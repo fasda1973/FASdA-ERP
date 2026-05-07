@@ -27,30 +27,32 @@
     </ui:define>
 
     <ui:define name="campos_formulario">
-	    <p:outputLabel value="Razão Social" for="razaoSocial" />
-	    <p:inputText id="razaoSocial" value="#{empresaBean.entidade.razaoSocial}" />
-	    
-	    <p:outputLabel value="Nome Fantasia" for="nomeFantasia" />
-	    <p:inputText id="nomeFantasia" value="#{empresaBean.entidade.nomeFantasia}" />
-	
-	    <p:outputLabel value="Tipo Empresa" for="tipo" />
-	    <p:selectOneMenu id="tipo" value="#{empresaBean.entidade.tipo}">
-	        <f:selectItem itemLabel="Selecione..." />
-	        <f:selectItems value="#{empresaBean.tiposEmpresa}" var="t" 
-	                       itemLabel="#{t.descricao}" itemValue="#{t}" />
-	    </p:selectOneMenu>
-	
-	    <p:outputLabel value="CNPJ" for="cnpj" />
-	    <p:inputMask id="cnpj" mask="99.999.999/9999-99" value="#{empresaBean.entidade.cnpj}" />
-	
-	    <p:outputLabel value="Data Fundação" for="dataFundacao" />
-	    <p:calendar id="dataFundacao" pattern="dd/MM/yyyy" value="#{empresaBean.entidade.dataFundacao}" />
-	
-	    <p:outputLabel value="Ramo Atividade" for="ramoAtividade" />
-	    <p:autoComplete id="ramoAtividade" value="#{empresaBean.entidade.ramoAtividade}"
-	                    completeMethod="#{empresaBean.CompletarRamoAtividade}"
-	                    converter="#{empresaBean.ramoAtividadeConverter}"
-	                    var="ramo" itemLabel="#{ramo.descricao}" itemValue="#{ramo}" />
+    	<h:panelGrid columns="2" id="gridCampos" layout="grid" rendered="#{managedBean.entidade ne null}">
+		    <p:outputLabel value="Razão Social" for="razaoSocial" />
+		    <p:inputText id="razaoSocial" value="#{empresaBean.entidade.razaoSocial}" />
+		    
+		    <p:outputLabel value="Nome Fantasia" for="nomeFantasia" />
+		    <p:inputText id="nomeFantasia" value="#{empresaBean.entidade.nomeFantasia}" />
+		
+		    <p:outputLabel value="Tipo Empresa" for="tipo" />
+		    <p:selectOneMenu id="tipo" value="#{empresaBean.entidade.tipo}">
+		        <f:selectItem itemLabel="Selecione..." />
+		        <f:selectItems value="#{empresaBean.tiposEmpresa}" var="t" 
+		                       itemLabel="#{t.descricao}" itemValue="#{t}" />
+		    </p:selectOneMenu>
+		
+		    <p:outputLabel value="CNPJ" for="cnpj" />
+		    <p:inputMask id="cnpj" mask="99.999.999/9999-99" value="#{empresaBean.entidade.cnpj}" />
+		
+		    <p:outputLabel value="Data Fundação" for="dataFundacao" />
+		    <p:calendar id="dataFundacao" pattern="dd/MM/yyyy" value="#{empresaBean.entidade.dataFundacao}" />
+		
+		    <p:outputLabel value="Ramo Atividade" for="ramoAtividade" />
+		    <p:autoComplete id="ramoAtividade" value="#{empresaBean.entidade.ramoAtividade}"
+		                    completeMethod="#{empresaBean.CompletarRamoAtividade}"
+		                    converter="#{empresaBean.ramoAtividadeConverter}"
+		                    var="ramo" itemLabel="#{ramo.descricao}" itemValue="#{ramo}" />
+        </h:panelGrid>
 	</ui:define>
 
 </ui:composition>

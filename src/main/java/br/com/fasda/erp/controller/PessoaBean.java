@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.com.fasda.erp.model.Cliente;
+import br.com.fasda.erp.model.DadosCliente;
 import br.com.fasda.erp.model.Pessoa;
 import br.com.fasda.erp.model.PessoaFisica;
 import br.com.fasda.erp.model.PessoaJuridica;
@@ -71,11 +72,27 @@ public class PessoaBean extends CrudBean<Pessoa> {
     
     @Override
     public void prepararNovo() {
-    	// Sobrescrita necessária para decidir qual "tipo" de pessoa instanciar
+    	
+    	// Se o tipoPessoa for nulo (primeira vez que abre o diálogo)
+        if (tipoPessoa == null) {
+            tipoPessoa = "FISICA"; // Default para não vir vazio
+        }
+    	
+        // Sobrescrita necessária para decidir qual "tipo" de pessoa instanciar
         if ("FISICA".equals(tipoPessoa)) {
-            this.entidade = new PessoaFisica();
-        } else {
-           this.entidade = new PessoaJuridica();
+        	if (!(entidade instanceof PessoaFisica)) {
+                this.entidade = new PessoaFisica();
+            }
+        } else if ("JURIDICA".equals(tipoPessoa)) {
+        	if (!(entidade instanceof PessoaJuridica)) {
+                this.entidade = new PessoaJuridica();
+            }
+        }
+        
+        // Inicializa os detalhes para evitar o erro de 'null' na aba de limites
+        if (this.entidade.getDadosCliente() == null) {
+            this.entidade.setDadosCliente(new DadosCliente());
+            this.entidade.getDadosCliente().setPessoa(this.entidade);
         }
     }
 

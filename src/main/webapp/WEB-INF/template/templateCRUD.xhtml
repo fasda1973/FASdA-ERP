@@ -57,24 +57,20 @@
                 <ui:insert name="colunas" />
             </p:dataTable>
 			
-            <p:dialog id="dialogId" header="Novo Cadastro" widgetVar="widgetVarDialog" modal="true" resizable="false" closeOnEscape="true">               
-                
-                <p:messages id="dialogMessages" />
-                <h:panelGroup id="painelCampos">
-	                <h:panelGrid columns="2" id="gridCampos" rendered="#{managedBean.entidade ne null}">
-	                    
-	                    <ui:insert name="campos_formulario" />
-		                    
-	                    <h:outputLabel />
-	                    <p:commandButton value="Salvar"
-	                    				 actionListener="#{managedBean.salvar}"
-	                        			 update="msgs"
-	                        			 process="@this dialogId"
-	                        			 oncomplete="if (!args.validationFailed) PF('widgetVarDialog').hide()" />
-	     
-	                </h:panelGrid>
-                </h:panelGroup>
-            </p:dialog>
+			<p:dialog id="dialogId" header="Cadastro" widgetVar="widgetVarDialog" 
+			          modal="true" resizable="false" closeOnEscape="true" responsive="true" width="600px">                
+			    
+			    <p:messages id="dialogMessages" />
+			    
+			    <h:panelGroup id="painelCampos">
+			    	
+			        <!-- Removi o h:panelGrid columns="2" daqui -->
+			        <ui:insert name="campos_formulario" />
+				        
+			    </h:panelGroup>
+			
+			</p:dialog>
+			
         </h:form>
     </ui:define>
 </ui:composition>

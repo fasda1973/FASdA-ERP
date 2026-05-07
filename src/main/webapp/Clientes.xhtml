@@ -24,9 +24,18 @@
         <p:column headerText="Nome Cliente">#{item.nomeCliente}</p:column>
     </ui:define>
     
-    <ui:define name="campos_formulario">
-	    <p:outputLabel value="Nome Cliente" for="nomeCliente" />
-	    <p:inputText id="nomeCliente" value="#{clienteBean.entidade.nomeCliente}" />
+    <ui:define name="campos_formulario">	    
+		    
+	    
+		    <p:panelGrid columns="2" id="gridCampos">
+			    <p:outputLabel value="Nome Cliente" for="nomeCliente" />
+			    <p:inputText id="nomeCliente" value="#{clienteBean.entidade.nomeCliente}" style="width: 100%"/>
+			
+			    <p:outputLabel value="Endereço" for="endereco" />
+			    <p:inputText id="endereco" value="#{clienteBean.entidade.endereco}" style="width: 100%"/>
+			</p:panelGrid>
+		
+		
 	</ui:define>
 	
 </ui:composition>

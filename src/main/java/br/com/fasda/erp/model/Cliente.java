@@ -17,6 +17,9 @@ public class Cliente implements Serializable {
     @NotBlank // Garante que não seja nulo nem vazio ("")
     @Column(name = "nome_cliente", nullable = false)
     private String nomeCliente;
+    
+    @Column(name = "endereco")
+    private String endereco;
 
 	
     //Getters e Setters
@@ -38,6 +41,14 @@ public class Cliente implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
 	}
 
 }
