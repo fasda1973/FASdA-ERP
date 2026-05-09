@@ -29,7 +29,7 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
     @Inject
     private PessoaRepository repository;
     
-    private String tipoPessoa;
+    private String tipoPessoa = "FISICA";
     
     public PessoaBean() {
         // Passamos a classe Pessoa para o CrudBean
@@ -51,15 +51,16 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
     public void salvar() {
         try {
         	// Define que essa pessoa terá o papel de cliente
-            getEntidade().setCliente(true);            
+            //getEntidade().setCliente(true);            
             
             // Chama o seu service especializado
             service.salvar(getEntidade());
+            atualizarRegistros();
             
             messages.info("Pessoa salva com sucesso!");
             prepararNovo(); // Limpa o formulário
             
-            PrimeFaces.current().ajax().update(Arrays.asList("formCadastro:dataTable", "formCadastro:messages", "formCadastro:msgs"));
+            PrimeFaces.current().ajax().update(Arrays.asList("frm:dataTable"));
             
         } catch (NegocioException e) {
             messages.error(e.getMessage());
@@ -76,8 +77,6 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
     
     @Override
     public void prepararNovo() {
-    	
-    	System.out.println("Instanciando entidade para Tipo: " + this.tipoPessoa);
 
         // 1. Instancia o tipo correto baseado na seleção atual
         if ("JURIDICA".equals(this.tipoPessoa)) {
@@ -93,6 +92,8 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
         // 3. Faz a ligação bidirecional (Pai aponta pro Filho e Filho pro Pai)
         dados.setPessoa(this.entidade);
         this.entidade.setDadosCliente(dados);
+        
+        System.out.println("Instanciando entidade para Tipo: " + this.tipoPessoa);
     	
     }
 
@@ -104,6 +105,22 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
     
     @Override
     public void prepararEdicao() {
+    	
+    	// 1. Verifica qual é a classe real da entidade que veio da tabela
+        if (this.entidade instanceof PessoaJuridica) {
+            this.tipoPessoa = "JURIDICA";
+        } else if (this.entidade instanceof PessoaFisica) {
+            this.tipoPessoa = "FISICA";
+        }
+
+        // 2. Garante que os DadosCliente não sejam nulos para evitar erro nos campos de limite/crédito
+        if (this.entidade.getDadosCliente() == null) {
+            DadosCliente dados = new DadosCliente();
+            dados.setPessoa(this.entidade);
+            this.entidade.setDadosCliente(dados);
+        }
+        
+        System.out.println("Editando Entidade Tipo: " + this.tipoPessoa);
         
     }
 

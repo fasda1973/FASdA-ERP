@@ -33,11 +33,11 @@
                     </p:commandButton>
                     
                     <p:commandButton value="Editar" icon="fa fa-pencil"
-                        disabled="#{not managedBean.itemSelecionado}"
                         actionListener="#{managedBean.prepararEdicao}"
                         oncomplete="PF('widgetVarDialog').show()"
-                        update="dialogId" process="@this">
-                        <p:resetInput target="dialogId" />
+                        update=":formCadastro:gridCampos" 
+                        process="@this">
+                        
                     </p:commandButton>
 
                     <p:commandButton value="Excluir" icon="fa fa-trash"
@@ -77,7 +77,7 @@
 				
 				<p:commandButton value="Salvar"
 	           		actionListener="#{managedBean.salvar}"
-	               	update="msgs"
+	               	update=":frm:dataTable :msgs"
 	               	process="@this dialogId"
 	               	oncomplete="if (!args.validationFailed) PF('widgetVarDialog').hide()" />
 			</h:form>    

@@ -51,7 +51,7 @@ public class ClienteBean extends CrudBean<Cliente> {
 	        atualizarRegistros();
 	        messages.info("Cliente salvo com sucesso!");
 	                
-	        PrimeFaces.current().ajax().update(Arrays.asList("frm:dataTable"));
+	        //PrimeFaces.current().ajax().update(Arrays.asList("frm:dataTable"));
 	    
     	} catch (NegocioException e) {
     		// Erro de regra de negócio amigável

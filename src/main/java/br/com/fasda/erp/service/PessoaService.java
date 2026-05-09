@@ -29,13 +29,15 @@ public class PessoaService implements Serializable {
         if (pessoa instanceof PessoaFisica) {
         	// Aqui o getCpf() já vai devolver só os números por causa do setter acima
             String cpfParaBusca = ((PessoaFisica) pessoa).getCpf();
-            if (pessoaRepository.verificarCpfExistente(cpfParaBusca)) {
+            Long idCompara = ((PessoaFisica) pessoa).getId();
+            if (pessoaRepository.verificarCpfExistente(cpfParaBusca, idCompara)) {
                 // Adiciona mensagem de erro
             	throw new NegocioException("Este CPF já está cadastrado no sistema!");
             }
         } else if (pessoa instanceof PessoaJuridica) {
         	String cnpjParaBusca = ((PessoaJuridica) pessoa).getCnpj();
-            if (pessoaRepository.verificarCnpjExistente(cnpjParaBusca)) {
+        	Long idCompara = ((PessoaJuridica) pessoa).getId();
+            if (pessoaRepository.verificarCnpjExistente(cnpjParaBusca, idCompara)) {
                 // Adiciona mensagem de erro
             	throw new NegocioException("Este CNPJ já está cadastrado no sistema!");
             }

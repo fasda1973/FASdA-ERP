@@ -47,15 +47,15 @@
 		        <p:outputLabel value="E-mail" for="email" />
 		        <p:inputText id="email" value="#{pessoaBean.entidade.email}" style="width: 100%" />
 		        
-		        <p:outputLabel value="CNPJ" for="cnpj" rendered="#{pessoaBean.tipoPessoa eq 'JURIDICA'}" />
-	        		        	
+		        <p:outputLabel value="CNPJ" for="cnpj" rendered="#{pessoaBean.tipoPessoa eq 'JURIDICA'}" />	        		        	
 		        <p:inputMask id="cnpj" value="#{pessoaBean.entidade.cnpj}" mask="99.999.999/9999-99"
-		                     rendered="#{pessoaBean.tipoPessoa eq 'JURIDICA'}" style="width: 100%" />
+		                     rendered="#{pessoaBean.tipoPessoa eq 'JURIDICA'}" style="width: 100%"
+		                     required="#{pessoaBean.entidade.id == null}" />
 						
-		        <p:outputLabel value="CPF" for="cpf" rendered="#{pessoaBean.tipoPessoa eq 'FISICA'}" />	
-		     	
+		        <p:outputLabel value="CPF" for="cpf" rendered="#{pessoaBean.tipoPessoa eq 'FISICA'}" />			     	
 		        <p:inputMask id="cpf" value="#{pessoaBean.entidade.cpf}" mask="999.999.999-99" 
-	                     	 rendered="#{pessoaBean.tipoPessoa eq 'FISICA'}" style="width: 100%" />
+	                     	 rendered="#{pessoaBean.tipoPessoa eq 'FISICA'}" style="width: 100%"
+	                     	 required="#{pessoaBean.entidade.id == null}" />
 		        
 			    <p:outputLabel value="Papéis"/>
 			    
