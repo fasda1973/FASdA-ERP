@@ -16,13 +16,29 @@ import br.com.fasda.erp.util.Transacional;
 public class PessoaService implements Serializable {
 
     @Inject
-    private PessoaRepository repository;
+    private PessoaRepository pessoaRepository;
+    
 
     @Transacional
     public void salvar(Pessoa pessoa) throws NegocioException {
         // 1. Validações comuns (Ex: Nome obrigatório)
         if (pessoa.getNome() == null || pessoa.getNome().isEmpty()) {
             throw new NegocioException("O nome é obrigatório.");
+        }
+        
+        if (pessoa instanceof PessoaFisica) {
+        	// Aqui o getCpf() já vai devolver só os números por causa do setter acima
+            String cpfParaBusca = ((PessoaFisica) pessoa).getCpf();
+            if (pessoaRepository.verificarCpfExistente(cpfParaBusca)) {
+                // Adiciona mensagem de erro
+            	throw new NegocioException("Este CPF já está cadastrado no sistema!");
+            }
+        } else if (pessoa instanceof PessoaJuridica) {
+        	String cnpjParaBusca = ((PessoaJuridica) pessoa).getCnpj();
+            if (pessoaRepository.verificarCnpjExistente(cnpjParaBusca)) {
+                // Adiciona mensagem de erro
+            	throw new NegocioException("Este CNPJ já está cadastrado no sistema!");
+            }
         }
 
         // 2. Validações específicas por tipo (O pulo do gato!)
@@ -48,12 +64,12 @@ public class PessoaService implements Serializable {
         // 3. Persistência única
         // O Hibernate fará o INSERT na tabela 'pessoa' 
         // e na 'pessoa_fisica' ou 'pessoa_juridica' num piscar de olhos.
-        repository.guardar(pessoa);
+        pessoaRepository.guardar(pessoa);
     }
     
     @Transacional
 	public void excluir(Pessoa pessoa) {
-		repository.remover(pessoa);
+		pessoaRepository.remover(pessoa);
 	}
     
     private void validarCPF(PessoaFisica pf) throws NegocioException {

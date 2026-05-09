@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.br.CNPJ;
 public class PessoaJuridica extends Pessoa {
 
     @CNPJ // Bean Validation
-    @Column(name = "cnpj", length = 18)
+    @Column(name = "cnpj", length = 18, nullable = false, unique = true)
     private String cnpj;
     
     @Column(name = "inscricao_estadual")
@@ -25,7 +25,11 @@ public class PessoaJuridica extends Pessoa {
 	}
 
 	public void setCnpj(String cnpj) {
-		this.cnpj = cnpj;
+		if (cnpj != null) {
+	        this.cnpj = cnpj.replaceAll("[^0-9]", "");
+	    } else {
+	        this.cnpj = null;
+	    }
 	}
 
 	public String getInscricaoEstadual() {

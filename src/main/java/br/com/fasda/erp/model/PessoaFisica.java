@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.br.CPF;
 public class PessoaFisica extends Pessoa {
 
     @CPF // Bean Validation
-    @Column(name = "cpf", length = 14)
+    @Column(name = "cpf", length = 14, nullable = false, unique = true)
     private String cpf;
     
     @Column(name = "rg")
@@ -25,7 +25,12 @@ public class PessoaFisica extends Pessoa {
 	}
 
 	public void setCpf(String cpf) {
-		this.cpf = cpf;
+		if (cpf != null) {
+	        // Substitui tudo que NÃO for número por nada
+	        this.cpf = cpf.replaceAll("[^0-9]", "");
+	    } else {
+	        this.cpf = null;
+	    }
 	}
 
 	public String getRg() {

@@ -1,12 +1,14 @@
 package br.com.fasda.erp.controller;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import br.com.fasda.erp.model.Cliente;
+import org.primefaces.PrimeFaces;
+
 import br.com.fasda.erp.model.DadosCliente;
 import br.com.fasda.erp.model.Pessoa;
 import br.com.fasda.erp.model.PessoaFisica;
@@ -17,7 +19,7 @@ import br.com.fasda.erp.util.NegocioException;
 
 @Named
 @ViewScoped
-public class PessoaBean extends CrudBean<Pessoa> {
+public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
 	
     private static final long serialVersionUID = 1L;
     
@@ -27,7 +29,7 @@ public class PessoaBean extends CrudBean<Pessoa> {
     @Inject
     private PessoaRepository repository;
     
-    private String tipoPessoa = "FISICA"; // Padrão inicial
+    private String tipoPessoa;
     
     public PessoaBean() {
         // Passamos a classe Pessoa para o CrudBean
@@ -57,6 +59,8 @@ public class PessoaBean extends CrudBean<Pessoa> {
             messages.info("Pessoa salva com sucesso!");
             prepararNovo(); // Limpa o formulário
             
+            PrimeFaces.current().ajax().update(Arrays.asList("formCadastro:dataTable", "formCadastro:messages", "formCadastro:msgs"));
+            
         } catch (NegocioException e) {
             messages.error(e.getMessage());
         }
@@ -73,27 +77,23 @@ public class PessoaBean extends CrudBean<Pessoa> {
     @Override
     public void prepararNovo() {
     	
-    	// Se o tipoPessoa for nulo (primeira vez que abre o diálogo)
-        if (tipoPessoa == null) {
-            tipoPessoa = "FISICA"; // Default para não vir vazio
+    	System.out.println("Instanciando entidade para Tipo: " + this.tipoPessoa);
+
+        // 1. Instancia o tipo correto baseado na seleção atual
+        if ("JURIDICA".equals(this.tipoPessoa)) {
+            this.entidade = new PessoaJuridica();
+        } else {
+            this.entidade = new PessoaFisica();
+            this.tipoPessoa = "FISICA"; // Garante consistência
         }
-    	
-        // Sobrescrita necessária para decidir qual "tipo" de pessoa instanciar
-        if ("FISICA".equals(tipoPessoa)) {
-        	if (!(entidade instanceof PessoaFisica)) {
-                this.entidade = new PessoaFisica();
-            }
-        } else if ("JURIDICA".equals(tipoPessoa)) {
-        	if (!(entidade instanceof PessoaJuridica)) {
-                this.entidade = new PessoaJuridica();
-            }
-        }
+
+        // 2. Instancia o objeto de detalhes (essencial para evitar Target Unreachable)
+        DadosCliente dados = new DadosCliente();
         
-        // Inicializa os detalhes para evitar o erro de 'null' na aba de limites
-        if (this.entidade.getDadosCliente() == null) {
-            this.entidade.setDadosCliente(new DadosCliente());
-            this.entidade.getDadosCliente().setPessoa(this.entidade);
-        }
+        // 3. Faz a ligação bidirecional (Pai aponta pro Filho e Filho pro Pai)
+        dados.setPessoa(this.entidade);
+        this.entidade.setDadosCliente(dados);
+    	
     }
 
     // Chamado pelo <p:ajax> quando o rádio button muda
@@ -128,8 +128,17 @@ public class PessoaBean extends CrudBean<Pessoa> {
         return termoPesquisa != null && !termoPesquisa.isEmpty();
     }
 
-    // Getter e Setter para o tipoPessoa (para o Radio Button)
-    public Pessoa getEntidade() { return entidade; }
-    public String getTipoPessoa() { return tipoPessoa; }
-    public void setTipoPessoa(String tipoPessoa) { this.tipoPessoa = tipoPessoa; }
+    @Override
+    public Pessoa getEntidade() {
+        return this.entidade;
+    }
+    
+    // Adicione estes dois métodos no final do seu PessoaBean.java
+    public String getTipoPessoa() {
+        return tipoPessoa;
+    }
+
+    public void setTipoPessoa(String tipoPessoa) {
+        this.tipoPessoa = tipoPessoa;
+    }
 }

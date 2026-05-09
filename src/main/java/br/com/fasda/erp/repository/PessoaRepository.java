@@ -53,4 +53,31 @@ public class PessoaRepository implements Serializable {
         manager.remove(pessoa);
     }
     
+    public boolean verificarCpfExistente(String cpf) {
+        try {
+            // Usamos o COUNT para ser performático
+            // O JPA retorna Long para resultados de count
+            Long count = manager.createQuery(
+                    "select count(p) from PessoaFisica p where p.cpf = :cpf", Long.class)
+                    .setParameter("cpf", cpf)
+                    .getSingleResult();
+            
+            return count > 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean verificarCnpjExistente(String cnpj) {
+        try {
+            Long count = manager.createQuery(
+                    "select count(p) from PessoaJuridica p where p.cnpj = :cnpj", Long.class)
+                    .setParameter("cnpj", cnpj)
+                    .getSingleResult();
+            
+            return count > 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

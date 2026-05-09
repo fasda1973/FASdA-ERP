@@ -6,13 +6,13 @@
     template="/WEB-INF/template/Layout.xhtml">
 
     <ui:define name="conteudo">
-    
-        <h:form id="frm">
-            <p:messages id="messages" />
-            
-            <!-- O 'life' define quanto tempo a mensagem fica na tela (3000ms = 3s) -->
-			<p:growl id="msgs" showDetail="true" showSummary="false" sticky="false" life="5000" />
-
+              
+        <p:messages id="messages" />
+        
+        <!-- O 'life' define quanto tempo a mensagem fica na tela (3000ms = 3s) -->
+		<p:growl id="msgs" showDetail="true" showSummary="false" sticky="false" life="5000" />
+		
+		<h:form id="frm">
             <p:toolbar id="toolbar">
                 <f:facet name="left">
                     <ui:insert name="pesquisa" />
@@ -26,7 +26,9 @@
                     <p:commandButton value="Novo" icon="fa fa-plus" 
                         actionListener="#{managedBean.prepararNovo}"
                         oncomplete="PF('widgetVarDialog').show()"
-                        update="dialogId" process="@this">
+                        update="dialogId" 
+                        process="@this"
+                        immediate="true">
                         <p:resetInput target="dialogId" />
                     </p:commandButton>
                     
@@ -56,21 +58,31 @@
 
                 <ui:insert name="colunas" />
             </p:dataTable>
-			
-			<p:dialog id="dialogId" header="Cadastro" widgetVar="widgetVarDialog" 
-			          modal="true" resizable="false" closeOnEscape="true" responsive="true" width="600px">                
-			    
-			    <p:messages id="dialogMessages" />
-			    
-			    <h:panelGroup id="painelCampos">
-			    	
-			        <!-- Removi o h:panelGrid columns="2" daqui -->
-			        <ui:insert name="campos_formulario" />
-				        
-			    </h:panelGroup>
-			
-			</p:dialog>
-			
-        </h:form>
+            
+            
+		</h:form>
+		
+				
+		<p:dialog id="dialogId" header="Cadastro" widgetVar="widgetVarDialog" 
+		          modal="true" resizable="false" closeOnEscape="true" responsive="true" width="600px">                
+			<h:form id="formCadastro">   
+				<p:messages id="dialogMessages" />
+				
+				<h:panelGroup id="painelCampos">
+					
+				    <!-- Removi o h:panelGrid columns="2" daqui -->
+				    <ui:insert name="campos_formulario" />
+				     
+				</h:panelGroup>
+				
+				<p:commandButton value="Salvar"
+	           		actionListener="#{managedBean.salvar}"
+	               	update="msgs"
+	               	process="@this dialogId"
+	               	oncomplete="if (!args.validationFailed) PF('widgetVarDialog').hide()" />
+			</h:form>    
+		</p:dialog>			
+        
     </ui:define>
+    
 </ui:composition>
