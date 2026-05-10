@@ -8,27 +8,27 @@ import javax.inject.Named;
 
 import org.primefaces.PrimeFaces;
 
-import br.com.fasda.erp.model.Cliente;
+import br.com.fasda.erp.model.ClienteOld;
 import br.com.fasda.erp.model.Pessoa;
-import br.com.fasda.erp.repository.ClienteRepository;
-import br.com.fasda.erp.service.ClienteService;
+import br.com.fasda.erp.repository.ClienteRepositoryOld;
+import br.com.fasda.erp.service.ClienteServiceOld;
 import br.com.fasda.erp.util.NegocioException;
 
 @Named
 @ViewScoped
-public class ClienteBean extends CrudBean<Cliente> {
+public class ClienteOldBean extends CrudBean<ClienteOld> {
     
 	private static final long serialVersionUID = 1L;
 
 	@Inject
-    private ClienteService clienteService;
+    private ClienteServiceOld clienteServiceOld;
 
     @Inject
-    private ClienteRepository clientesRepository;
+    private ClienteRepositoryOld clientesRepository;
     
-    public ClienteBean() {
-        // Passamos a classe Cliente para o CrudBean
-        super(Cliente.class);
+    public ClienteOldBean() {
+        // Passamos a classe ClienteOld para o CrudBean
+        super(ClienteOld.class);
     }
     
     // --- MÉTODOS OBRIGATÓRIOS (OVERRIDE) ---
@@ -47,9 +47,9 @@ public class ClienteBean extends CrudBean<Cliente> {
     	try{
     		
 	    	// Usamos 'entidade' que vem do CrudBean (substitui 'cliente')
-	        clienteService.salvar(this.entidade);
+	        clienteServiceOld.salvar(this.entidade);
 	        atualizarRegistros();
-	        messages.info("Cliente salvo com sucesso!");
+	        messages.info("ClienteOld salvo com sucesso!");
 	                
 	        //PrimeFaces.current().ajax().update(Arrays.asList("frm:dataTable"));
 	    
@@ -64,15 +64,15 @@ public class ClienteBean extends CrudBean<Cliente> {
     
     @Override
     public void excluir() {
-    	clienteService.excluir(this.entidade);
+    	clienteServiceOld.excluir(this.entidade);
         this.entidade = null;
         atualizarRegistros(); // Atualiza a lista após remover
-        messages.info("Cliente excluído com sucesso!");
+        messages.info("ClienteOld excluído com sucesso!");
     }
     
     @Override
     public void prepararNovo() {
-        this.entidade = new Cliente();
+        this.entidade = new ClienteOld();
     }
     
     @Override
@@ -81,8 +81,8 @@ public class ClienteBean extends CrudBean<Cliente> {
     }
     
     @Override
-    protected Object getEntidadeId(Cliente cliente) {
-        return cliente.getId();
+    protected Object getEntidadeId(ClienteOld clienteOld) {
+        return clienteOld.getId();
     }
     
     public void todosClientes() {

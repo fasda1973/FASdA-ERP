@@ -4,28 +4,28 @@ import java.io.Serializable;
 
 import javax.inject.Inject;
 
-import br.com.fasda.erp.model.Cliente;
-import br.com.fasda.erp.repository.ClienteRepository;
+import br.com.fasda.erp.model.ClienteOld;
+import br.com.fasda.erp.repository.ClienteRepositoryOld;
 import br.com.fasda.erp.util.NegocioException;
 import br.com.fasda.erp.util.Transacional;
 
-public class ClienteService implements Serializable {
+public class ClienteServiceOld implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	@Inject
-	private ClienteRepository clienterepository;
+	private ClienteRepositoryOld clienterepository;
 	
 	@Transacional
-	public void salvar(Cliente cliente) throws NegocioException {
+	public void salvar(ClienteOld clienteOld) throws NegocioException {
 		
 		
-		clienterepository.guardar(cliente);
+		clienterepository.guardar(clienteOld);
 	}
 	
 	@Transacional
-	public void excluir(Cliente cliente) {
-		clienterepository.remover(cliente);
+	public void excluir(ClienteOld clienteOld) {
+		clienterepository.remover(clienteOld);
 	}
 
 }

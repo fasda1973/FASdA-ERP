@@ -7,47 +7,47 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import br.com.fasda.erp.model.Cliente;
+import br.com.fasda.erp.model.ClienteOld;
 
-public class ClienteRepository implements Serializable {
+public class ClienteRepositoryOld implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Inject
 	private EntityManager manager;
 
-	public ClienteRepository() {
+	public ClienteRepositoryOld() {
 
 	}
 
-	public ClienteRepository(EntityManager manager) {
+	public ClienteRepositoryOld(EntityManager manager) {
 		this.manager = manager;
 	}
 
-	public Cliente porId(Long id) {
-		return manager.find(Cliente.class, id);
+	public ClienteOld porId(Long id) {
+		return manager.find(ClienteOld.class, id);
 	}
 
-	public List<Cliente> pesquisar(String nome) {
-		String jpql = "from Cliente where nomeCliente like :nomeCliente";
+	public List<ClienteOld> pesquisar(String nome) {
+		String jpql = "from ClienteOld where nomeCliente like :nomeCliente";
 		
-		TypedQuery<Cliente> query = manager.createQuery(jpql,Cliente.class);
+		TypedQuery<ClienteOld> query = manager.createQuery(jpql,ClienteOld.class);
 		
 		query.setParameter("nomeCliente", nome + "%");
 
 		return query.getResultList();
 	}
 	
-	public List<Cliente> todos() {		
-		return manager.createQuery("from Cliente",Cliente.class).getResultList();
+	public List<ClienteOld> todos() {		
+		return manager.createQuery("from ClienteOld",ClienteOld.class).getResultList();
 	}
 
-	public Cliente guardar(Cliente cliente) {
-		return manager.merge(cliente);
+	public ClienteOld guardar(ClienteOld clienteOld) {
+		return manager.merge(clienteOld);
 	}
 
-	public void remover(Cliente cliente) {
-		cliente = porId(cliente.getId());
-		manager.remove(cliente);
+	public void remover(ClienteOld clienteOld) {
+		clienteOld = porId(clienteOld.getId());
+		manager.remove(clienteOld);
 	}
 }
