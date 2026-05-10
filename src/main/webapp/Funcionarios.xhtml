@@ -1,0 +1,59 @@
+<ui:composition template="/WEB-INF/template/templateCRUD.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:param name="managedBean" value="#{funcionarioBean}" />
+
+    <ui:define name="titulo">Gestão de Funcionários</ui:define>
+
+    <ui:define name="tabela_dados">
+        <p:dataTable id="tabela" value="#{funcionarioBean.listaItens}" var="item" 
+                     selectionMode="single" selection="#{funcionarioBean.entidade}" 
+                     rowKey="#{item.id}" paginator="true" rows="10">
+            
+            <p:column headerText="Matrícula" width="100">
+                <h:outputText value="#{item.matricula}" />
+            </p:column>
+            
+            <p:column headerText="Nome">
+                <h:outputText value="#{item.nome}" />
+            </p:column>
+            
+            <p:column headerText="CPF" width="150">
+                <h:outputText value="#{item.cpf}" />
+            </p:column>
+        </p:dataTable>
+    </ui:define>
+
+    <ui:define name="campos_formulario">
+        <h:form id="formCadastro">
+            <p:messages id="msgs" />
+            <p:panelGrid columns="2" id="gridCampos" layout="grid" styleClass="ui-panelgrid-blank">
+                
+                <p:outputLabel value="Nome" for="nome" />
+                <p:inputText id="nome" value="#{funcionarioBean.entidade.nome}" required="true" />
+
+                <p:outputLabel value="Matrícula" for="matr" />
+                <p:inputText id="matr" value="#{funcionarioBean.entidade.matricula}" required="true" />
+
+                <p:outputLabel value="Data de Admissão" for="adm" />
+                <p:calendar id="adm" value="#{funcionarioBean.entidade.dataAdmissao}" 
+                            pattern="dd/MM/yyyy" showOn="button" />
+
+                <p:outputLabel value="CPF" for="cpf" />
+                <p:inputMask id="cpf" value="#{funcionarioBean.entidade.cpf}" 
+                             mask="999.999.999-99" required="true" />
+
+            </p:panelGrid>
+
+            <div style="margin-top: 20px;">
+                <p:commandButton value="Salvar Funcionário" action="#{funcionarioBean.salvar}"
+                                 process="@form" update="@form :formListagem:tabela :messages"
+                                 oncomplete="if (!args.validationFailed) PF('widgetDialogo').hide()" />
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
