@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import br.com.fasda.erp.model.Cliente;
+import br.com.fasda.erp.model.ClienteOld;
 import br.com.fasda.erp.model.Pessoa;
 
 public class PessoaRepository implements Serializable {
@@ -42,6 +42,14 @@ public class PessoaRepository implements Serializable {
     // Busca todas as pessoas, independente de serem PF ou PJ
     public List<Pessoa> todas() {
         return manager.createQuery("from Pessoa", Pessoa.class).getResultList();
+    }
+    
+    public List<Pessoa> listarClientes() {
+        return manager.createQuery("from Pessoa p where p.isCliente = true", Pessoa.class).getResultList();
+    }
+
+    public List<Pessoa> listarFuncionarios() {
+        return manager.createQuery("from Pessoa p where p.isFuncionario = true", Pessoa.class).getResultList();
     }
 
     public Pessoa guardar(Pessoa pessoa) {
