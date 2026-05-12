@@ -39,10 +39,10 @@ public class ClienteBean extends CrudBean<Pessoa> implements Serializable {
     
     @Override
     public void prepararNovo() {
-        // Funcionários geralmente são Pessoa Física
+        // Clientes geralmente são Pessoa Física
         this.entidade = new PessoaFisica();
         this.setTipoPessoa("FISICA");
-        this.entidade.setFuncionario(true); // Já marca o papel automaticamente
+        this.entidade.setCliente(true); // Já marca o papel automaticamente
     }
     
     @Override
