@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import javax.inject.Inject;
 
 import br.com.fasda.erp.model.DadosCliente;
+import br.com.fasda.erp.model.DadosFuncionario;
 import br.com.fasda.erp.model.Pessoa;
 import br.com.fasda.erp.model.PessoaFisica;
 import br.com.fasda.erp.model.PessoaJuridica;
@@ -61,6 +62,14 @@ public class PessoaService implements Serializable {
             if (pessoa.getDadosCliente().getLimiteCredito() == null) {
                 pessoa.getDadosCliente().setLimiteCredito(BigDecimal.ZERO);
             }
+        }
+        
+        if (pessoa.isFuncionario()) {
+            if (pessoa.getDadosFuncionario() == null) {
+                pessoa.setDadosFuncionario(new DadosFuncionario());
+            }
+            // Vincula o "pai" ao "filho" para o @MapsId funcionar
+            pessoa.getDadosFuncionario().setPessoa(pessoa);
         }
 
         // 3. Persistência única

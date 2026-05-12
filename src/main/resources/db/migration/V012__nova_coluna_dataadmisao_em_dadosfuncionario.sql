@@ -1,0 +1,1 @@
+ALTER TABLE dados_funcionario ADD COLUMN dataAdmissao DATE;

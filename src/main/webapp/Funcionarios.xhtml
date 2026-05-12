@@ -19,14 +19,18 @@
                      size="30" value="#{pessoaBean.termoPesquisa}" />
     </ui:define>
 
-    <ui:define name="colunas">            
-	    <p:column headerText="Matrícula" width="100">
-	        <h:outputText value="#{item.matricula}" />
-	    </p:column>
-	    
-	    <p:column headerText="Nome">
+    <ui:define name="colunas">
+    	<p:column headerText="Nome">
 	        <h:outputText value="#{item.nome}" />
 	    </p:column>
+                
+	    <p:column headerText="Matrícula" width="100">
+	        <h:outputText value="#{item.dadosFuncionario.matricula}" />
+	    </p:column>
+	    
+	    <p:column headerText="Admissão">
+		    <h:outputText value="#{item.dadosFuncionario.dataAdmissaoFormatada}" />
+		</p:column>
 	    
 	    <p:column headerText="CPF" width="150">
 	        <h:outputText value="#{item.cpf}" />
@@ -40,12 +44,15 @@
 	        <p:outputLabel value="Nome" for="nome" />
 	        <p:inputText id="nome" value="#{funcionarioBean.entidade.nome}" required="true" />
 	
-	        <p:outputLabel value="Matrícula" for="matr" />
-	        <p:inputText id="matr" value="#{funcionarioBean.entidade.matricula}" required="true" />
+	        <p:outputLabel value="Matrícula" for="matricula" />
+	        <p:inputText id="matricula" value="#{funcionarioBean.entidade.dadosFuncionario.matricula}" required="true" />
 	
-	        <p:outputLabel value="Data de Admissão" for="adm" />
-	        <p:calendar id="adm" value="#{funcionarioBean.entidade.dataAdmissao}" 
-	                    pattern="dd/MM/yyyy" showOn="button" />
+	        <p:outputLabel value="Data de Admissão" for="dataAdmissao" />
+	        <p:datePicker id="dataAdmissao" 
+	        			  value="#{funcionarioBean.entidade.dadosFuncionario.dataAdmissao}" 
+	                      pattern="dd/MM/yyyy" 
+	                      showIcon="true"
+	                      mask="true" />
 	
 	        <p:outputLabel value="CPF" for="cpf" />
 	        <p:inputMask id="cpf" value="#{funcionarioBean.entidade.cpf}" 

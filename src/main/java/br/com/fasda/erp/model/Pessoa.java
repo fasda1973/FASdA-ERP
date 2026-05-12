@@ -44,6 +44,9 @@ public abstract class Pessoa implements Serializable {
 
     @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private DadosCliente dadosCliente;
+    
+    @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private DadosFuncionario dadosFuncionario;
 	
     // Getters e Setters...
     public Long getId() {
@@ -53,6 +56,7 @@ public abstract class Pessoa implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 
 	public String getNome() {
 		return nome;
@@ -100,6 +104,14 @@ public abstract class Pessoa implements Serializable {
 
 	public void setDadosCliente(DadosCliente dadosCliente) {
 		this.dadosCliente = dadosCliente;
+	}
+	
+	public DadosFuncionario getDadosFuncionario() {
+		return dadosFuncionario;
+	}
+
+	public void setDadosFuncionario(DadosFuncionario dadosFuncionario) {
+		this.dadosFuncionario = dadosFuncionario;
 	}
 	
 	public String getDocumento() {

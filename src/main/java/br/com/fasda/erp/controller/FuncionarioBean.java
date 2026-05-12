@@ -6,7 +6,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import br.com.fasda.erp.model.DadosCliente;
+import br.com.fasda.erp.model.DadosFuncionario;
 import br.com.fasda.erp.model.Pessoa;
 import br.com.fasda.erp.model.PessoaFisica;
 import br.com.fasda.erp.model.PessoaJuridica;
@@ -55,10 +55,10 @@ public class FuncionarioBean extends CrudBean<Pessoa> implements Serializable {
         }
         
         // Garante que os dados auxiliares não estejam nulos
-        if (this.entidade.getDadosCliente() == null) {
-            DadosCliente dados = new DadosCliente();
+        if (this.entidade.getDadosFuncionario() == null) {
+            DadosFuncionario dados = new DadosFuncionario();
             dados.setPessoa(this.entidade);
-            this.entidade.setDadosCliente(dados);
+            this.entidade.setDadosFuncionario(dados);
         }           
     }
 
