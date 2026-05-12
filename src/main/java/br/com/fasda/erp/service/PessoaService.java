@@ -70,7 +70,7 @@ public class PessoaService implements Serializable {
     }
     
     @Transacional
-	public void excluir(Pessoa pessoa) {
+	public void excluir(Pessoa pessoa) throws NegocioException {
 		pessoaRepository.remover(pessoa);
 	}
     

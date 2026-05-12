@@ -101,5 +101,14 @@ public abstract class Pessoa implements Serializable {
 	public void setDadosCliente(DadosCliente dadosCliente) {
 		this.dadosCliente = dadosCliente;
 	}
+	
+	public String getDocumento() {
+	    if (this instanceof PessoaJuridica) {
+	        return ((PessoaJuridica) this).getCnpj();
+	    } else if (this instanceof PessoaFisica) {
+	        return ((PessoaFisica) this).getCpf();
+	    }
+	    return "";
+	}
    
 }

@@ -6,67 +6,64 @@
     xmlns:p="http://primefaces.org/ui">
 
     <ui:param name="managedBean" value="#{fornecedorBean}" />
+    
+    <ui:define name="tituloHead">Fornecedores</ui:define>
 
-    <ui:define name="titulo">Gestão de Fornecedores</ui:define>
+    <ui:define name="titulo">
+    	<i class="fa-solid fa-building"></i>
+    	<span>Fornecedores</span>
+    </ui:define>
+    
+    <ui:define name="pesquisa">
+        <p:inputText id="termoPesquisa" placeholder="Pesquisar pessoa..." 
+                     size="30" value="#{pessoaBean.termoPesquisa}" />
+    </ui:define>
 
-    <ui:define name="tabela_dados">
-        <p:dataTable id="tabela" value="#{fornecedorBean.listaItens}" var="item" 
-                     selectionMode="single" selection="#{fornecedorBean.entidade}" 
-                     rowKey="#{item.id}" paginator="true" rows="10">
-            
-            <p:column headerText="Razão Social / Nome">
-                <h:outputText value="#{item.nome}" />
-            </p:column>
-            
-            <p:column headerText="Documento" width="180">
-                <h:outputText value="#{item instanceof PessoaJuridica ? item.cnpj : item.cpf}" />
-            </p:column>
-            
-            <p:column headerText="E-mail">
-                <h:outputText value="#{item.email}" />
-            </p:column>
-        </p:dataTable>
+    <ui:define name="colunas">            
+	    <p:column headerText="Razão Social / Nome">
+	        <h:outputText value="#{item.nome}" />
+	    </p:column>
+	    
+	    <p:column headerText="Documento" width="180">
+	        <h:outputText value="#{item.documento}" />
+	    </p:column>
+	    
+	    <p:column headerText="E-mail">
+	        <h:outputText value="#{item.email}" />
+	    </p:column>
     </ui:define>
 
     <ui:define name="campos_formulario">
-        <h:form id="formCadastro">
-            <p:messages id="msgs" />
-            
-            <!-- Seletor de Tipo -->
-            <p:selectOneButton value="#{fornecedorBean.tipoPessoa}" style="margin-bottom: 15px">
-                <f:selectItem itemLabel="Jurídica" itemValue="JURIDICA" />
-                <f:selectItem itemLabel="Física" itemValue="FISICA" />
-                <p:ajax event="change" listener="#{fornecedorBean.prepararNovo}" 
-                        process="@this" update="gridCampos" />
-            </p:selectOneButton>
-
-            <p:panelGrid columns="2" id="gridCampos" layout="grid">
-                
-                <p:outputLabel value="Nome/Razão Social" for="nome" />
-                <p:inputText id="nome" value="#{fornecedorBean.entidade.nome}" required="true" />
-
-                <!-- Campos para Pessoa Jurídica -->
-                <p:outputLabel value="CNPJ" for="cnpj" rendered="#{fornecedorBean.tipoPessoa == 'JURIDICA'}" />
-                <p:inputMask id="cnpj" value="#{fornecedorBean.entidade.cnpj}" 
-                             mask="99.999.999/9999-99" required="true"
-                             rendered="#{fornecedorBean.tipoPessoa == 'JURIDICA'}" />
-
-                <!-- Campos para Pessoa Física -->
-                <p:outputLabel value="CPF" for="cpf" rendered="#{fornecedorBean.tipoPessoa == 'FISICA'}" />
-                <p:inputMask id="cpf" value="#{fornecedorBean.entidade.cpf}" 
-                             mask="999.999.999-99" required="true"
-                             rendered="#{fornecedorBean.tipoPessoa == 'FISICA'}" />
-
-                <p:outputLabel value="E-mail" for="email" />
-                <p:inputText id="email" value="#{fornecedorBean.entidade.email}" />
-
-            </p:panelGrid>
-
-            <div style="margin-top: 20px;">
-                <p:commandButton value="Salvar Fornecedor" action="#{fornecedorBean.salvar}"
-                                 process="@form" update="@form :formListagem:tabela :messages"
-                                 oncomplete="if (!args.validationFailed) PF('widgetDialogo').hide()" />
-            </div>
-        </h:form>
+	    <p:messages id="msgs" />
+	    
+	    <!-- Seletor de Tipo -->
+	    <p:selectOneButton value="#{fornecedorBean.tipoPessoa}" style="margin-bottom: 15px">
+	        <f:selectItem itemLabel="Jurídica" itemValue="JURIDICA" />
+	        <f:selectItem itemLabel="Física" itemValue="FISICA" />
+	        <p:ajax event="change" listener="#{fornecedorBean.prepararNovo}" 
+	                process="@this" update="gridCampos" />
+	    </p:selectOneButton>
+	
+	    <p:panelGrid columns="2" id="gridCampos" layout="grid">
+	        
+	        <p:outputLabel value="Nome/Razão Social" for="nome" />
+	        <p:inputText id="nome" value="#{fornecedorBean.entidade.nome}" required="true" />
+	
+	        <!-- Campos para Pessoa Jurídica -->
+	        <p:outputLabel value="CNPJ" for="cnpj" rendered="#{fornecedorBean.tipoPessoa == 'JURIDICA'}" />
+	        <p:inputMask id="cnpj" value="#{fornecedorBean.entidade.cnpj}" 
+	                     mask="99.999.999/9999-99" required="true"
+	                     rendered="#{fornecedorBean.tipoPessoa == 'JURIDICA'}" />
+	
+	        <!-- Campos para Pessoa Física -->
+	        <p:outputLabel value="CPF" for="cpf" rendered="#{fornecedorBean.tipoPessoa == 'FISICA'}" />
+	        <p:inputMask id="cpf" value="#{fornecedorBean.entidade.cpf}" 
+	                     mask="999.999.999-99" required="true"
+	                     rendered="#{fornecedorBean.tipoPessoa == 'FISICA'}" />
+	
+	        <p:outputLabel value="E-mail" for="email" />
+	        <p:inputText id="email" value="#{fornecedorBean.entidade.email}" />
+	
+	    </p:panelGrid>
     </ui:define>
 </ui:composition>

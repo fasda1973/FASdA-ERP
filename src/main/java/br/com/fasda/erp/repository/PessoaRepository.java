@@ -45,15 +45,15 @@ public class PessoaRepository implements Serializable {
     }
     
     public List<Pessoa> listarClientes() {
-        return manager.createQuery("from Pessoa p where p.isCliente = true", Pessoa.class).getResultList();
+        return manager.createQuery("from Pessoa p where p.cliente = true", Pessoa.class).getResultList();
     }
 
     public List<Pessoa> listarFuncionarios() {
-        return manager.createQuery("from Pessoa p where p.isFuncionario = true", Pessoa.class).getResultList();
+        return manager.createQuery("from Pessoa p where p.funcionario = true", Pessoa.class).getResultList();
     }
     
     public List<Pessoa> listarFornecedores() {
-        return manager.createQuery("from Pessoa p where p.isFornecedor = true", Pessoa.class).getResultList();
+        return manager.createQuery("from Pessoa p where p.fornecedor = true", Pessoa.class).getResultList();
     }
 
     public Pessoa guardar(Pessoa pessoa) {

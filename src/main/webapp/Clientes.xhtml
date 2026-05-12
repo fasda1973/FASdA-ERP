@@ -5,34 +5,34 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui">
 
-    <!-- Passamos o ClienteBean para o template -->
     <ui:param name="managedBean" value="#{clienteBean}" />
+    
+    <ui:define name="tituloHead">Clientes</ui:define>
 
-    <ui:define name="titulo">Cadastro de Clientes</ui:define>
-
-    <ui:define name="tabela_dados">
-        <p:dataTable value="#{clienteBean.listaItens}" var="item" ...>
-            <p:column headerText="Nome">
-                <h:outputText value="#{item.nome}" />
-            </p:column>
-            <!-- Outras colunas... -->
-        </p:dataTable>
+    <ui:define name="titulo">
+    	<i class="fa-solid fa-handshake"></i>
+    	<span>Clientes</span>
+    </ui:define>
+    
+    <ui:define name="pesquisa">
+        <p:inputText id="termoPesquisa" placeholder="Pesquisar pessoa..." 
+                     size="30" value="#{pessoaBean.termoPesquisa}" />
     </ui:define>
 
-    <ui:define name="campos_formulario">
-        <h:form id="formCadastro">
-             <!-- Aqui você pode até esconder os checkboxes de "Papel" 
-                  já que nesta tela estamos tratando apenas de Clientes -->
-             <p:panelGrid columns="2">
-                 <p:outputLabel value="Nome" for="nome" />
-                 <p:inputText id="nome" value="#{clienteBean.entidade.nome}" />
-                 
-                 <!-- Campos específicos de cliente, como Limite de Crédito -->
-                 <p:outputLabel value="Limite" for="limite" />
-                 <p:inputNumber id="limite" value="#{clienteBean.entidade.dadosCliente.limiteCredito}" />
-             </p:panelGrid>
-             
-             <p:commandButton value="Salvar" action="#{clienteBean.salvar}" ... />
-        </h:form>
+    <ui:define name="colunas">      
+	    <p:column headerText="Nome">
+	        <h:outputText value="#{item.nome}" />
+	    </p:column>      
+    </ui:define>
+
+    <ui:define name="campos_formulario">       	    
+	    <p:panelGrid columns="2" id="gridCampos" layout="grid">
+	        <p:outputLabel value="Nome" for="nome" />
+	        <p:inputText id="nome" value="#{clienteBean.entidade.nome}" />
+	        
+	        <!-- Campos específicos de cliente, como Limite de Crédito -->
+	        <p:outputLabel value="Limite" for="limite" />
+	        <p:inputNumber id="limite" value="#{clienteBean.entidade.dadosCliente.limiteCredito}" />
+	    </p:panelGrid>      
     </ui:define>
 </ui:composition>

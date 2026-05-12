@@ -6,6 +6,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import br.com.fasda.erp.model.DadosCliente;
 import br.com.fasda.erp.model.Pessoa;
 import br.com.fasda.erp.model.PessoaJuridica;
 import br.com.fasda.erp.repository.PessoaRepository;
@@ -18,10 +19,12 @@ public class FornecedorBean extends CrudBean<Pessoa> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Inject
-    private PessoaService service;
+    private PessoaService pessoaService;
     
     @Inject
-    private PessoaRepository repository;
+    private PessoaRepository pessoaRepository;
+    
+    private String tipoPessoa;
 
     public FornecedorBean() {
         super(Pessoa.class);
@@ -30,7 +33,7 @@ public class FornecedorBean extends CrudBean<Pessoa> implements Serializable {
     @Override
     public void pesquisar() {
         // Filtra para exibir apenas fornecedores
-        this.listaItens = repository.listarFornecedores();
+        this.listaItens = pessoaRepository.listarFornecedores();
     }
 
     @Override
@@ -43,14 +46,26 @@ public class FornecedorBean extends CrudBean<Pessoa> implements Serializable {
     
     @Override
     public void prepararEdicao() {
+    	// Sincroniza a variável de controle com o tipo real do objeto
+        if (this.entidade instanceof PessoaJuridica) {
+            this.setTipoPessoa("JURIDICA");
+        } else {
+            this.setTipoPessoa("FISICA");
+        }
         
+        // Garante que os dados auxiliares não estejam nulos
+        if (this.entidade.getDadosCliente() == null) {
+            DadosCliente dados = new DadosCliente();
+            dados.setPessoa(this.entidade);
+            this.entidade.setDadosCliente(dados);
+        }           
     }
 
     @Override
     public void salvar() {
         try {
             entidade.setFornecedor(true);
-            service.salvar(entidade);
+            pessoaService.salvar(entidade);
             messages.info("Fornecedor salvo com sucesso!");
             prepararNovo();
         } catch (NegocioException e) {
@@ -60,7 +75,13 @@ public class FornecedorBean extends CrudBean<Pessoa> implements Serializable {
     
     @Override
     public void excluir() {
-    	
+    	try {
+            pessoaService.excluir(entidade);
+            pesquisar(); // Atualiza a tabela após excluir
+            messages.info("Registro excluído com sucesso!");
+        } catch (NegocioException e) {
+            messages.error(e.getMessage());
+        }    	
     }
     
     @Override
@@ -68,7 +89,11 @@ public class FornecedorBean extends CrudBean<Pessoa> implements Serializable {
         return pessoa.getId();
     }
     
+    public String getTipoPessoa() {
+        return tipoPessoa;
+    }
+    
     public void setTipoPessoa(String tipoPessoa) {
-        
+    	this.tipoPessoa = tipoPessoa;        
     }
 }

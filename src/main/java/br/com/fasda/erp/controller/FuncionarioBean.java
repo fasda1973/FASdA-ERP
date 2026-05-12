@@ -6,8 +6,10 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import br.com.fasda.erp.model.DadosCliente;
 import br.com.fasda.erp.model.Pessoa;
 import br.com.fasda.erp.model.PessoaFisica;
+import br.com.fasda.erp.model.PessoaJuridica;
 import br.com.fasda.erp.repository.PessoaRepository;
 import br.com.fasda.erp.service.PessoaService;
 import br.com.fasda.erp.util.NegocioException;
@@ -22,6 +24,8 @@ public class FuncionarioBean extends CrudBean<Pessoa> implements Serializable {
     
     @Inject
     private PessoaRepository pessoaRepository;
+    
+    private String tipoPessoa;
 
     public FuncionarioBean() {
         super(Pessoa.class);
@@ -43,7 +47,19 @@ public class FuncionarioBean extends CrudBean<Pessoa> implements Serializable {
     
     @Override
     public void prepararEdicao() {
+    	// Sincroniza a variável de controle com o tipo real do objeto
+        if (this.entidade instanceof PessoaJuridica) {
+            this.setTipoPessoa("JURIDICA");
+        } else {
+            this.setTipoPessoa("FISICA");
+        }
         
+        // Garante que os dados auxiliares não estejam nulos
+        if (this.entidade.getDadosCliente() == null) {
+            DadosCliente dados = new DadosCliente();
+            dados.setPessoa(this.entidade);
+            this.entidade.setDadosCliente(dados);
+        }           
     }
 
     @Override
@@ -60,7 +76,13 @@ public class FuncionarioBean extends CrudBean<Pessoa> implements Serializable {
     
     @Override
     public void excluir() {
-    	
+    	try {
+            pessoaService.excluir(entidade);
+            pesquisar(); // Atualiza a tabela após excluir
+            messages.info("Registro excluído com sucesso!");
+        } catch (NegocioException e) {
+            messages.error(e.getMessage());
+        }     	
     }
     
     @Override
@@ -68,7 +90,11 @@ public class FuncionarioBean extends CrudBean<Pessoa> implements Serializable {
         return pessoa.getId();
     }
     
+    public String getTipoPessoa() {
+        return tipoPessoa;
+    }
+    
     public void setTipoPessoa(String tipoPessoa) {
-        
+    	this.tipoPessoa = tipoPessoa;        
     }
 }

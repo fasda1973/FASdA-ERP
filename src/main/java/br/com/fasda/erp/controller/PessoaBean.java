@@ -69,10 +69,14 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
     
     @Override
     public void excluir() {
-    	service.excluir(this.entidade);
-        this.entidade = null;
-        atualizarRegistros(); // Atualiza a lista após remover
-        messages.info("Pessoa excluída com sucesso!");
+    	try {
+	    	service.excluir(this.entidade);
+	        this.entidade = null;
+	        atualizarRegistros(); // Atualiza a lista após remover
+	        messages.info("Pessoa excluída com sucesso!");
+    	} catch (NegocioException e) {
+            messages.error(e.getMessage());
+        }
     }
     
     @Override
