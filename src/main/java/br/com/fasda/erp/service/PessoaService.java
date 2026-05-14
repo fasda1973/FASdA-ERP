@@ -7,9 +7,11 @@ import javax.inject.Inject;
 
 import br.com.fasda.erp.model.DadosCliente;
 import br.com.fasda.erp.model.DadosFuncionario;
+import br.com.fasda.erp.model.LogAuditoria;
 import br.com.fasda.erp.model.Pessoa;
 import br.com.fasda.erp.model.PessoaFisica;
 import br.com.fasda.erp.model.PessoaJuridica;
+import br.com.fasda.erp.repository.LogRepository;
 import br.com.fasda.erp.repository.PessoaRepository;
 import br.com.fasda.erp.util.NegocioException;
 import br.com.fasda.erp.util.Transacional;
@@ -19,6 +21,8 @@ public class PessoaService implements Serializable {
     @Inject
     private PessoaRepository pessoaRepository;
     
+    @Inject
+    private LogRepository logRepository; // 1. Injetar o repositório de logs
 
     @Transacional
     public void salvar(Pessoa pessoa) throws NegocioException {
@@ -76,6 +80,13 @@ public class PessoaService implements Serializable {
         // O Hibernate fará o INSERT na tabela 'pessoa' 
         // e na 'pessoa_fisica' ou 'pessoa_juridica' num piscar de olhos.
         pessoaRepository.guardar(pessoa);
+        
+        // 3. Monta a mensagem de auditoria usando o ID recém-gerado
+        String detalheLog = "Pessoa cadastrada - ID: " + pessoa.getId() + " | Nome: " + pessoa.getNome();
+        
+        // 4. Instancia e grava o log
+        LogAuditoria log = new LogAuditoria("CADASTRO", detalheLog);
+        logRepository.salvar(log);
     }
     
     @Transacional

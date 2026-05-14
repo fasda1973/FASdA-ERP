@@ -41,6 +41,8 @@ public class FuncionarioBean extends CrudBean<Pessoa> implements Serializable {
     public void prepararNovo() {
         // Funcionários geralmente são Pessoa Física
         this.entidade = new PessoaFisica();
+        // Aqui está o segredo:
+        this.entidade.setDadosFuncionario(new DadosFuncionario());
         this.setTipoPessoa("FISICA");
         this.entidade.setFuncionario(true); // Já marca o papel automaticamente
     }

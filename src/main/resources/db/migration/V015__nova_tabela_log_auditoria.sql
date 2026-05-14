@@ -1,0 +1,7 @@
+CREATE TABLE log_auditoria (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    data_hora DATETIME NOT NULL,
+    operacao VARCHAR(255) NOT NULL,
+    detalhe VARCHAR(500) NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import br.com.fasda.erp.model.ClienteOld;
+import br.com.fasda.erp.model.LogAuditoria;
 import br.com.fasda.erp.model.Pessoa;
 
 public class PessoaRepository implements Serializable {
@@ -57,8 +57,17 @@ public class PessoaRepository implements Serializable {
     }
 
     public Pessoa guardar(Pessoa pessoa) {
-        return manager.merge(pessoa);
+    	if (pessoa.getId() == null) {
+            manager.persist(pessoa); // Persist é mais forte que o merge para novos
+        } else {
+            pessoa = manager.merge(pessoa);
+        }
+        
+        manager.flush(); // Aqui o Hibernate É OBRIGADO a ir no banco
+        return pessoa;
     }
+    
+    
 
     public void remover(Pessoa pessoa) {
         pessoa = porId(pessoa.getId());
