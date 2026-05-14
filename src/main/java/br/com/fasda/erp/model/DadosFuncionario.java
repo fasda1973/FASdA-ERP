@@ -14,6 +14,8 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import br.com.fasda.erp.util.DateUtils;
+
 @Entity
 @Table(name = "dados_funcionario")
 public class DadosFuncionario implements Serializable {
@@ -65,11 +67,6 @@ public class DadosFuncionario implements Serializable {
 	public LocalDate getDataAdmissao() {
 		return dataAdmissao;
 	}
-	
-	public String getDataAdmissaoFormatada() {
-	    if (this.dataAdmissao == null) return "";
-	    return this.dataAdmissao.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-	}
 
 	public void setDataAdmissao(LocalDate dataAdmissao) {
 		this.dataAdmissao = dataAdmissao;
@@ -85,6 +82,10 @@ public class DadosFuncionario implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	
+	public String getDataFormatada() {
+	    return DateUtils.formatarData(this.dataAdmissao);
 	}
     
 }
