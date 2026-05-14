@@ -1,7 +1,6 @@
 package br.com.fasda.erp.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,29 +12,28 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-
-
 @Entity
-@Table(name = "dados_cliente")
-public class DadosCliente implements Serializable {
+@Table(name = "dados_fornecedor")
+public class DadosFornecedor implements Serializable {
     private static final long serialVersionUID = 1L;
-
+    
     @Id
     private Long id;
-
+    
     @OneToOne
     @MapsId // Faz com que o ID desta tabela seja o mesmo ID da tabela Pessoa
     @JoinColumn(name = "pessoa_id")
     private Pessoa pessoa;
-
-    @Column(name = "limite_credito", precision = 10, scale = 2)
-    private BigDecimal limiteCredito;
+    
+    @Column(name = "prazo_pagamento")
+    private Long prazoPagamento;
     
     @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private DadosCliente dadosCliente;
+    private DadosFornecedor dadosFornecedor;
 
     // Getters e Setters
-    public Long getId() {
+    
+	public Long getId() {
 		return id;
 	}
 
@@ -51,24 +49,24 @@ public class DadosCliente implements Serializable {
 		this.pessoa = pessoa;
 	}
 
-	public BigDecimal getLimiteCredito() {
-		return limiteCredito;
+	public Long getPrazoPagamento() {
+		return prazoPagamento;
 	}
 
-	public void setLimiteCredito(BigDecimal limiteCredito) {
-		this.limiteCredito = limiteCredito;
-	}
-
-	public DadosCliente getDadosCliente() {
-		return dadosCliente;
-	}
-
-	public void setDadosCliente(DadosCliente dadosCliente) {
-		this.dadosCliente = dadosCliente;
+	public void setPrazoPagamento(Long prazoPagamento) {
+		this.prazoPagamento = prazoPagamento;
 	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-   
+
+	public DadosFornecedor getDadosFornecedor() {
+		return dadosFornecedor;
+	}
+
+	public void setDadosFornecedor(DadosFornecedor dadosFornecedor) {
+		this.dadosFornecedor = dadosFornecedor;
+	}
+    
 }

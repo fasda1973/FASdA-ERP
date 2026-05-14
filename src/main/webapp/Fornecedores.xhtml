@@ -24,19 +24,20 @@
 	        <h:outputText value="#{item.nome}" />
 	    </p:column>
 	    
-	    <p:column headerText="Documento" width="180">
+	    <p:column headerText="Documento" width="150">
 	        <h:outputText value="#{item.documento}" />
 	    </p:column>
 	    
-	    <p:column headerText="E-mail">
+	    <p:column headerText="Prazo de Pagamento(dias)" width="120">
+	        <h:outputText value="#{item.dadosFornecedor.prazoPagamento}" />
+	    </p:column>
+	    
+	    <p:column headerText="E-mail"  width="240">
 	        <h:outputText value="#{item.email}" />
 	    </p:column>
     </ui:define>
 
-    <ui:define name="campos_formulario">
-	    <p:messages id="msgs" />
-	    
-	    <!-- Seletor de Tipo -->
+    <ui:define name="campos_formulario">   
 	    <p:selectOneButton value="#{fornecedorBean.tipoPessoa}" style="margin-bottom: 15px">
 	        <f:selectItem itemLabel="Jurídica" itemValue="JURIDICA" />
 	        <f:selectItem itemLabel="Física" itemValue="FISICA" />
@@ -49,13 +50,11 @@
 	        <p:outputLabel value="Nome/Razão Social" for="nome" />
 	        <p:inputText id="nome" value="#{fornecedorBean.entidade.nome}" required="true" />
 	
-	        <!-- Campos para Pessoa Jurídica -->
 	        <p:outputLabel value="CNPJ" for="cnpj" rendered="#{fornecedorBean.tipoPessoa == 'JURIDICA'}" />
 	        <p:inputMask id="cnpj" value="#{fornecedorBean.entidade.cnpj}" 
 	                     mask="99.999.999/9999-99" required="true"
 	                     rendered="#{fornecedorBean.tipoPessoa == 'JURIDICA'}" />
 	
-	        <!-- Campos para Pessoa Física -->
 	        <p:outputLabel value="CPF" for="cpf" rendered="#{fornecedorBean.tipoPessoa == 'FISICA'}" />
 	        <p:inputMask id="cpf" value="#{fornecedorBean.entidade.cpf}" 
 	                     mask="999.999.999-99" required="true"
@@ -63,6 +62,9 @@
 	
 	        <p:outputLabel value="E-mail" for="email" />
 	        <p:inputText id="email" value="#{fornecedorBean.entidade.email}" />
+	        
+	        <p:outputLabel value="Prazo Pagamento" for="prazoPagamento" />
+	        <p:inputText id="prazoPagamento" value="#{fornecedorBean.entidade.dadosFornecedor.prazoPagamento}" />
 	
 	    </p:panelGrid>
     </ui:define>

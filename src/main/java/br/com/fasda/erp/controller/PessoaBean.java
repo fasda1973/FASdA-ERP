@@ -10,6 +10,7 @@ import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
 import br.com.fasda.erp.model.DadosCliente;
+import br.com.fasda.erp.model.DadosFornecedor;
 import br.com.fasda.erp.model.DadosFuncionario;
 import br.com.fasda.erp.model.Pessoa;
 import br.com.fasda.erp.model.PessoaFisica;
@@ -94,14 +95,19 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
         // 2. Instancia o objeto de detalhes (essencial para evitar Target Unreachable)
         DadosCliente dados = new DadosCliente();
         
-        DadosFuncionario dadosFuncionario = new DadosFuncionario();
-        
         // 3. Faz a ligação bidirecional (Pai aponta pro Filho e Filho pro Pai)
         dados.setPessoa(this.entidade);
         this.entidade.setDadosCliente(dados);
         
+        DadosFuncionario dadosFuncionario = new DadosFuncionario();
+        
         dadosFuncionario.setPessoa(this.entidade);
         this.entidade.setDadosFuncionario(dadosFuncionario);
+        
+        DadosFornecedor dadosFornecedor = new DadosFornecedor();
+        
+        dadosFornecedor.setPessoa(this.entidade);
+        this.entidade.setDadosFornecedor(dadosFornecedor);
         
         System.out.println("Instanciando entidade para Tipo: " + this.tipoPessoa);
     	
@@ -134,6 +140,12 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
         	DadosFuncionario dadosFuncionario = new DadosFuncionario();
         	dadosFuncionario.setPessoa(this.entidade);
             this.entidade.setDadosFuncionario(dadosFuncionario);
+        }
+        
+        if (this.entidade.getDadosFornecedor() == null) {
+        	DadosFornecedor dadosFornecedor = new DadosFornecedor();
+        	dadosFornecedor.setPessoa(this.entidade);
+            this.entidade.setDadosFornecedor(dadosFornecedor);
         }
         
         System.out.println("Editando Entidade Tipo: " + this.tipoPessoa);

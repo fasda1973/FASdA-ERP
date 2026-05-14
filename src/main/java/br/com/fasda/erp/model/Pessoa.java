@@ -47,6 +47,9 @@ public abstract class Pessoa implements Serializable {
     
     @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private DadosFuncionario dadosFuncionario;
+    
+    @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private DadosFornecedor dadosFornecedor;
 	
     // Getters e Setters...
     public Long getId() {
@@ -122,5 +125,13 @@ public abstract class Pessoa implements Serializable {
 	    }
 	    return "";
 	}
-   
+
+	public DadosFornecedor getDadosFornecedor() {
+		return dadosFornecedor;
+	}
+
+	public void setDadosFornecedor(DadosFornecedor dadosFornecedor) {
+		this.dadosFornecedor = dadosFornecedor;
+	}
+	
 }

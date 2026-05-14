@@ -9,7 +9,7 @@
     
     <ui:define name="tituloHead">Funcionários</ui:define>
 
-     <ui:define name="titulo">
+    <ui:define name="titulo">
     	<i class="fa-solid fa-users-gear"></i>
     	<span>Funcionários</span>
     </ui:define>
@@ -38,8 +38,7 @@
     </ui:define>
 
     <ui:define name="campos_formulario">
-	    <p:messages id="msgs" />
-	    <p:panelGrid columns="2" id="gridCampos" layout="grid" styleClass="ui-panelgrid-blank">
+	    <p:panelGrid columns="2" id="gridCampos" layout="grid" >
 	        
 	        <p:outputLabel value="Nome" for="nome" />
 	        <p:inputText id="nome" value="#{funcionarioBean.entidade.nome}" required="true" />

@@ -6,7 +6,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import br.com.fasda.erp.model.DadosCliente;
+import br.com.fasda.erp.model.DadosFornecedor;
 import br.com.fasda.erp.model.Pessoa;
 import br.com.fasda.erp.model.PessoaJuridica;
 import br.com.fasda.erp.repository.PessoaRepository;
@@ -54,10 +54,10 @@ public class FornecedorBean extends CrudBean<Pessoa> implements Serializable {
         }
         
         // Garante que os dados auxiliares não estejam nulos
-        if (this.entidade.getDadosCliente() == null) {
-            DadosCliente dados = new DadosCliente();
+        if (this.entidade.getDadosFornecedor() == null) {
+            DadosFornecedor dados = new DadosFornecedor();
             dados.setPessoa(this.entidade);
-            this.entidade.setDadosCliente(dados);
+            this.entidade.setDadosFornecedor(dados);
         }           
     }
 
@@ -96,4 +96,5 @@ public class FornecedorBean extends CrudBean<Pessoa> implements Serializable {
     public void setTipoPessoa(String tipoPessoa) {
     	this.tipoPessoa = tipoPessoa;        
     }
+    
 }
