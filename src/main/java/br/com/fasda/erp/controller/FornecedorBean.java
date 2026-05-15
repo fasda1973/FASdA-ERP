@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.com.fasda.erp.model.DadosFornecedor;
+import br.com.fasda.erp.model.DadosFuncionario;
 import br.com.fasda.erp.model.Pessoa;
 import br.com.fasda.erp.model.PessoaJuridica;
 import br.com.fasda.erp.repository.PessoaRepository;
@@ -40,6 +41,7 @@ public class FornecedorBean extends CrudBean<Pessoa> implements Serializable {
     public void prepararNovo() {
         // Fornecedores geralmente são Pessoa Jurídica
         this.entidade = new PessoaJuridica();
+        this.entidade.setDadosFornecedor(new DadosFornecedor());
         this.setTipoPessoa("JURIDICA");
         this.entidade.setFornecedor(true);
     }
@@ -66,6 +68,7 @@ public class FornecedorBean extends CrudBean<Pessoa> implements Serializable {
         try {
             entidade.setFornecedor(true);
             pessoaService.salvar(entidade);
+            pesquisar(); // Atualiza a tabela
             messages.info("Fornecedor salvo com sucesso!");
             prepararNovo();
         } catch (NegocioException e) {

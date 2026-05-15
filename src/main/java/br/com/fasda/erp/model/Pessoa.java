@@ -46,7 +46,7 @@ public abstract class Pessoa implements Serializable {
     private DadosCliente dadosCliente;
     
     @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private DadosFuncionario dadosFuncionario;
+    private DadosFuncionario dadosFuncionario = new DadosFuncionario();
     
     @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private DadosFornecedor dadosFornecedor;

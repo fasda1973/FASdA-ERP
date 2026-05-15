@@ -75,11 +75,26 @@ public class PessoaService implements Serializable {
             // Vincula o "pai" ao "filho" para o @MapsId funcionar
             pessoa.getDadosFuncionario().setPessoa(pessoa);
         }
+        
+        // Se NÃO for cliente, remove o objeto para o Hibernate não tentar salvar
+        if (!pessoa.isCliente()) {
+            pessoa.setDadosCliente(null);
+        }
+        
+        // Se NÃO for fornecedor, remove o objeto
+        if (!pessoa.isFornecedor()) {
+            pessoa.setDadosFornecedor(null);
+        }
+        
+        // Se NÃO for funcionário, remove o objeto
+        if (!pessoa.isFuncionario()) {
+            pessoa.setDadosFuncionario(null);
+        }
 
         // 3. Persistência única
         // O Hibernate fará o INSERT na tabela 'pessoa' 
         // e na 'pessoa_fisica' ou 'pessoa_juridica' num piscar de olhos.
-        pessoaRepository.guardar(pessoa);
+        pessoa = pessoaRepository.guardar(pessoa);
         
         // 3. Monta a mensagem de auditoria usando o ID recém-gerado
         String detalheLog = "Pessoa cadastrada - ID: " + pessoa.getId() + " | Nome: " + pessoa.getNome();

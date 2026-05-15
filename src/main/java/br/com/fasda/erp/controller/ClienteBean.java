@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.com.fasda.erp.model.DadosCliente;
+import br.com.fasda.erp.model.DadosFuncionario;
 import br.com.fasda.erp.model.Pessoa;
 import br.com.fasda.erp.model.PessoaFisica;
 import br.com.fasda.erp.model.PessoaJuridica;
@@ -41,6 +42,7 @@ public class ClienteBean extends CrudBean<Pessoa> implements Serializable {
     public void prepararNovo() {
         // Clientes geralmente são Pessoa Física
         this.entidade = new PessoaFisica();
+        this.entidade.setDadosCliente(new DadosCliente());
         this.setTipoPessoa("FISICA");
         this.entidade.setCliente(true); // Já marca o papel automaticamente
     }
@@ -67,6 +69,7 @@ public class ClienteBean extends CrudBean<Pessoa> implements Serializable {
         try {
             entidade.setCliente(true); // Garante que ao salvar por esta tela, seja cliente
             pessoaService.salvar(entidade);
+            pesquisar(); // Atualiza a tabela
             messages.info("Cliente salvo com sucesso!");
             prepararNovo();
         } catch (NegocioException e) {
