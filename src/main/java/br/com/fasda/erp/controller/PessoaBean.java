@@ -31,6 +31,9 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
     @Inject
     private PessoaRepository repository;
     
+    @Inject
+    private LoginBean loginBean; // Injeta o seu bean de login/sessão
+    
     private String tipoPessoa = "FISICA";
     
     public PessoaBean() {
@@ -53,10 +56,19 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
     public void salvar() {
         try {
         	// Define que essa pessoa terá o papel de cliente
-            //getEntidade().setCliente(true);            
+            //getEntidade().setCliente(true);
+        	
+        	String loginDoUsuario = "SISTEMA"; // Valor padrão de segurança
+        	
+        	// 1. Verifica se o loginBean e o usuário logado não estão nulos
+            if (loginBean != null && loginBean.getUsuarioLogado() != null) {
+                
+                // 2. Pega o login (se na sua classe Usuario o método for getLogin())
+                loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
+            }
             
             // Chama o seu service especializado
-            service.salvar(getEntidade());
+            service.salvar(getEntidade(), "Cadastro de Pessoas", loginDoUsuario);
             atualizarRegistros();
             
             messages.info("Pessoa salva com sucesso!");
@@ -186,4 +198,6 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
     public void setTipoPessoa(String tipoPessoa) {
         this.tipoPessoa = tipoPessoa;
     }
+    
+    
 }

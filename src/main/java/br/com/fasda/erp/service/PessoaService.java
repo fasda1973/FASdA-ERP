@@ -25,7 +25,7 @@ public class PessoaService implements Serializable {
     private LogRepository logRepository; // 1. Injetar o repositório de logs
 
     @Transacional
-    public void salvar(Pessoa pessoa) throws NegocioException {
+    public void salvar(Pessoa pessoa, String origemTela, String usuarioLogado) throws NegocioException {
         // 1. Validações comuns (Ex: Nome obrigatório)
         if (pessoa.getNome() == null || pessoa.getNome().isEmpty()) {
             throw new NegocioException("O nome é obrigatório.");
@@ -91,17 +91,25 @@ public class PessoaService implements Serializable {
             pessoa.setDadosFuncionario(null);
         }
 
-        // 3. Persistência única
-        // O Hibernate fará o INSERT na tabela 'pessoa' 
-        // e na 'pessoa_fisica' ou 'pessoa_juridica' num piscar de olhos.
-        pessoa = pessoaRepository.guardar(pessoa);
-        
-        // 3. Monta a mensagem de auditoria usando o ID recém-gerado
-        String detalheLog = "Pessoa cadastrada - ID: " + pessoa.getId() + " | Nome: " + pessoa.getNome();
-        
-        // 4. Instancia e grava o log
-        LogAuditoria log = new LogAuditoria("CADASTRO", detalheLog);
-        logRepository.salvar(log);
+        try {
+	        // 3. Persistência única
+	        // O Hibernate fará o INSERT na tabela 'pessoa' 
+	        // e na 'pessoa_fisica' ou 'pessoa_juridica' num piscar de olhos.
+	        pessoa = pessoaRepository.guardar(pessoa);
+	        
+	        // Monta a mensagem incluindo a tela de origem
+	        String detalheLog = String.format("Cadastro realizado via tela [%s] - ID: %d | Nome: %s", 
+	                                          origemTela.toUpperCase(), pessoa.getId(), pessoa.getNome());
+	        
+	        // 4. Instancia e grava o log
+	        LogAuditoria log = new LogAuditoria("CADASTRO", detalheLog, usuarioLogado);
+	        logRepository.salvar(log);
+	        
+        } catch (Exception e) {
+        	// Se der erro de banco (ConstraintViolationException, coluna nula, etc), cai aqui
+            // Repassa o erro para o JSF exibir na tela e NÃO grava o log
+            throw new NegocioException("Erro ao salvar no banco de dados. Operação cancelada. Detalhe: " + e.getMessage());
+        }
     }
     
     @Transacional

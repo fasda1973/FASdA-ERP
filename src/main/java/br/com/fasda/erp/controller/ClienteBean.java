@@ -27,6 +27,9 @@ public class ClienteBean extends CrudBean<Pessoa> implements Serializable {
     private PessoaRepository pessoaRepository;
     
     private String tipoPessoa;
+    
+    @Inject
+    private LoginBean loginBean; // Injeta o seu bean de login/sessão
 
     public ClienteBean() {
         super(Pessoa.class);
@@ -68,7 +71,17 @@ public class ClienteBean extends CrudBean<Pessoa> implements Serializable {
     public void salvar() {
         try {
             entidade.setCliente(true); // Garante que ao salvar por esta tela, seja cliente
-            pessoaService.salvar(entidade);
+            
+            String loginDoUsuario = "SISTEMA"; // Valor padrão de segurança
+        	
+        	// 1. Verifica se o loginBean e o usuário logado não estão nulos
+            if (loginBean != null && loginBean.getUsuarioLogado() != null) {
+                
+                // 2. Pega o login (se na sua classe Usuario o método for getLogin())
+                loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
+            }
+            
+            pessoaService.salvar(entidade, "Cadastro de Clientes", loginDoUsuario);
             pesquisar(); // Atualiza a tabela
             messages.info("Cliente salvo com sucesso!");
             prepararNovo();

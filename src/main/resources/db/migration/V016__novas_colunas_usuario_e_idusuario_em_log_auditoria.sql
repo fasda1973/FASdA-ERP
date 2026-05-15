@@ -1,0 +1,1 @@
+ALTER TABLE log_auditoria ADD COLUMN usuario VARCHAR(100) NOT NULL;

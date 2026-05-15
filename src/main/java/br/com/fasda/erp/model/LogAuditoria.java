@@ -25,17 +25,18 @@ public class LogAuditoria {
     @Column(nullable = false, length = 500)
     private String detalhe; // Ex: "Pessoa cadastrada com ID: 12 e Nome: João"
 
-    // Se você já tiver controle de usuários logados, poderia adicionar:
-    // private String usuario; 
+    @Column(name = "usuario", nullable = false, length = 100)
+    private String usuario; 
 
     // Construtor padrão do Hibernate
     public LogAuditoria() {}
 
     // Construtor utilitário para facilitar a criação do log
-    public LogAuditoria(String operacao, String detalhe) {
+    public LogAuditoria(String operacao, String detalhe, String usuario) {
         this.dataHora = LocalDateTime.now(); // Pega a hora exata do servidor
         this.operacao = operacao;
         this.detalhe = detalhe;
+        this.usuario = usuario;
     }
 
     // Getters e Setters
@@ -50,4 +51,8 @@ public class LogAuditoria {
 
     public String getDetalhe() { return detalhe; }
     public void setDetalhe(String detalhe) { this.detalhe = detalhe; }
+
+	public String getUsuario() { return usuario; }
+
+	public void setUsuario(String usuario) { this.usuario = usuario; }
 }

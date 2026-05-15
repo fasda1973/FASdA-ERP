@@ -43,6 +43,15 @@ public class LoginBean implements Serializable {
     }
     
     // Getters e Setters para nomeUsuario e senha
+
+	public UsuarioRepository getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(UsuarioRepository usuarios) {
+		this.usuarios = usuarios;
+	}
+
 	public String getNomeUsuario() {
 		return nomeUsuario;
 	}
@@ -58,5 +67,17 @@ public class LoginBean implements Serializable {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-    
+
+	public Usuario getUsuarioLogado() {
+		return usuarioLogado;
+	}
+
+	public void setUsuarioLogado(Usuario usuarioLogado) {
+		this.usuarioLogado = usuarioLogado;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
 }
