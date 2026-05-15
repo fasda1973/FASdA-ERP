@@ -69,6 +69,7 @@ public class FuncionarioBean extends CrudBean<Pessoa> implements Serializable {
         try {
             entidade.setFuncionario(true); // Garantia extra
             pessoaService.salvar(entidade);
+            pesquisar(); // Atualiza a tabela
             messages.info("Funcionário salvo com sucesso!");
             prepararNovo();
         } catch (NegocioException e) {
