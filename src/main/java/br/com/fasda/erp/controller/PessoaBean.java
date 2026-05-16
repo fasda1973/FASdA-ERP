@@ -26,10 +26,10 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Inject
-    private PessoaService service; // O Service a gente injeta aqui
+    private PessoaService pessoaService; // O Service a gente injeta aqui
     
     @Inject
-    private PessoaRepository repository;
+    private PessoaRepository pessoaRepository;
     
     @Inject
     private LoginBean loginBean; // Injeta o seu bean de login/sessão
@@ -46,31 +46,26 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
     @Override
     public void pesquisar() {   	
     	if (termoPesquisa == null || termoPesquisa.trim().isEmpty()) {
-    		this.listaItens = repository.todas(); // Traz tudo se não houver filtro
+    		this.listaItens = pessoaRepository.todas(); // Traz tudo se não houver filtro
     	} else {
-            this.listaItens = repository.pesquisar(this.termoPesquisa);
+            this.listaItens = pessoaRepository.pesquisar(this.termoPesquisa);
         }
 	}
     
     @Override
     public void salvar() {
         try {
-        	// Define que essa pessoa terá o papel de cliente
-            //getEntidade().setCliente(true);
-        	
-        	String loginDoUsuario = "SISTEMA"; // Valor padrão de segurança
-        	
+        	// Prepara loginAuditoria
+        	String loginDoUsuario = "SISTEMA"; // Valor padrão de segurança      	
         	// 1. Verifica se o loginBean e o usuário logado não estão nulos
-            if (loginBean != null && loginBean.getUsuarioLogado() != null) {
-                
-                // 2. Pega o login (se na sua classe Usuario o método for getLogin())
+            if (loginBean != null && loginBean.getUsuarioLogado() != null) {                
+                // 2. Pega o login através do getNomeUsuario
                 loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
             }
             
             // Chama o seu service especializado
-            service.salvar(getEntidade(), "Cadastro de Pessoas", loginDoUsuario);
-            atualizarRegistros();
-            
+            pessoaService.salvar(getEntidade(), "Cadastro de Pessoas", loginDoUsuario);
+            atualizarRegistros();            
             messages.info("Pessoa salva com sucesso!");
             prepararNovo(); // Limpa o formulário
             
@@ -84,7 +79,7 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
     @Override
     public void excluir() {
     	try {
-	    	service.excluir(this.entidade);
+    		pessoaService.excluir(this.entidade);
 	        this.entidade = null;
 	        atualizarRegistros(); // Atualiza a lista após remover
 	        messages.info("Pessoa excluída com sucesso!");
@@ -170,7 +165,7 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
     }
     
     public void todasPessoas() {
-        this.listaItens = repository.todas();
+        this.listaItens = pessoaRepository.todas();
     }
     
     private void atualizarRegistros() {

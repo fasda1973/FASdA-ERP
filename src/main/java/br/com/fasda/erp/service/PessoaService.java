@@ -68,6 +68,11 @@ public class PessoaService implements Serializable {
             }
         }
         
+        // Se NÃO for cliente, remove o objeto para o Hibernate não tentar salvar
+        if (!pessoa.isCliente()) {
+            pessoa.setDadosCliente(null);
+        }
+        
         if (pessoa.isFuncionario()) {
             if (pessoa.getDadosFuncionario() == null) {
                 pessoa.setDadosFuncionario(new DadosFuncionario());
@@ -76,19 +81,14 @@ public class PessoaService implements Serializable {
             pessoa.getDadosFuncionario().setPessoa(pessoa);
         }
         
-        // Se NÃO for cliente, remove o objeto para o Hibernate não tentar salvar
-        if (!pessoa.isCliente()) {
-            pessoa.setDadosCliente(null);
+        // Se NÃO for funcionário, remove o objeto
+        if (!pessoa.isFuncionario()) {
+            pessoa.setDadosFuncionario(null);
         }
         
         // Se NÃO for fornecedor, remove o objeto
         if (!pessoa.isFornecedor()) {
             pessoa.setDadosFornecedor(null);
-        }
-        
-        // Se NÃO for funcionário, remove o objeto
-        if (!pessoa.isFuncionario()) {
-            pessoa.setDadosFuncionario(null);
         }
 
         try {
