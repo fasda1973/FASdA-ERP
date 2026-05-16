@@ -90,6 +90,11 @@ public class PessoaService implements Serializable {
         if (!pessoa.isFornecedor()) {
             pessoa.setDadosFornecedor(null);
         }
+        
+        // >>> O PULO DO GATO: Descobre a operação ANTES de salvar <<<
+        // Se o ID for nulo, a operação é CADASTRO. Se já tiver ID, é ALTERAÇÃO.
+        String tipoOperacao = (pessoa.getId() == null) ? "CADASTRO" : "ALTERAÇÃO";
+        String acaoTexto = (pessoa.getId() == null) ? "Inclusão realizada" : "Edição realizada";
 
         try {
 	        // 3. Persistência única
@@ -98,11 +103,11 @@ public class PessoaService implements Serializable {
 	        pessoa = pessoaRepository.guardar(pessoa);
 	        
 	        // Monta a mensagem incluindo a tela de origem
-	        String detalheLog = String.format("Cadastro realizado via tela [%s] - ID: %d | Nome: %s", 
-	                                          origemTela.toUpperCase(), pessoa.getId(), pessoa.getNome());
+	        String detalheLog = String.format("%s via tela [%s] - ID: %d | Nome: %s", 
+	                                          acaoTexto, origemTela.toUpperCase(), pessoa.getId(), pessoa.getNome());
 	        
 	        // 4. Instancia e grava o log
-	        LogAuditoria log = new LogAuditoria("CADASTRO", detalheLog, usuarioLogado);
+	        LogAuditoria log = new LogAuditoria(tipoOperacao, detalheLog, usuarioLogado);
 	        logRepository.salvar(log);
 	        
         } catch (Exception e) {
@@ -113,8 +118,23 @@ public class PessoaService implements Serializable {
     }
     
     @Transacional
-	public void excluir(Pessoa pessoa) throws NegocioException {
-		pessoaRepository.remover(pessoa);
+	public void excluir(Pessoa pessoa, String origemTela, String usuarioLogado) throws NegocioException {
+    	String tipoOperacao = "EXCLUSÃO";
+        String acaoTexto = "Exclução do registro";
+    	
+    	try {
+    		pessoaRepository.remover(pessoa);
+    		
+    		// Monta a mensagem incluindo a tela de origem
+	        String detalheLog = String.format("%s via tela [%s] - ID: %d | Nome: %s", 
+	                                          acaoTexto, origemTela.toUpperCase(), pessoa.getId(), pessoa.getNome());
+	        
+	        // 4. Instancia e grava o log
+	        LogAuditoria log = new LogAuditoria(tipoOperacao, detalheLog, usuarioLogado);
+	        logRepository.salvar(log);
+    	} catch (Exception e) {
+    		throw new NegocioException("Erro ao salvar no banco de dados. Operação cancelada. Detalhe: " + e.getMessage());
+    	}
 	}
     
     private void validarCPF(PessoaFisica pf) throws NegocioException {

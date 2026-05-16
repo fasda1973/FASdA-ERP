@@ -1,5 +1,6 @@
 package br.com.fasda.erp.model;
 
+import java.time.ZoneId;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,7 +34,7 @@ public class LogAuditoria {
 
     // Construtor utilitário para facilitar a criação do log
     public LogAuditoria(String operacao, String detalhe, String usuario) {
-        this.dataHora = LocalDateTime.now(); // Pega a hora exata do servidor
+        this.dataHora = LocalDateTime.now(ZoneId.of("America/Sao_Paulo")); // Pega a hora Brasil
         this.operacao = operacao;
         this.detalhe = detalhe;
         this.usuario = usuario;

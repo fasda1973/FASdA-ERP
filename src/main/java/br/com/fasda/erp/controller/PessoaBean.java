@@ -79,7 +79,11 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
     @Override
     public void excluir() {
     	try {
-    		pessoaService.excluir(this.entidade);
+    		String loginDoUsuario = "SISTEMA"; // Valor padrão de segurança
+    		
+    		loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
+    		
+    		pessoaService.excluir(this.entidade, "Cadastro de Pessoas", loginDoUsuario);
 	        this.entidade = null;
 	        atualizarRegistros(); // Atualiza a lista após remover
 	        messages.info("Pessoa excluída com sucesso!");

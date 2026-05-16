@@ -93,7 +93,11 @@ public class FuncionarioBean extends CrudBean<Pessoa> implements Serializable {
     @Override
     public void excluir() {
     	try {
-            pessoaService.excluir(entidade);
+    		String loginDoUsuario = "SISTEMA"; // Valor padrão de segurança
+    		
+    		loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
+    		
+            pessoaService.excluir(entidade, "Cadastro de Funcionários", loginDoUsuario);
             pesquisar(); // Atualiza a tabela após excluir
             messages.info("Registro excluído com sucesso!");
         } catch (NegocioException e) {
