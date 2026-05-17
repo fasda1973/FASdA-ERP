@@ -1,6 +1,7 @@
 package br.com.fasda.erp.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -34,6 +35,22 @@ public class DadosFuncionario implements Serializable {
     
     @Column(name = "data_admissao")
     private LocalDate dataAdmissao;
+    
+    // --- NOVOS CAMPOS ---
+    @Column(length = 100)
+    private String cargo;
+
+    @Column(name = "salario_base")
+    private BigDecimal salarioBase = BigDecimal.ZERO;
+
+    @Column(name = "data_demissao")
+    private LocalDate dataDemissao;
+
+    @Column(length = 30)
+    private String ctps;
+
+    @Column(name = "pis_pasep", length = 20)
+    private String pisPasep;
     
     @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private DadosFuncionario dadosFuncionario;

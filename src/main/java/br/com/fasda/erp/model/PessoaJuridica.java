@@ -19,6 +19,16 @@ public class PessoaJuridica extends Pessoa {
     @Column(name = "inscricao_estadual")
     private String inscricaoEstadual;
 
+    // --- NOVOS CAMPOS ---
+    @Column(name = "razao_social", length = 150)
+    private String razaoSocial;
+
+    @Column(name = "inscricao_municipal", length = 30)
+    private String inscricaoMunicipal;
+
+    @Column(name = "regime_tributario", length = 50)
+    private String regimeTributario;
+    
     // Getters e Setters...
 	public String getCnpj() {
 		return cnpj;
@@ -39,5 +49,31 @@ public class PessoaJuridica extends Pessoa {
 	public void setInscricaoEstadual(String inscricaoEstadual) {
 		this.inscricaoEstadual = inscricaoEstadual;
 	}
+
+	public String getRazaoSocial() {
+		return razaoSocial;
+	}
+
+	public void setRazaoSocial(String razaoSocial) {
+		this.razaoSocial = razaoSocial;
+	}
+
+	public String getInscricaoMunicipal() {
+		return inscricaoMunicipal;
+	}
+
+	public void setInscricaoMunicipal(String inscricaoMunicipal) {
+		this.inscricaoMunicipal = inscricaoMunicipal;
+	}
+
+	public String getRegimeTributario() {
+		return regimeTributario;
+	}
+
+	public void setRegimeTributario(String regimeTributario) {
+		this.regimeTributario = regimeTributario;
+	}
+	
+	
     
 }

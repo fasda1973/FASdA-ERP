@@ -1,5 +1,7 @@
 package br.com.fasda.erp.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -18,6 +20,16 @@ public class PessoaFisica extends Pessoa {
     
     @Column(name = "rg")
     private String rg;
+    
+    // --- NOVOS CAMPOS ---
+    @Column(name = "data_nascimento")
+    private LocalDate dataNascimento;
+
+    @Column(length = 15)
+    private String sexo; // Dica: Pode virar um Enum no futuro
+
+    @Column(name = "estado_civil", length = 20)
+    private String estadoCivil;
     
     // Getters e Setters...
 	public String getCpf() {
@@ -40,5 +52,31 @@ public class PessoaFisica extends Pessoa {
 	public void setRg(String rg) {
 		this.rg = rg;
 	}
+
+	public LocalDate getDataNascimento() {
+		return dataNascimento;
+	}
+
+	public void setDataNascimento(LocalDate dataNascimento) {
+		this.dataNascimento = dataNascimento;
+	}
+
+	public String getSexo() {
+		return sexo;
+	}
+
+	public void setSexo(String sexo) {
+		this.sexo = sexo;
+	}
+
+	public String getEstadoCivil() {
+		return estadoCivil;
+	}
+
+	public void setEstadoCivil(String estadoCivil) {
+		this.estadoCivil = estadoCivil;
+	}
+	
+	
        
 }
