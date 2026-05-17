@@ -9,7 +9,7 @@
 	<!-- <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider> -->
 		<properties>
 			<property name="javax.persistence.jdbc.url"
-				value="jdbc:mysql://localhost:3306/cursojsfprimefaces?allowPublicKeyRetrieval=true&amp;useTimezone=true&amp;serverTimezone=America/Sao_Paulo&amp;useSSL=false" />
+				value="jdbc:mysql://localhost:3306/fasda_erp?allowPublicKeyRetrieval=true&amp;useTimezone=true&amp;serverTimezone=America/Sao_Paulo&amp;useSSL=false" />
 				
 				<!-- Estava funcionado assim até 28/12/2022
 				value="jdbc:mysql://localhost/cursojsfprimefaces?serverTimezone=UTC&amp;useSSL=false" />
