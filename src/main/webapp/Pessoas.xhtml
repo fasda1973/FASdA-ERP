@@ -31,7 +31,7 @@
     
     <ui:define name="campos_formulario">		
 		  
-		    <p:panelGrid columns="2" id="gridCampos">	        
+		    <p:panelGrid columns="2" id="gridCampos" layout="tabular">	        
 		        <p:outputLabel value="Tipo de Pessoa" for="tipo" />
 		        <p:selectOneButton id="tipo" value="#{pessoaBean.tipoPessoa}" unselectable="false">
 		            <f:selectItem itemLabel="Física" itemValue="FISICA" />
