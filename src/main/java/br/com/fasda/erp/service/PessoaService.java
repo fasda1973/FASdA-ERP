@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import javax.inject.Inject;
 
 import br.com.fasda.erp.model.DadosCliente;
+import br.com.fasda.erp.model.DadosFornecedor;
 import br.com.fasda.erp.model.DadosFuncionario;
 import br.com.fasda.erp.model.LogAuditoria;
 import br.com.fasda.erp.model.Pessoa;
@@ -86,6 +87,14 @@ public class PessoaService implements Serializable {
             pessoa.setDadosFuncionario(null);
         }
         
+        if (pessoa.isFornecedor()) {
+            if (pessoa.getDadosFornecedor() == null) {
+                pessoa.setDadosFornecedor(new DadosFornecedor());
+            }
+            // Vincula o "pai" ao "filho" para o @MapsId funcionar
+            pessoa.getDadosFornecedor().setPessoa(pessoa);
+        }
+        
         // Se NÃO for fornecedor, remove o objeto
         if (!pessoa.isFornecedor()) {
             pessoa.setDadosFornecedor(null);
@@ -111,6 +120,9 @@ public class PessoaService implements Serializable {
 	        logRepository.salvar(log);
 	        
         } catch (Exception e) {
+        	// ESSA LINHA É CRUCIAL AGORA: Ela vai cuspir o erro escondido no console!
+            e.printStackTrace();
+        	
         	// Se der erro de banco (ConstraintViolationException, coluna nula, etc), cai aqui
             // Repassa o erro para o JSF exibir na tela e NÃO grava o log
             throw new NegocioException("Erro ao salvar no banco de dados. Operação cancelada. Detalhe: " + e.getMessage());
