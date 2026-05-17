@@ -12,11 +12,11 @@ public class FlywayConfig implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
                 
     	try {
-    	    System.out.println("Iniciando Migração do Banco de Dados com Flyway...");
+    	    System.out.println("Iniciando Migração do Banco(fasda_erp) de Dados com Flyway...");
 
     	    // Criando o DataSource manualmente para garantir a conexão
     	    com.mysql.cj.jdbc.MysqlDataSource dataSource = new com.mysql.cj.jdbc.MysqlDataSource();
-    	    dataSource.setURL("jdbc:mysql://localhost:3306/cursojsfprimefaces?useSSL=false&allowPublicKeyRetrieval=true");
+    	    dataSource.setURL("jdbc:mysql://localhost:3306/fasda_erp?useSSL=false&allowPublicKeyRetrieval=true");
     	    dataSource.setUser("root");
     	    dataSource.setPassword("brcd2605");
 
