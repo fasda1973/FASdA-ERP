@@ -1,4 +1,4 @@
-package br.com.fasda.erp.controller;
+package old;
 
 import java.util.Arrays;
 
@@ -8,11 +8,9 @@ import javax.inject.Named;
 
 import org.primefaces.PrimeFaces;
 
+import br.com.fasda.erp.controller.CrudBean;
 import br.com.fasda.erp.model.Pessoa;
-import br.com.fasda.erp.repository.ClienteRepositoryOld;
-import br.com.fasda.erp.service.ClienteServiceOld;
 import br.com.fasda.erp.util.NegocioException;
-import old.ClienteOld;
 
 @Named
 @ViewScoped
