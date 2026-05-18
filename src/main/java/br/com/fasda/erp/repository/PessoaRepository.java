@@ -44,16 +44,39 @@ public class PessoaRepository implements Serializable {
         return manager.createQuery("from Pessoa", Pessoa.class).getResultList();
     }
     
+    public Long contarTodas() {
+	    return manager.createQuery("select count(e) from Pessoa e", Long.class)
+	                  .getSingleResult();
+	}
+    
     public List<Pessoa> listarClientes() {
         return manager.createQuery("from Pessoa p where p.cliente = true", Pessoa.class).getResultList();
+    }
+    
+    public Long contarTodosClientes() {
+        // Usando a flag booleana da própria classe Pessoa
+        return manager.createQuery("select count(p) from Pessoa p where p.cliente = true", Long.class)
+                      .getSingleResult();
     }
 
     public List<Pessoa> listarFuncionarios() {
         return manager.createQuery("from Pessoa p where p.funcionario = true", Pessoa.class).getResultList();
     }
     
+    public Long contarTodosFuncionarios() {
+        // Usando a flag booleana da própria classe Pessoa
+        return manager.createQuery("select count(p) from Pessoa p where p.funcionario = true", Long.class)
+                      .getSingleResult();
+    }
+    
     public List<Pessoa> listarFornecedores() {
         return manager.createQuery("from Pessoa p where p.fornecedor = true", Pessoa.class).getResultList();
+    }
+    
+    public Long contarTodosFornecedores() {
+        // Usando a flag booleana da própria classe Pessoa
+        return manager.createQuery("select count(p) from Pessoa p where p.fornecedor = true", Long.class)
+                      .getSingleResult();
     }
 
     public Pessoa guardar(Pessoa pessoa) {

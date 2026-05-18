@@ -13,33 +13,47 @@
         </f:metadata>
 
         <div class="ui-g">
-		    <!-- Cards Superiores -->
-	        <div class="ui-g-12 ui-md-6 ui-lg-3">
-	            <div class="card-dashboard card-dashboard:hover" style="background: #2196F3; color: white; padding: 20px; border-radius: 8px;">
-		        <i class="fa fa-users" style="font-size: 2em; float: right; opacity: 0.5;"></i>
-		        <span>USUÁRIOS</span>
-		        <h2>#{dashboardBean.totalUsuarios}</h2>
-		    </div>
+        	<div class="ui-g-12 ui-md-6 ui-lg-2">
+	            <div class="card-dashboard card-dashboard:hover" style="background: #4242FF; color: white; padding: 20px; border-radius: 8px;">
+	                <i class="fa-solid fa-handshake" style="font-size: 2em; float: right; opacity: 0.5;"></i>
+	                <span>CLIENTES</span>
+	                <h2>#{dashboardBean.totalClientes}</h2>
+	            </div>
 	        </div>
-	
-	        <div class="ui-g-12 ui-md-6 ui-lg-3">
+        	
+        	<div class="ui-g-12 ui-md-6 ui-lg-2">
+	            <div class="card-dashboard card-dashboard:hover" style="background: #FF2F2F; color: white; padding: 20px; border-radius: 8px;">
+	                <i class="fa-solid fa-users-gear" style="font-size: 2em; float: right; opacity: 0.5;"></i>
+	                <span>FUNCIONARIOS</span>
+	                <h2>#{dashboardBean.totalFuncionarios}</h2>
+	            </div>
+	        </div>
+        		
+	        <div class="ui-g-12 ui-md-6 ui-lg-2">
 	            <div class="card-dashboard card-dashboard:hover" style="background: #4CAF50; color: white; padding: 20px; border-radius: 8px;">
 	                <i class="fa fa-building" style="font-size: 2em; float: right; opacity: 0.5;"></i>
-	                <span>EMPRESAS</span>
-	                <h2>#{dashboardBean.totalEmpresas}</h2>
+	                <span>FORNECEDORES</span>
+	                <h2>#{dashboardBean.totalFornecedores}</h2>
 	            </div>
 	        </div>
 		    
-		    <!-- Card Pendências (Laranja) - Exemplo -->
-		    <div class="ui-g-12 ui-md-6 ui-lg-3">
+		    <div class="ui-g-12 ui-md-6 ui-lg-2">
 		        <div class="card-dashboard card-dashboard:hover" style="background: #FF9800; color: white; padding: 20px; border-radius: 8px;">
-		            <i class="fa fa-exclamation-triangle" style="font-size: 2em; float: right; opacity: 0.5;"></i>
-		            <span>ALERTAS</span>
-		            <h2>3</h2>
+		            <i class="fa-solid fa-person" style="font-size: 2em; float: right; opacity: 0.5;"></i>
+		            <span>PESSOAS</span>
+		            <h2>#{dashboardBean.totalPessoas}</h2>
 		        </div>
 		    </div>
 		    
-		    <!-- Linha do Gráfico -->
+		    <div class="ui-g-12 ui-md-6 ui-lg-2">
+	            <div class="card-dashboard card-dashboard:hover" style="background: #2196F3; color: white; padding: 20px; border-radius: 8px;">
+			        <i class="fa fa-users" style="font-size: 2em; float: right; opacity: 0.5;"></i>
+			        <span>USUÁRIOS</span>
+			        <h2>#{dashboardBean.totalUsuarios}</h2>
+		    	</div>
+	        </div>
+		    
+		    <!-- Barras do Gráfico -->
 	        <div class="ui-g-12">
 	            <p:panel header="Estatísticas de Cadastro" style="margin-top: 20px;">
 	                <p:chart type="bar" model="#{dashboardBean.barModel}" style="height:350px;" responsive="true"/>
