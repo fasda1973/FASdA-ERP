@@ -9,7 +9,7 @@
 	<packaging>war</packaging>
 
 	<name>fasda-erp</name>
-	<description>Curso JSF e Primefaces Essencial</description>
+	<description>ERP Gestão de Empresas</description>
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
