@@ -8,11 +8,11 @@ import javax.inject.Named;
 
 import org.primefaces.PrimeFaces;
 
-import br.com.fasda.erp.model.ClienteOld;
 import br.com.fasda.erp.model.Pessoa;
 import br.com.fasda.erp.repository.ClienteRepositoryOld;
 import br.com.fasda.erp.service.ClienteServiceOld;
 import br.com.fasda.erp.util.NegocioException;
+import old.ClienteOld;
 
 @Named
 @ViewScoped

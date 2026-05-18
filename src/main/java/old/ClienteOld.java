@@ -1,4 +1,4 @@
-package br.com.fasda.erp.model;
+package old;
 
 import java.io.Serializable;
 import javax.persistence.*;

@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import br.com.fasda.erp.model.ClienteOld;
+import old.ClienteOld;
 
 public class ClienteRepositoryOld implements Serializable {
 

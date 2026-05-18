@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 import javax.inject.Inject;
 
-import br.com.fasda.erp.model.ClienteOld;
 import br.com.fasda.erp.repository.ClienteRepositoryOld;
 import br.com.fasda.erp.util.NegocioException;
 import br.com.fasda.erp.util.Transacional;
+import old.ClienteOld;
 
 public class ClienteServiceOld implements Serializable {
 
