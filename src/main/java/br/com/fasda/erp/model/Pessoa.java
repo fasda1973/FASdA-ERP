@@ -169,12 +169,12 @@ public abstract class Pessoa implements Serializable {
 		this.dadosFornecedor = dadosFornecedor;
 	}
 
-	public String getTelephone() {
+	public String getTelefone() {
 		return telefone;
 	}
 
-	public void setTelephone(String telephone) {
-		this.telefone = telephone;
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
 	}
 
 	public String getCelular() {

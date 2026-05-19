@@ -60,9 +60,38 @@
 	                     	 style="width: 100%"
 	                     	 required="#{pessoaBean.entidade.id == null}"
 	                     	 readonly="#{pessoaBean.entidade.id != null}" />
+	            
+	            <p:outputLabel value="Telefone" for="telefone" />
+		        <p:inputText id="telefone" value="#{pessoaBean.entidade.telefone}" style="width: 100%" />
 		        
-			    <p:outputLabel value="Papéis"/>
-			    
+		        <p:outputLabel value="Celular" for="celular" />
+		        <p:inputText id="celular" value="#{pessoaBean.entidade.celular}" style="width: 100%" />
+		        
+		        <p:outputLabel value="Logradouro" for="logradouro" />
+		        <p:inputText id="logradouro" value="#{pessoaBean.entidade.logradouro}" style="width: 100%" />
+		        
+		        <p:outputLabel value="Número" for="numero" />
+		        <p:inputText id="numero" value="#{pessoaBean.entidade.numero}" style="width: 100%" />
+		        
+		        <p:outputLabel value="Complemento" for="complemento" />
+		        <p:inputText id="complemento" value="#{pessoaBean.entidade.complemento}" style="width: 100%" />
+		        
+		        <p:outputLabel value="Bairro" for="bairro" />
+		        <p:inputText id="bairro" value="#{pessoaBean.entidade.bairro}" style="width: 100%" />
+		        
+		        <p:outputLabel value="CEP" for="cep" />
+		        <p:inputText id="cep" value="#{pessoaBean.entidade.cep}" style="width: 100%" />
+		        
+		        <p:outputLabel value="Cidade" for="cidade" />
+		        <p:inputText id="cidade" value="#{pessoaBean.entidade.cidade}" style="width: 100%" />
+		        
+		        <p:outputLabel value="Estado" for="estado" />
+		        <p:inputText id="estado" value="#{pessoaBean.entidade.estado}" style="width: 100%" />
+		        
+		        <p:outputLabel value="Ativo"/>
+		        <p:selectBooleanCheckbox value="#{pessoaBean.entidade.ativo}" />		        
+		        
+			    <p:outputLabel value="Papéis"/>			    
 			    <h:panelGroup style="display: flex; gap: 15px;">
 			            
 		            <p:selectBooleanCheckbox value="#{pessoaBean.entidade.cliente}" />
