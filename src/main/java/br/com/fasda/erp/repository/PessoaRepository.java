@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import br.com.fasda.erp.model.LogAuditoria;
@@ -26,7 +27,21 @@ public class PessoaRepository implements Serializable {
 	}
 
     public Pessoa porId(Long id) {
-        return manager.find(Pessoa.class, id);
+    	String jpql = "SELECT p FROM Pessoa p " +
+                "LEFT JOIN FETCH p.dadosCliente " +
+                "LEFT JOIN FETCH p.dadosFornecedor " +
+                "LEFT JOIN FETCH p.dadosFuncionario " +
+                "WHERE p.id = :id";
+    	
+    	TypedQuery<Pessoa> query = manager.createQuery(jpql,Pessoa.class);
+    	
+    	query.setParameter("id", id);
+    	
+    	try {
+    	    return query.getSingleResult();
+    	} catch (NoResultException e) {
+    	    return null;
+    	}
     }
     
     public List<Pessoa> pesquisar(String nome) {
@@ -144,4 +159,5 @@ public class PessoaRepository implements Serializable {
             return false;
         }
     }
+    
 }

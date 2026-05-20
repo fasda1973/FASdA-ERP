@@ -85,6 +85,23 @@ public abstract class Pessoa implements Serializable {
     
     @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private DadosFornecedor dadosFornecedor;
+    
+    // Construtor padrão (obrigatório pelo JPA, não apague o seu)
+    public Pessoa() {
+    }
+
+    // Novo construtor para tirar a "foto" dos dados antigos
+    public Pessoa(Pessoa fonte) {
+        this.id = fonte.getId();
+        this.nome = fonte.getNome();
+        this.telefone = fonte.getTelefone();
+        this.email = fonte.getEmail();
+        
+        // Se você audita campos de tabelas espelho (dados_cliente, etc):
+        if (fonte.getDadosCliente() != null) {
+            // Copie os campos cruciais do cliente se necessário
+        }
+    }
 	
     // Getters e Setters...
     public Long getId() {
