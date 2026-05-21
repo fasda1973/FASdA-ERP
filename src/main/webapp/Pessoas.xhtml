@@ -8,7 +8,9 @@
     
     <ui:param name="managedBean" value="#{pessoaBean}" />
     
-    <ui:define name="tituloHead">Pessoas</ui:define>
+    <ui:define name="tituloHead">
+    	Pessoas
+    </ui:define>
     
     <ui:define name="titulo">    	
     	<i class="fa-solid fa-person"></i>
@@ -34,40 +36,40 @@
         <h:panelGroup id="gridCampos" layout="block" style="width: 100%;">
             
             <!-- Bloco Superior: Tipo de Pessoa, Status e Papéis (Sempre visíveis no topo) -->
-            <div class="ui-fluid formgrid grid" style="margin-bottom: 15px; background: #fdfdfd; padding: 15px; border-radius: 4px; border: 1px solid #e0e0e0;">
-                <div class="field col-12 md:col-4">
-                    <p:outputLabel value="Tipo de Pessoa" for="tipo" style="font-weight: bold;" />
-                    <p:selectOneButton id="tipo" value="#{pessoaBean.tipoPessoa}" unselectable="false">
-                        <f:selectItem itemLabel="Física" itemValue="FISICA" />
-                        <f:selectItem itemLabel="Jurídica" itemValue="JURIDICA" />
-                        <p:ajax listener="#{pessoaBean.prepararNovo}" process="@this" update="gridCampos" />
-                    </p:selectOneButton>
-                </div>
-                
-                <div class="field col-12 md:col-5">
-                    <p:outputLabel value="Papéis operacionais" style="font-weight: bold; display: block; margin-bottom: 8px;" />
-                    <div style="display: flex; gap: 20px; align-items: center; margin-top: 5px;">
-                        <h:panelGroup>
-                            <p:selectBooleanCheckbox value="#{pessoaBean.entidade.cliente}" id="chkCliente" />
-                            <p:outputLabel for="chkCliente" value=" Cliente" style="margin-left: 5px;" />
-                        </h:panelGroup>
-                        <h:panelGroup>
-                            <p:selectBooleanCheckbox value="#{pessoaBean.entidade.fornecedor}" id="chkFornecedor" />
-                            <p:outputLabel for="chkFornecedor" value=" Fornecedor" style="margin-left: 5px;" />
-                        </h:panelGroup>
-                        <h:panelGroup>
-                            <p:selectBooleanCheckbox value="#{pessoaBean.entidade.funcionario}" id="chkFuncionario" />
-                            <p:outputLabel for="chkFuncionario" value=" Funcionário" style="margin-left: 5px;" />
-                        </h:panelGroup>
+            <div class="ui-fluid formgrid grid align-items-start" style="margin-bottom: 20px; background: #fdfdfd; padding: 20px; border-radius: 6px; border: 1px solid #e0e0e0; row-gap: 15px;">
+                <div class="field col-12" style="margin-bottom: 2px;">
+                    <p:outputLabel value="Tipo de Pessoa" for="tipo" style="font-weight: bold; display: block; margin-bottom: 8px;" />
+                    <div style="max-width: 300px;">
+	                    <p:selectOneButton id="tipo" value="#{pessoaBean.tipoPessoa}" unselectable="false">
+	                        <f:selectItem itemLabel="Física" itemValue="FISICA" />
+	                        <f:selectItem itemLabel="Jurídica" itemValue="JURIDICA" />
+	                        <p:ajax listener="#{pessoaBean.prepararNovo}" process="@this" update="gridCampos" />
+	                    </p:selectOneButton>
+                    </div>
+                </div>               
+                <div class="field col-12" style="margin-bottom: 2px; solid: #f0f0f0; padding-top: 0px;">
+                    <p:outputLabel value="Papéis operacionais" style="font-weight: bold; display: block; margin-bottom: 12px;" />
+                    <div class="flex flex-wrap gap-4">                       
+                        <div class="flex align-items-center">                      
+			                <p:selectBooleanCheckbox value="#{pessoaBean.entidade.cliente}" id="chkCliente" />
+			                <p:outputLabel for="chkCliente" value="Cliente" style="margin-left: 8px; cursor: pointer;" />
+		                </div>           
+			            <div class="flex align-items-center">		            
+			                <p:selectBooleanCheckbox value="#{pessoaBean.entidade.fornecedor}" id="chkFornecedor" />
+			                <p:outputLabel for="chkFornecedor" value="Fornecedor" style="margin-left: 8px; cursor: pointer;" />
+		                </div>  	            
+			            <div class="flex align-items-center">		            
+			                <p:selectBooleanCheckbox value="#{pessoaBean.entidade.funcionario}" id="chkFuncionario" />
+			                <p:outputLabel for="chkFuncionario" value="Funcionário" style="margin-left: 8px; cursor: pointer;" />
+		                </div>		                	            
                     </div>
                 </div>
-
-                <div class="field col-12 md:col-3">
-                    <p:outputLabel value="Status" for="ativo" style="font-weight: bold; display: block; margin-bottom: 8px;" />
-                    <div style="margin-top: 5px;">
-                        <p:selectBooleanCheckbox value="#{pessoaBean.entidade.ativo}" id="ativo" />
-                        <p:outputLabel for="ativo" value=" Cadastro Ativo" style="margin-left: 5px;" />
-                    </div>
+                <div class="field col-12" style="margin-bottom: 2px; solid #f0f0f0; padding-top: 0;">
+                    <p:outputLabel value="Status do Cadastro" style="font-weight: bold; display: block; margin-bottom: 12px;" />
+			        <div class="flex align-items-center">
+			            <p:selectBooleanCheckbox value="#{pessoaBean.entidade.ativo}" id="ativo" />
+			            <p:outputLabel for="ativo" value="Cadastro Ativo" style="margin-left: 8px; cursor: pointer;" />
+			        </div>
                 </div>
             </div>
 

@@ -34,16 +34,26 @@
     </ui:define>
 
     <ui:define name="campos_formulario">       	    
-	    <p:panelGrid columns="2" id="gridCampos" layout="grid">
-	        <p:outputLabel value="Nome" for="nome" />
-	        <p:inputText id="nome" value="#{clienteBean.entidade.nome}" />
-	        
-	        <p:outputLabel value="CPF" for="cpf" />
-	        <p:inputMask id="cpf" value="#{clienteBean.entidade.cpf}" 
-	                     mask="999.999.999-99" required="true" />
-	        
-	        <p:outputLabel value="Limite" for="limite" />
-	        <p:inputNumber id="limite" value="#{clienteBean.entidade.dadosCliente.limiteCredito}" />
-	    </p:panelGrid>      
+	    <h:panelGroup id="gridCampos" layout="block" style="width: 100%;">
+		    <p:tabView id="tabCliente">
+			    <p:tab title="Dados Cliente">
+				    <div class="ui-fluid formgrid grid">
+					    <div class="field col-12 md:col-8">
+					        <p:outputLabel value="Nome" for="nome" />
+					        <p:inputText id="nome" value="#{clienteBean.entidade.nome}" />
+					    </div>
+					    <div class="field col-12 md:col-4">   
+					        <p:outputLabel value="CPF" for="cpf" />
+					        <p:inputMask id="cpf" value="#{clienteBean.entidade.cpf}" 
+					                     mask="999.999.999-99" required="true" />
+	                    </div>
+					    <div class="field col-12 md:col-3">    
+					        <p:outputLabel value="Limite" for="limite" />
+					        <p:inputNumber id="limite" value="#{clienteBean.entidade.dadosCliente.limiteCredito}" />
+				        </div>
+			        </div>
+		        </p:tab>
+	        </p:tabView>
+	    </h:panelGroup>      
     </ui:define>
 </ui:composition>
