@@ -29,86 +29,131 @@
         <p:column headerText="Funcionário" style="width: 100px;">#{item.funcionario}</p:column>
     </ui:define>
     
-    <ui:define name="campos_formulario">		
-		  
-		    <p:panelGrid columns="2" id="gridCampos" layout="tabular">	        
-		        <p:outputLabel value="Tipo de Pessoa" for="tipo" />
-		        <p:selectOneButton id="tipo" value="#{pessoaBean.tipoPessoa}" unselectable="false">
-		            <f:selectItem itemLabel="Física" itemValue="FISICA" />
-		            <f:selectItem itemLabel="Jurídica" itemValue="JURIDICA" />
-		            <p:ajax listener="#{pessoaBean.prepararNovo}" 
-		            	process="@this" 
-		            	update="gridCampos" />
-		        </p:selectOneButton>
-				
-		        <p:outputLabel value="Nome" for="nome" />
-		        <p:inputText id="nome" value="#{managedBean.entidade.nome}" style="width: 100%" />
-				
-		        <p:outputLabel value="E-mail" for="email" />
-		        <p:inputText id="email" value="#{pessoaBean.entidade.email}" style="width: 100%" />
-		        
-		        <p:outputLabel value="CNPJ" for="cnpj" rendered="#{pessoaBean.tipoPessoa eq 'JURIDICA'}" />	        		        	
-		        <p:inputMask id="cnpj" value="#{pessoaBean.entidade.cnpj}" mask="99.999.999/9999-99"
-		                     rendered="#{pessoaBean.tipoPessoa eq 'JURIDICA'}" 
-		                     style="width: 100%"
-		                     required="#{pessoaBean.entidade.id == null}"
-		                     readonly="#{pessoaBean.entidade.id != null}" />
-						
-		        <p:outputLabel value="CPF" for="cpf" rendered="#{pessoaBean.tipoPessoa eq 'FISICA'}" />			     	
-		        <p:inputMask id="cpf" value="#{pessoaBean.entidade.cpf}" mask="999.999.999-99" 
-	                     	 rendered="#{pessoaBean.tipoPessoa eq 'FISICA'}" 
-	                     	 style="width: 100%"
-	                     	 required="#{pessoaBean.entidade.id == null}"
-	                     	 readonly="#{pessoaBean.entidade.id != null}" />
-	            
-	            <p:outputLabel value="Telefone" for="telefone" />
-		        <p:inputText id="telefone" value="#{pessoaBean.entidade.telefone}" style="width: 100%" />
-		        
-		        <p:outputLabel value="Celular" for="celular" />
-		        <p:inputText id="celular" value="#{pessoaBean.entidade.celular}" style="width: 100%" />
-		        
-		        <p:outputLabel value="Logradouro" for="logradouro" />
-		        <p:inputText id="logradouro" value="#{pessoaBean.entidade.logradouro}" style="width: 100%" />
-		        
-		        <p:outputLabel value="Número" for="numero" />
-		        <p:inputText id="numero" value="#{pessoaBean.entidade.numero}" style="width: 100%" />
-		        
-		        <p:outputLabel value="Complemento" for="complemento" />
-		        <p:inputText id="complemento" value="#{pessoaBean.entidade.complemento}" style="width: 100%" />
-		        
-		        <p:outputLabel value="Bairro" for="bairro" />
-		        <p:inputText id="bairro" value="#{pessoaBean.entidade.bairro}" style="width: 100%" />
-		        
-		        <p:outputLabel value="CEP" for="cep" />
-		        <p:inputText id="cep" value="#{pessoaBean.entidade.cep}" style="width: 100%" />
-		        
-		        <p:outputLabel value="Cidade" for="cidade" />
-		        <p:inputText id="cidade" value="#{pessoaBean.entidade.cidade}" style="width: 100%" />
-		        
-		        <p:outputLabel value="Estado" for="estado" />
-		        <p:inputText id="estado" value="#{pessoaBean.entidade.estado}" style="width: 100%" />
-		        
-		        <p:outputLabel value="Ativo"/>
-		        <p:selectBooleanCheckbox value="#{pessoaBean.entidade.ativo}" />		        
-		        
-			    <p:outputLabel value="Papéis"/>			    
-			    <h:panelGroup style="display: flex; gap: 15px;">
-			            
-		            <p:selectBooleanCheckbox value="#{pessoaBean.entidade.cliente}" />
-		            <h:outputText value=" Cliente" />
-		        
-		            <p:selectBooleanCheckbox value="#{pessoaBean.entidade.fornecedor}" />
-		            <h:outputText value=" Fornecedor" />
-		        
-		            <p:selectBooleanCheckbox value="#{pessoaBean.entidade.funcionario}" />
-		            <h:outputText value=" Funcionário" />
-			        
-			    </h:panelGroup>
-				
-		    </p:panelGrid>
-			
-		    
-	  	
-    </ui:define>  
+    <ui:define name="campos_formulario">
+        <!-- Mantemos um container pai com o ID antigo para o AJAX do botão de Tipo continuar funcionando -->
+        <h:panelGroup id="gridCampos" layout="block" style="width: 100%;">
+            
+            <!-- Bloco Superior: Tipo de Pessoa, Status e Papéis (Sempre visíveis no topo) -->
+            <div class="ui-fluid formgrid grid" style="margin-bottom: 15px; background: #fdfdfd; padding: 15px; border-radius: 4px; border: 1px solid #e0e0e0;">
+                <div class="field col-12 md:col-4">
+                    <p:outputLabel value="Tipo de Pessoa" for="tipo" style="font-weight: bold;" />
+                    <p:selectOneButton id="tipo" value="#{pessoaBean.tipoPessoa}" unselectable="false">
+                        <f:selectItem itemLabel="Física" itemValue="FISICA" />
+                        <f:selectItem itemLabel="Jurídica" itemValue="JURIDICA" />
+                        <p:ajax listener="#{pessoaBean.prepararNovo}" process="@this" update="gridCampos" />
+                    </p:selectOneButton>
+                </div>
+                
+                <div class="field col-12 md:col-5">
+                    <p:outputLabel value="Papéis operacionais" style="font-weight: bold; display: block; margin-bottom: 8px;" />
+                    <div style="display: flex; gap: 20px; align-items: center; margin-top: 5px;">
+                        <h:panelGroup>
+                            <p:selectBooleanCheckbox value="#{pessoaBean.entidade.cliente}" id="chkCliente" />
+                            <p:outputLabel for="chkCliente" value=" Cliente" style="margin-left: 5px;" />
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:selectBooleanCheckbox value="#{pessoaBean.entidade.fornecedor}" id="chkFornecedor" />
+                            <p:outputLabel for="chkFornecedor" value=" Fornecedor" style="margin-left: 5px;" />
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:selectBooleanCheckbox value="#{pessoaBean.entidade.funcionario}" id="chkFuncionario" />
+                            <p:outputLabel for="chkFuncionario" value=" Funcionário" style="margin-left: 5px;" />
+                        </h:panelGroup>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-3">
+                    <p:outputLabel value="Status" for="ativo" style="font-weight: bold; display: block; margin-bottom: 8px;" />
+                    <div style="margin-top: 5px;">
+                        <p:selectBooleanCheckbox value="#{pessoaBean.entidade.ativo}" id="ativo" />
+                        <p:outputLabel for="ativo" value=" Cadastro Ativo" style="margin-left: 5px;" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- O grande divisor: Abas para organizar os dados espalhados -->
+            <p:tabView id="tabPessoa">
+                
+                <!-- ABA 1: IDENTIFICAÇÃO E CONTATOS -->
+                <p:tab title="Dados Principais">
+                    <div class="ui-fluid formgrid grid">
+                        <!-- Nome ocupa 8 colunas se houver espaço, ou a linha toda no mobile -->
+                        <div class="field col-12 md:col-8">
+                            <p:outputLabel value="Nome / Razão Social" for="nome" />
+                            <p:inputText id="nome" value="#{managedBean.entidade.nome}" />
+                        </div>
+                        
+                        <!-- Documento Dinâmico (CPF/CNPJ) ocupa as 4 colunas restantes na mesma linha -->
+                        <div class="field col-12 md:col-4">
+                            <h:panelGroup rendered="#{pessoaBean.tipoPessoa eq 'JURIDICA'}">
+                                <p:outputLabel value="CNPJ" for="cnpj" />
+                                <p:inputMask id="cnpj" value="#{pessoaBean.entidade.cnpj}" mask="99.999.999/9999-99"
+                                             required="#{pessoaBean.entidade.id == null}" readonly="#{pessoaBean.entidade.id != null}" />
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{pessoaBean.tipoPessoa eq 'FISICA'}">
+                                <p:outputLabel value="CPF" for="cpf" />
+                                <p:inputMask id="cpf" value="#{pessoaBean.entidade.cpf}" mask="999.999.999-99" 
+                                             required="#{pessoaBean.entidade.id == null}" readonly="#{pessoaBean.entidade.id != null}" />
+                            </h:panelGroup>
+                        </div>
+
+                        <!-- Segunda Linha: E-mail, Telefone e Celular lado a lado -->
+                        <div class="field col-12 md:col-6">
+                            <p:outputLabel value="E-mail" for="email" />
+                            <p:inputText id="email" value="#{pessoaBean.entidade.email}" />
+                        </div>
+                        <div class="field col-12 md:col-3">
+                            <p:outputLabel value="Telefone Fixio" for="telefone" />
+                            <p:inputText id="telefone" value="#{pessoaBean.entidade.telefone}" />
+                        </div>
+                        <div class="field col-12 md:col-3">
+                            <p:outputLabel value="Celular" for="celular" />
+                            <p:inputText id="celular" value="#{pessoaBean.entidade.celular}" />
+                        </div>
+                    </div>
+                </p:tab>
+
+                <!-- ABA 2: LOCALIZAÇÃO -->
+                <p:tab title="Endereço">
+                    <div class="ui-fluid formgrid grid">
+                        <!-- Linha 1 do Endereço: CEP e Logradouro -->
+                        <div class="field col-12 md:col-3">
+                            <p:outputLabel value="CEP" for="cep" />
+                            <p:inputText id="cep" value="#{pessoaBean.entidade.cep}" />
+                        </div>
+                        <div class="field col-12 md:col-9">
+                            <p:outputLabel value="Logradouro (Rua, Av.)" for="logradouro" />
+                            <p:inputText id="logradouro" value="#{pessoaBean.entidade.logradouro}" />
+                        </div>
+
+                        <!-- Linha 2 do Endereço: Número, Complemento e Bairro -->
+                        <div class="field col-12 md:col-2">
+                            <p:outputLabel value="Número" for="numero" />
+                            <p:inputText id="numero" value="#{pessoaBean.entidade.numero}" />
+                        </div>
+                        <div class="field col-12 md:col-5">
+                            <p:outputLabel value="Complemento" for="complemento" />
+                            <p:inputText id="complemento" value="#{pessoaBean.entidade.complemento}" />
+                        </div>
+                        <div class="field col-12 md:col-5">
+                            <p:outputLabel value="Bairro" for="bairro" />
+                            <p:inputText id="bairro" value="#{pessoaBean.entidade.bairro}" />
+                        </div>
+
+                        <!-- Linha 3 do Endereço: Cidade e Estado -->
+                        <div class="field col-12 md:col-9">
+                            <p:outputLabel value="Cidade" for="cidade" />
+                            <p:inputText id="cidade" value="#{pessoaBean.entidade.cidade}" />
+                        </div>
+                        <div class="field col-12 md:col-3">
+                            <p:outputLabel value="Estado (UF)" for="estado" />
+                            <p:inputText id="estado" value="#{pessoaBean.entidade.estado}" />
+                        </div>
+                    </div>
+                </p:tab>
+                
+            </p:tabView>
+        </h:panelGroup>
+    </ui:define>
 
 </ui:composition>
