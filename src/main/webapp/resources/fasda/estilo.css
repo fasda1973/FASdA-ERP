@@ -289,3 +289,12 @@ body.menu-aberto .layout-content {
     transform: translateY(-5px); /* Sobe o card em 5 pixels */
     box-shadow: 0 12px 20px rgba(0,0,0,0.2) !important; /* Aumenta a sombra */
 }
+
+.sinalizador-booleano {
+	display: inline-block; 
+    padding: 4px 10px; 
+    font-size: 0.85em; 
+    font-weight: bold; 
+    border-radius: 4px; 
+    color: #ffffff;
+}
