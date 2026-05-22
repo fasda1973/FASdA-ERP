@@ -94,8 +94,11 @@
                             </h:panelGroup>
                             <h:panelGroup rendered="#{pessoaBean.tipoPessoa eq 'FISICA'}">
                                 <p:outputLabel value="CPF" for="cpf" />
-                                <p:inputMask id="cpf" value="#{pessoaBean.entidade.cpf}" mask="999.999.999-99" 
-                                             required="#{pessoaBean.entidade.id == null}" readonly="#{pessoaBean.entidade.id != null}" />
+                                <p:inputMask id="cpf" 
+                                			 value="#{pessoaBean.entidade.cpf}" 
+                                			 mask="999.999.999-99" 
+                                             required="#{pessoaBean.entidade.id == null}" 
+                                             readonly="#{pessoaBean.entidade.id != null}" />
                             </h:panelGroup>
                         </div>
 
