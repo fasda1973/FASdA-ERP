@@ -30,6 +30,30 @@
 	    
 	    <p:column headerText="Limite de Crédito" width="150">
 	    	<h:outputText value="#{item.dadosCliente.limiteCredito}" />
+	    </p:column>
+	    
+	    <p:column headerText="Saldo Disponível" width="150">
+	    	<h:outputText value="#{item.dadosCliente.saldoCreditoUtilizado}" />
+	    </p:column>
+	    
+	    <p:column headerText="Última Compra" width="150">
+	    	<h:outputText value="#{item.dadosCliente.dataUltimaCompra}" />
+	    </p:column> 
+	    
+	    <p:column headerText="Status do Saldo" style="text-align: center; width: 100px;">
+	    	<span style="display: inline-block; 
+                 padding: 4px 10px; 
+                 font-size: 0.85em; 
+                 font-weight: bold; 
+                 border-radius: 4px; 
+                 color: #ffffff; 
+                 background-color: #{item.dadosCliente.bloqueadoPorAtraso ? '#d32f2f' : '#2e7d32'};">
+        	#{item.dadosCliente.bloqueadoPorAtraso ? 'Bloqueado' : 'Livre'}
+   		    </span>
+	    </p:column>
+	    
+	    <p:column headerText="Observações Financeiras" width="200">
+	    	<h:outputText value="#{item.dadosCliente.observacaoFinanceira}" />
 	    </p:column>     
     </ui:define>
 
@@ -44,15 +68,51 @@
 					    </div>
 					    <div class="field col-12 md:col-4">   
 					        <p:outputLabel value="CPF" for="cpf" />
-					        <p:inputMask id="cpf" value="#{clienteBean.entidade.cpf}" 
-					                     mask="999.999.999-99" required="true" />
+					        <p:inputMask id="cpf" 
+				        				 value="#{clienteBean.entidade.cpf}" 
+					                     mask="999.999.999-99" 
+					                     required="#{clienteBean.entidade.id == null}" 
+					                     readonly="#{clienteBean.entidade.id != null}" />
 	                    </div>
 					    <div class="field col-12 md:col-3">    
-					        <p:outputLabel value="Limite" for="limite" />
-					        <p:inputNumber id="limite" value="#{clienteBean.entidade.dadosCliente.limiteCredito}" />
+					        <p:outputLabel value="Limite de Crédito" for="limite" />
+					        <p:inputNumber id="limite" 
+					        			   value="#{clienteBean.entidade.dadosCliente.limiteCredito}" />
+				        </div>
+				        <div class="field col-12 md:col-3">    
+					        <p:outputLabel value="Saldo Disponível" for="saldoCreditoUtilizado" />
+					        <p:inputNumber id="saldoCreditoUtilizado" 
+					        			   value="#{clienteBean.entidade.dadosCliente.saldoCreditoUtilizado}"
+					        			   readonly="true" />
+				        </div>
+				        
+				        <div class="field col-12 md:col-3">
+				        	<p:outputLabel value="Status" style="display: block; margin-bottom: 12px;" />    
+					        <p:selectBooleanCheckbox id="chkbloqueadoPorAtraso"  
+					        						 value="#{clienteBean.entidade.dadosCliente.bloqueadoPorAtraso}" />
+			                <p:outputLabel for="chkbloqueadoPorAtraso" 
+			                			   value="Bloqueado" 
+			                			   style="margin-left: 8px; cursor: pointer;" />
 				        </div>
 			        </div>
 		        </p:tab>
+		        <p:tab title="Observações Financeiras">
+				    <div class="ui-fluid formgrid grid">
+				        <div class="field col-12">
+				            <p:outputLabel value="Informações e Notas Financeiras" for="obsFinanceiras" style="font-weight: bold;" />				            
+				            <p:inputTextarea id="obsFinanceiras" 
+				                             value="#{pessoaBean.entidade.observacaoFinanceira}" 
+				                             rows="6" 
+				                             cols="50" 
+				                             maxlength="2000" 
+				                             counter="displayContador" 
+				                             counterTemplate="{0} caracteres restantes." 
+				                             autoResize="true"
+				                             placeholder="Digite aqui restrições de crédito, limite de compras, histórico de cobrança ou qualquer informação financeira relevante..." />				            
+				            <h:outputText id="displayContador" class="block text-right text-xs text-gray-500" style="margin-top: 4px; display: block; text-align: right; font-size: 0.8em; color: #666;" />
+				        </div>
+				    </div>
+				</p:tab>
 	        </p:tabView>
 	    </h:panelGroup>      
     </ui:define>
