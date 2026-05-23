@@ -298,3 +298,13 @@ body.menu-aberto .layout-content {
     border-radius: 4px; 
     color: #ffffff;
 }
+
+/* Limita o texto a exatamente 2 linhas e adiciona reticências (...) */
+.texto-limitado-linhas {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Defina aqui o número de linhas: 1, 2, etc. */
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word; /* Garante que palavras longas quebrem corretamente */
+}
