@@ -32,12 +32,33 @@ public class ObjetoDiffUtil {
             if (field.getName().equals("serialVersionUID") || field.getType().equals(List.class)) {
                 continue;
             }
-            
-            // 1. Ignora os relacionamentos de composição para não sujar o log com referências de memória
+
+            // TRATAMENTO EXCLUSIVO PARA COMPOSIÇÕES DE DADOS ESPECÍFICOS
             if (field.getName().equals("dadosCliente") || 
                 field.getName().equals("dadosFornecedor") || 
                 field.getName().equals("dadosFuncionario")) {
-                continue;
+                
+                try {
+                    field.setAccessible(true);
+                    Object valorAntigo = field.get(antigo);
+                    Object valorNovo = field.get(novo);
+                    
+                    if (valorAntigo == null && valorNovo == null) {
+                        continue;
+                    }
+                    
+                    // Se a composição foi preenchida agora ou removida por completo
+                    if (valorAntigo == null || valorNovo == null) {
+                        modificacoes.add(field.getName() + ": " + (valorAntigo == null ? "vazio" : "preenchido") + " -> " + (valorNovo == null ? "vazio" : "preenchido"));
+                    } else {
+                        // Se ambos existem na memória, em vez de comparar as referências, comparamos seus campos reais de negócio
+                        List<String> alteracoesInternas = compararCamposInternos(valorAntigo, valorNovo);
+                        modificacoes.addAll(alteracoesInternas);
+                    }
+                } catch (IllegalAccessException e) {
+                    // Ignora falhas de reflexão nestas propriedades
+                }
+                continue; // CRITICAL: Impede o fluxo principal de logar a referência de memória feia (@hashcode)
             }
 
             try {
@@ -48,8 +69,8 @@ public class ObjetoDiffUtil {
                 // Se os valores forem diferentes, houve alteração!
                 if (!Objects.equals(valorAntigo, valorNovo)) {
                     String nomeCampo = field.getName();
-                    // Formata: NomeDoCampo: antigo -> novo
-                    modificacoes.add(nomeCampo + ": " + valorAntigo + " -> " + valorNovo);
+                    // Formata: NomeDoCampo: antigo -> novo (colocando 'vazio' se for nulo)
+                    modificacoes.add(nomeCampo + ": " + (valorAntigo == null ? "vazio" : valorAntigo) + " -> " + (valorNovo == null ? "vazio" : valorNovo));
                 }
             } catch (IllegalAccessException e) {
                 // Trata ou ignora campos inacessíveis
@@ -58,5 +79,49 @@ public class ObjetoDiffUtil {
 
         // Junta todas as modificações separando por vírgula
         return String.join(", ", modificacoes);
+    }
+
+    /**
+     * Método auxiliar privado para inspecionar e comparar exclusivamente atributos primitivos
+     * de dados de negócio, evitando referências circulares e filtrando proxies do Hibernate.
+     */
+    private static List<String> compararCamposInternos(Object antigo, Object novo) {
+        List<String> modificacoesInternas = new ArrayList<>();
+        if (antigo == null || novo == null) return modificacoesInternas;
+        
+        Class<?> clazz = antigo.getClass();
+        
+        // Desembrulha proxies do Hibernate (Lazy Initializers) caso existam em tempo de execução
+        if (clazz.getName().contains("$$EnhancerBy") || clazz.getName().contains("HibernateProxy")) {
+            clazz = clazz.getSuperclass();
+        }
+        
+        Field[] fields = clazz.getDeclaredFields();
+        for (Field f : fields) {
+            // Ignora metadados, coleções e o mapeamento reverso que aponta de volta para o objeto Pessoa
+            if (f.getName().equals("serialVersionUID") || 
+                f.getName().equalsIgnoreCase("pessoa") || 
+                f.getType().equals(List.class)) {
+                continue;
+            }
+            
+            try {
+                f.setAccessible(true);
+                Object valAntigo = f.get(antigo);
+                Object valNovo = f.get(novo);
+                
+                if (valAntigo == null && valNovo == null) {
+                    continue;
+                }
+                
+                if (!Objects.equals(valAntigo, valNovo)) {
+                    modificacoesInternas.add(f.getName() + ": " + (valAntigo == null ? "vazio" : valAntigo) + " -> " + (valNovo == null ? "vazio" : valNovo));
+                }
+            } catch (IllegalAccessException e) {
+                // Ignora falhas de leitura
+            }
+        }
+        
+        return modificacoesInternas;
     }
 }

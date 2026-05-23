@@ -145,6 +145,7 @@ public class PessoaService implements Serializable {
                 manager.detach(pessoa);
                 
                 String tipoOperacao = "ALTERAÇÃO";
+                String acaoTexto = "Edição realizada";
                 
                 // 2. Agora buscamos o snapshot real do banco sem interferência
                 pOrigem = buscarSnapshotDoBanco(pessoa.getId());
@@ -170,9 +171,9 @@ public class PessoaService implements Serializable {
                 // 4. GRAVA O LOG SE HOUVE MUDANÇAS
                 if (camposAlterados != null && !camposAlterados.trim().isEmpty()) {
                     String detalheLog = String.format(
-                        "Edição realizada via tela [CADASTRO DE PESSOAS] - ID: %d | Nome: %s | Campos: %s",
-                        pessoa.getId(), pessoa.getNome(), camposAlterados
-                    );
+                        "%s via tela [%s] - ID: %d | Nome: %s | Campos: %s",
+                        acaoTexto, origemTela.toUpperCase(), pessoa.getId(), pessoa.getNome(), camposAlterados);
+                    
                     LogAuditoria log = new LogAuditoria(tipoOperacao, detalheLog, usuarioLogado);
                     logRepository.salvar(log);
                 }
@@ -184,7 +185,8 @@ public class PessoaService implements Serializable {
                 
                 pessoa = pessoaRepository.guardar(pessoa);
                 
-                String detalheLog = String.format("%s via tela [%s] - ID: %d | Nome: %s", 
+                String detalheLog = String.format(
+                	"%s via tela [%s] - ID: %d | Nome: %s", 
                         acaoTexto, origemTela.toUpperCase(), pessoa.getId(), pessoa.getNome());
                 
                 LogAuditoria log = new LogAuditoria(tipoOperacao, detalheLog, usuarioLogado);
