@@ -23,12 +23,40 @@
     </ui:define>
     
     <ui:define name="colunas">
+    	<p:column headerText="Imagem" style="width: 70px; text-align: center;">
+		    <p:graphicImage value="/fotos/#{item.fotoCaminho}" 
+		                    cache="false" 
+		                    style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; object-position: 50% 10%;"
+		                    rendered="#{item.fotoCaminho != null}" />
+		    
+		    <h:panelGroup rendered="#{item.fotoCaminho == null}">
+		        <i class="pi pi-user" style="font-size: 1.5rem; color: #ccc;"></i>
+		    </h:panelGroup>
+		</p:column>
+    
         <p:column headerText="Nome Pessoa">#{item.nome}</p:column>
         <p:column headerText="E-mail">#{item.email}</p:column>
         
-        <p:column headerText="Cliente" style="width: 100px;">#{item.cliente}</p:column>
-        <p:column headerText="Fornecedor" style="width: 100px;">#{item.fornecedor}</p:column>
-        <p:column headerText="Funcionário" style="width: 100px;">#{item.funcionario}</p:column>
+        <p:column headerText="Cliente" style="text-align: center; width: 100px;">
+        	<span class="sinalizador-booleano" 
+        		  style="background-color: #{item.cliente ? '#2e7d32' : '#d32f2f'};">
+        	#{item.cliente ? 'Sim' : 'Não'}
+        	</span>
+        </p:column>
+        
+        <p:column headerText="Fornecedor" style="text-align: center; width: 100px;">
+        	<span class="sinalizador-booleano"
+        		  style="background-color: #{item.fornecedor ? '#2e7d32' : '#d32f2f'};">
+        	#{item.fornecedor ? 'Sim' : 'Não'}
+        	</span>
+        </p:column>
+        
+        <p:column headerText="Funcionário" style="text-align: center; width: 100px;">
+        	<span class="sinalizador-booleano"
+        		  style="background-color: #{item.funcionario ? '#2e7d32' : '#d32f2f'};">
+        	#{item.funcionario ? 'Sim' : 'Não'}
+        	</span>
+        </p:column>
     </ui:define>
     
     <ui:define name="campos_formulario">
@@ -37,7 +65,8 @@
             
             <!-- Bloco Superior: Tipo de Pessoa, Status e Papéis (Sempre visíveis no topo) -->
             <div class="ui-fluid formgrid grid align-items-start" style="margin-bottom: 20px; background: #fdfdfd; padding: 20px; border-radius: 6px; border: 1px solid #e0e0e0; row-gap: 15px;">
-                <div class="field col-12" style="margin-bottom: 2px;">
+                <div class="field col-8 flex flex-wrap gap-5" style="margin-bottom: 2px;">
+                    <div>
                     <p:outputLabel value="Tipo de Pessoa" for="tipo" style="font-weight: bold; display: block; margin-bottom: 8px;" />
                     <div style="max-width: 300px;">
 	                    <p:selectOneButton id="tipo" value="#{pessoaBean.tipoPessoa}" unselectable="false">
@@ -46,8 +75,8 @@
 	                        <p:ajax listener="#{pessoaBean.prepararNovo}" process="@this" update="gridCampos" />
 	                    </p:selectOneButton>
                     </div>
-                </div>               
-                <div class="field col-12" style="margin-bottom: 2px; solid: #f0f0f0; padding-top: 0px;">
+                    </div>
+                    <div>           
                     <p:outputLabel value="Papéis operacionais" style="font-weight: bold; display: block; margin-bottom: 12px;" />
                     <div class="flex flex-wrap gap-4">                       
                         <div class="flex align-items-center">                      
@@ -63,14 +92,37 @@
 			                <p:outputLabel for="chkFuncionario" value="Funcionário" style="margin-left: 8px; cursor: pointer;" />
 		                </div>		                	            
                     </div>
-                </div>
-                <div class="field col-12" style="margin-bottom: 2px; solid #f0f0f0; padding-top: 0;">
+                    </div>
+                    <div>
                     <p:outputLabel value="Status do Cadastro" style="font-weight: bold; display: block; margin-bottom: 12px;" />
 			        <div class="flex align-items-center">
 			            <p:selectBooleanCheckbox value="#{pessoaBean.entidade.ativo}" id="ativo" />
 			            <p:outputLabel for="ativo" value="Cadastro Ativo" style="margin-left: 8px; cursor: pointer;" />
 			        </div>
+             		</div>
                 </div>
+                <div class="field col-4" style="margin-bottom: 2px;">
+                	<p:outputLabel value="Imagem da Pessoa" style="font-weight: bold; display: block; margin-bottom: 8px;" />
+                	<p:graphicImage value="/fotos/#{pessoaBean.entidade.fotoCaminho}" 
+		                cache="false"
+		                style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; object-position: 50% 10%;"
+		                rendered="#{pessoaBean.entidade.fotoCaminho != null}" />
+	                <h:panelGroup rendered="#{pessoaBean.entidade.fotoCaminho == null}">
+				        <i class="pi pi-user" style="font-size: 1.5rem; color: #ccc;"></i>
+				    </h:panelGroup>
+				    
+				    <p:outputLabel for="foto"/>
+				    <div style="max-width: 135px;">
+					<p:fileUpload id="foto" 
+					              listener="#{pessoaBean.handleFileUpload}"
+					              mode="advanced" 
+					              update="messages" 
+					              auto="true" 
+					              sizeLimit="2000000" 
+					              allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+					              label="Escolher" />
+	                </div>
+                </div>              
             </div>
 
             <!-- O grande divisor: Abas para organizar os dados espalhados -->

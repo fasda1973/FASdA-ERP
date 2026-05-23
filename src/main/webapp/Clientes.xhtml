@@ -19,7 +19,18 @@
                      size="30" value="#{pessoaBean.termoPesquisa}" />
     </ui:define>
 
-    <ui:define name="colunas">      
+    <ui:define name="colunas"> 
+    	<p:column headerText="Imagem" style="width: 70px; text-align: center;">
+		    <p:graphicImage value="/fotos/#{item.fotoCaminho}" 
+		                    cache="false" 
+		                    style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; object-position: 50% 10%;"
+		                    rendered="#{item.fotoCaminho != null}" />
+		    
+		    <h:panelGroup rendered="#{item.fotoCaminho == null}">
+		        <i class="pi pi-user" style="font-size: 1.5rem; color: #ccc;"></i>
+		    </h:panelGroup>
+		</p:column>
+         
 	    <p:column headerText="Nome">
 	        <h:outputText value="#{item.nome}" />
 	    </p:column>
@@ -41,13 +52,8 @@
 	    </p:column> 
 	    
 	    <p:column headerText="Status do Saldo" style="text-align: center; width: 100px;">
-	    	<span style="display: inline-block; 
-                 padding: 4px 10px; 
-                 font-size: 0.85em; 
-                 font-weight: bold; 
-                 border-radius: 4px; 
-                 color: #ffffff; 
-                 background-color: #{item.dadosCliente.bloqueadoPorAtraso ? '#d32f2f' : '#2e7d32'};">
+	    	<span class="sinalizador-booleano"
+	    		  style="background-color: #{item.dadosCliente.bloqueadoPorAtraso ? '#d32f2f' : '#2e7d32'};">
         	#{item.dadosCliente.bloqueadoPorAtraso ? 'Bloqueado' : 'Livre'}
    		    </span>
 	    </p:column>

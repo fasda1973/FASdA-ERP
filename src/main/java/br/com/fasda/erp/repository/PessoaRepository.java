@@ -56,7 +56,7 @@ public class PessoaRepository implements Serializable {
     
     // Busca todas as pessoas, independente de serem PF ou PJ
     public List<Pessoa> todas() {
-        return manager.createQuery("from Pessoa", Pessoa.class).getResultList();
+        return manager.createQuery("from Pessoa p order by p.nome", Pessoa.class).getResultList();
     }
     
     public Long contarTodas() {
@@ -65,7 +65,7 @@ public class PessoaRepository implements Serializable {
 	}
     
     public List<Pessoa> listarClientes() {
-        return manager.createQuery("from Pessoa p where p.cliente = true", Pessoa.class).getResultList();
+        return manager.createQuery("from Pessoa p where p.cliente = true order by p.nome", Pessoa.class).getResultList();
     }
     
     public Long contarTodosClientes() {
@@ -75,7 +75,7 @@ public class PessoaRepository implements Serializable {
     }
 
     public List<Pessoa> listarFuncionarios() {
-        return manager.createQuery("from Pessoa p where p.funcionario = true", Pessoa.class).getResultList();
+        return manager.createQuery("from Pessoa p where p.funcionario = true order by p.nome", Pessoa.class).getResultList();
     }
     
     public Long contarTodosFuncionarios() {
@@ -85,7 +85,7 @@ public class PessoaRepository implements Serializable {
     }
     
     public List<Pessoa> listarFornecedores() {
-        return manager.createQuery("from Pessoa p where p.fornecedor = true", Pessoa.class).getResultList();
+        return manager.createQuery("from Pessoa p where p.fornecedor = true order by p.nome", Pessoa.class).getResultList();
     }
     
     public Long contarTodosFornecedores() {

@@ -76,6 +76,9 @@ public abstract class Pessoa implements Serializable {
 
     @Column(nullable = false)
     private boolean ativo = true;
+    
+    @Column(name = "foto_caminho")
+    private String fotoCaminho;
 
     @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private DadosCliente dadosCliente;
@@ -272,6 +275,14 @@ public abstract class Pessoa implements Serializable {
 
 	public void setAtivo(boolean ativo) {
 		this.ativo = ativo;
+	}
+
+	public String getFotoCaminho() {
+		return fotoCaminho;
+	}
+
+	public void setFotoCaminho(String fotoCaminho) {
+		this.fotoCaminho = fotoCaminho;
 	}
 	
 	
