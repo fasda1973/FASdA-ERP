@@ -3,6 +3,7 @@ package br.com.fasda.erp.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,6 +15,8 @@ import javax.persistence.Lob;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import br.com.fasda.erp.util.ObjetoFormataUtil;
 
 
 
@@ -96,6 +99,10 @@ public class DadosCliente implements Serializable {
 
 	public LocalDateTime getDataUltimaCompra() {
 		return dataUltimaCompra;
+	}
+	
+	public String getDataUltimaCompraFormatada() {
+		return ObjetoFormataUtil.formatarDataHora(this.dataUltimaCompra);
 	}
 
 	public void setDataUltimaCompra(LocalDateTime dataUltimaCompra) {

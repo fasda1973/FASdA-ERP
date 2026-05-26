@@ -157,7 +157,11 @@ public abstract class Pessoa implements Serializable {
 	}
 
 	public DadosCliente getDadosCliente() {
-		return dadosCliente;
+		if (this.dadosCliente == null) {
+	        this.dadosCliente = new DadosCliente();
+	        this.dadosCliente.setPessoa(this);
+	    }
+	    return this.dadosCliente;
 	}
 
 	public void setDadosCliente(DadosCliente dadosCliente) {
@@ -165,7 +169,11 @@ public abstract class Pessoa implements Serializable {
 	}
 	
 	public DadosFuncionario getDadosFuncionario() {
-		return dadosFuncionario;
+		if (this.dadosFuncionario == null) {
+	        this.dadosFuncionario = new DadosFuncionario();
+	        this.dadosFuncionario.setPessoa(this); // Mantém o vínculo do relacionamento se houver
+	    }
+	    return this.dadosFuncionario;
 	}
 
 	public void setDadosFuncionario(DadosFuncionario dadosFuncionario) {
@@ -182,7 +190,11 @@ public abstract class Pessoa implements Serializable {
 	}
 
 	public DadosFornecedor getDadosFornecedor() {
-		return dadosFornecedor;
+		if (this.dadosFornecedor == null) {
+	        this.dadosFornecedor = new DadosFornecedor();
+	        this.dadosFornecedor.setPessoa(this);
+	    }
+	    return this.dadosFornecedor;
 	}
 
 	public void setDadosFornecedor(DadosFornecedor dadosFornecedor) {

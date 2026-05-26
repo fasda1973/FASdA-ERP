@@ -308,3 +308,15 @@ body.menu-aberto .layout-content {
     text-overflow: ellipsis;
     word-break: break-word; /* Garante que palavras longas quebrem corretamente */
 }
+
+/* Quando a tabela tiver a classe 'tabela-centralizada', todas as colunas herdam o centro */
+.tabela-centralizada .ui-datatable table thead th,
+.tabela-centralizada .ui-datatable table tbody td {
+    text-align: center !important;
+}
+
+/* Quando a tabela tiver a classe 'tabela-valores', todas as colunas vão para a direita */
+.tabela-valores table thead th,
+.tabela-valores table tbody td {
+    text-align: right !important;
+}

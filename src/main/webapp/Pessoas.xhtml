@@ -34,8 +34,13 @@
 		    </h:panelGroup>
 		</p:column>
     
-        <p:column headerText="Nome Pessoa">#{item.nome}</p:column>
-        <p:column headerText="E-mail">#{item.email}</p:column>
+        <p:column headerText="Nome Pessoa" style="text-align: center;">
+        	#{item.nome}
+       	</p:column>
+       	
+        <p:column headerText="E-mail" style="text-align: center;">
+        	#{item.email}
+        </p:column>
         
         <p:column headerText="Cliente" style="text-align: center; width: 100px;">
         	<span class="sinalizador-booleano" 
@@ -61,45 +66,64 @@
     
     <ui:define name="campos_formulario">
         <!-- Mantemos um container pai com o ID antigo para o AJAX do botão de Tipo continuar funcionando -->
-        <h:panelGroup id="gridCampos" layout="block" style="width: 100%;">
-            
+        <h:panelGroup id="gridCampos" layout="block" style="width: 100%;">           
             <!-- Bloco Superior: Tipo de Pessoa, Status e Papéis (Sempre visíveis no topo) -->
             <div class="ui-fluid formgrid grid align-items-start" style="margin-bottom: 20px; background: #fdfdfd; padding: 20px; border-radius: 6px; border: 1px solid #e0e0e0; row-gap: 15px;">
                 <div class="field col-8 flex flex-wrap gap-5" style="margin-bottom: 2px;">
                     <div>
-                    <p:outputLabel value="Tipo de Pessoa" for="tipo" style="font-weight: bold; display: block; margin-bottom: 8px;" />
-                    <div style="max-width: 300px;">
-	                    <p:selectOneButton id="tipo" value="#{pessoaBean.tipoPessoa}" unselectable="false">
-	                        <f:selectItem itemLabel="Física" itemValue="FISICA" />
-	                        <f:selectItem itemLabel="Jurídica" itemValue="JURIDICA" />
-	                        <p:ajax listener="#{pessoaBean.prepararNovo}" process="@this" update="gridCampos" />
-	                    </p:selectOneButton>
-                    </div>
+	                    <p:outputLabel value="Tipo de Pessoa" for="tipo" style="font-weight: bold; display: block; margin-bottom: 8px;" />
+	                    <div style="max-width: 300px;">
+		                    <p:selectOneButton id="tipo" value="#{pessoaBean.tipoPessoa}" unselectable="false">		                        
+		                        <f:selectItem itemLabel="Jurídica" itemValue="JURIDICA" />
+		                        <f:selectItem itemLabel="Física" itemValue="FISICA" />
+		                        <p:ajax listener="#{pessoaBean.prepararNovo}" 
+		                        		process="@this" 
+		                        		update="gridCampos" />
+		                    </p:selectOneButton>
+	                    </div>
                     </div>
                     <div>           
-                    <p:outputLabel value="Papéis operacionais" style="font-weight: bold; display: block; margin-bottom: 12px;" />
-                    <div class="flex flex-wrap gap-4">                       
-                        <div class="flex align-items-center">                      
-			                <p:selectBooleanCheckbox value="#{pessoaBean.entidade.cliente}" id="chkCliente" />
-			                <p:outputLabel for="chkCliente" value="Cliente" style="margin-left: 8px; cursor: pointer;" />
-		                </div>           
-			            <div class="flex align-items-center">		            
-			                <p:selectBooleanCheckbox value="#{pessoaBean.entidade.fornecedor}" id="chkFornecedor" />
-			                <p:outputLabel for="chkFornecedor" value="Fornecedor" style="margin-left: 8px; cursor: pointer;" />
-		                </div>  	            
-			            <div class="flex align-items-center">		            
-			                <p:selectBooleanCheckbox value="#{pessoaBean.entidade.funcionario}" id="chkFuncionario" />
-			                <p:outputLabel for="chkFuncionario" value="Funcionário" style="margin-left: 8px; cursor: pointer;" />
-		                </div>		                	            
+	                    <p:outputLabel value="Papéis operacionais" style="font-weight: bold; display: block; margin-bottom: 12px;" />
+	                    <div class="flex flex-wrap gap-4">                       
+	                        <div class="flex align-items-center">                      
+				                <p:selectBooleanCheckbox value="#{pessoaBean.entidade.cliente}" id="chkCliente" />
+				                <p:outputLabel for="chkCliente" value="Cliente" style="margin-left: 8px; cursor: pointer;" />
+			                </div>           
+				            <div class="flex align-items-center">		            
+				                <p:selectBooleanCheckbox value="#{pessoaBean.entidade.fornecedor}" id="chkFornecedor" />
+				                <p:outputLabel for="chkFornecedor" value="Fornecedor" style="margin-left: 8px; cursor: pointer;" />
+			                </div>  	            
+				            <div class="flex align-items-center">		            
+				                <p:selectBooleanCheckbox value="#{pessoaBean.entidade.funcionario}" id="chkFuncionario">
+				                	<p:ajax event="change" update="painelMatricula" process="@this" />
+			                	</p:selectBooleanCheckbox>
+				                <p:outputLabel for="chkFuncionario" value="Funcionário" style="margin-left: 8px; cursor: pointer;" />
+			                </div>		                	            
+	                    </div>                   
                     </div>
-                    </div>
+                    
                     <div>
-                    <p:outputLabel value="Status do Cadastro" style="font-weight: bold; display: block; margin-bottom: 12px;" />
-			        <div class="flex align-items-center">
-			            <p:selectBooleanCheckbox value="#{pessoaBean.entidade.ativo}" id="ativo" />
-			            <p:outputLabel for="ativo" value="Cadastro Ativo" style="margin-left: 8px; cursor: pointer;" />
-			        </div>
+	                    <p:outputLabel value="Status do Cadastro" style="font-weight: bold; display: block; margin-bottom: 12px;" />
+				        
+					        <div class="flex align-items-center">
+					            <p:selectBooleanCheckbox value="#{pessoaBean.entidade.ativo}" id="ativo" />
+					            <p:outputLabel for="ativo" value="Cadastro Ativo" style="margin-left: 8px; cursor: pointer;" />
+					        </div>
+				       
              		</div>
+                    
+                    <h:panelGroup id="painelMatricula" layout="block" styleClass="flex align-items-center">
+                    	<h:panelGroup rendered="#{pessoaBean.entidade.funcionario}">
+	                    	<div class="field">
+						        <p:outputLabel value="Matrícula" for="matricula" style="display: block; font-weight: bold;" />
+						        <p:inputText id="matricula" 
+						        			 value="#{pessoaBean.entidade.dadosFuncionario.matricula}" 
+						        			 required="true"
+						        			 requiredMessage="A matrícula é obrigatória para funcionários." />
+		        			</div>
+	        			</h:panelGroup>
+			        </h:panelGroup>
+                    
                 </div>
                 <div class="field col-4" style="margin-bottom: 2px;">
                 	<p:outputLabel value="Imagem da Pessoa" style="font-weight: bold; display: block; margin-bottom: 8px;" />
@@ -141,8 +165,11 @@
                         <div class="field col-12 md:col-4">
                             <h:panelGroup rendered="#{pessoaBean.tipoPessoa eq 'JURIDICA'}">
                                 <p:outputLabel value="CNPJ" for="cnpj" />
-                                <p:inputMask id="cnpj" value="#{pessoaBean.entidade.cnpj}" mask="99.999.999/9999-99"
-                                             required="#{pessoaBean.entidade.id == null}" readonly="#{pessoaBean.entidade.id != null}" />
+                                <p:inputMask id="cnpj" 
+                                			 value="#{pessoaBean.entidade.cnpj}" 
+                                			 mask="99.999.999/9999-99"
+                                             required="#{pessoaBean.entidade.id == null}" 
+                                             readonly="#{pessoaBean.entidade.id != null}" />
                             </h:panelGroup>
                             <h:panelGroup rendered="#{pessoaBean.tipoPessoa eq 'FISICA'}">
                                 <p:outputLabel value="CPF" for="cpf" />

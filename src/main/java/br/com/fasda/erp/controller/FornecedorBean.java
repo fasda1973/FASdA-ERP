@@ -9,6 +9,7 @@ import javax.inject.Named;
 import br.com.fasda.erp.model.DadosFornecedor;
 import br.com.fasda.erp.model.DadosFuncionario;
 import br.com.fasda.erp.model.Pessoa;
+import br.com.fasda.erp.model.PessoaFisica;
 import br.com.fasda.erp.model.PessoaJuridica;
 import br.com.fasda.erp.repository.PessoaRepository;
 import br.com.fasda.erp.service.PessoaService;
@@ -45,6 +46,7 @@ public class FornecedorBean extends CrudBean<Pessoa> implements Serializable {
         // Fornecedores geralmente são Pessoa Jurídica
         this.entidade = new PessoaJuridica();
         this.entidade.setDadosFornecedor(new DadosFornecedor());
+        this.entidade.getDadosFornecedor().setPessoa(this.entidade); // Lembra de amarrar os lados
         this.setTipoPessoa("JURIDICA");
         this.entidade.setFornecedor(true);
     }
@@ -102,6 +104,29 @@ public class FornecedorBean extends CrudBean<Pessoa> implements Serializable {
         } catch (NegocioException e) {
             messages.error(e.getMessage());
         }    	
+    }
+    
+    // Dentro do seu FornecedorBean.java
+
+    public void alterarTipoPessoa() {
+        // Evita alterar o objeto caso estejamos editando um registro já salvo no banco
+        if (this.entidade != null && this.entidade.getId() != null) {
+            return; 
+        }
+
+        if ("FISICA".equals(this.tipoPessoa)) {
+            PessoaFisica pf = new PessoaFisica();
+            pf.setFornecedor(true);
+            pf.setDadosFornecedor(new DadosFornecedor());
+            pf.getDadosFornecedor().setPessoa(pf);
+            this.entidade = pf;
+        } else {
+            PessoaJuridica pj = new PessoaJuridica();
+            pj.setFornecedor(true);
+            pj.setDadosFornecedor(new DadosFornecedor());
+            pj.getDadosFornecedor().setPessoa(pj);
+            this.entidade = pj;
+        }
     }
     
     @Override

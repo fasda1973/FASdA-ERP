@@ -19,40 +19,106 @@
                      size="30" value="#{pessoaBean.termoPesquisa}" />
     </ui:define>
 
-    <ui:define name="colunas">
-    	<p:column headerText="Nome">
+	
+    <ui:define name="colunas"> 
+     
+    	<p:column headerText="Imagem" style="width: 70px; text-align: center;">
+		    <p:graphicImage value="/fotos/#{item.fotoCaminho}" 
+		                    cache="false" 
+		                    style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; object-position: 50% 10%;"
+		                    rendered="#{item.fotoCaminho != null}" />
+		    
+		    <h:panelGroup rendered="#{item.fotoCaminho == null}">
+		        <i class="pi pi-user" style="font-size: 1.5rem; color: #ccc;"></i>
+		    </h:panelGroup>
+		</p:column>
+    	
+    	<p:column headerText="Nome" style="text-align: center;">
 	        <h:outputText value="#{item.nome}" />
 	    </p:column>
                 
-	    <p:column headerText="Matrícula" width="100">
+	    <p:column headerText="Matrícula" width="100" style="text-align: center;">
 	        <h:outputText value="#{item.dadosFuncionario.matricula}" />
 	    </p:column>
 	    
-	    <p:column headerText="Admissão">
-		    <h:outputText value="#{item.dadosFuncionario.dataFormatada}" />
+	    <p:column headerText="Cargo" width="100" style="text-align: center;">
+	        <h:outputText value="#{item.dadosFuncionario.cargo}" />
+	    </p:column>
+	    
+	    <p:column headerText="Admissão" style="text-align: center;">
+		    <h:outputText value="#{item.dadosFuncionario.dataAdmissaoFormatada}" />
 		</p:column>
+		
+		<p:column headerText="Demissão" style="text-align: center;">
+		    <h:outputText value="#{item.dadosFuncionario.dataDemissaoFormatada}" />
+		</p:column>
+		
     </ui:define>
+	
 
     <ui:define name="campos_formulario">
-	    <p:panelGrid columns="2" id="gridCampos" layout="grid" >
-	        
-	        <p:outputLabel value="Nome" for="nome" />
-	        <p:inputText id="nome" value="#{funcionarioBean.entidade.nome}" required="true" />
-	
-	        <p:outputLabel value="Matrícula" for="matricula" />
-	        <p:inputText id="matricula" value="#{funcionarioBean.entidade.dadosFuncionario.matricula}" required="true" />
-	
-	        <p:outputLabel value="Data de Admissão" for="dataAdmissao" />
-	        <p:datePicker id="dataAdmissao" 
-	        			  value="#{funcionarioBean.entidade.dadosFuncionario.dataAdmissao}" 
-	                      pattern="dd/MM/yyyy" 
-	                      showIcon="true"
-	                      mask="true" />
-	
-	        <p:outputLabel value="CPF" for="cpf" />
-	        <p:inputMask id="cpf" value="#{funcionarioBean.entidade.cpf}" 
-	                     mask="999.999.999-99" required="true" />
-	
-	    </p:panelGrid>
+		<h:panelGroup id="gridCampos" layout="block" style="width: 100%;">
+			<p:tabView id="tabFuncionario">
+				<p:tab title="Dados Funcionario">
+					<div class="ui-fluid formgrid grid">
+						<div class="field col-12 md:col-8">    	        
+					        <p:outputLabel value="Nome" for="nome" />
+					        <p:inputText id="nome" 
+					        			 value="#{funcionarioBean.entidade.nome}" required="true" />
+	        			</div>
+				        <div class="field col-12 md:col-4">			 
+							<p:outputLabel value="CPF" for="cpf" />
+					        <p:inputMask id="cpf" 
+					        			 value="#{funcionarioBean.entidade.cpf}" 
+					                     mask="999.999.999-99" 
+					                     required="#{clienteBean.entidade.id == null}" 
+									     readonly="#{clienteBean.entidade.id != null}" />
+					    </div>
+						<div class="field col-12 md:col-4">
+					        <p:outputLabel value="Matrícula" for="matricula" />
+					        <p:inputText id="matricula" 
+					        			 value="#{funcionarioBean.entidade.dadosFuncionario.matricula}" 
+					        			 required="true" />
+				        </div>
+				        <div class="field col-12 md:col-4">			 
+							<p:outputLabel value="CTPS" for="ctps" />
+					        <p:inputText id="ctps" 
+					        			 value="#{funcionarioBean.entidade.dadosFuncionario.ctps}" />
+				        </div>
+				        <div class="field col-12 md:col-4">			 
+							<p:outputLabel value="Pis/Pasep" for="pisPasep" />
+					        <p:inputText id="pisPasep" 
+					        			 value="#{funcionarioBean.entidade.dadosFuncionario.pisPasep}" />
+				        </div>
+				        <div class="field col-12 md:col-8">
+				        <p:outputLabel value="Cargo" for="cargo" />
+				        <p:inputText id="cargo" 
+				        			 value="#{funcionarioBean.entidade.dadosFuncionario.cargo}" />
+				        </div>
+				        <div class="field col-12 md:col-4">			 
+			   			<p:outputLabel value="Salário Base" for="salarioBase" />
+						<p:inputNumber id="salarioBase" 
+									   value="#{funcionarioBean.entidade.dadosFuncionario.salarioBase}" />
+						</div>
+						<div class="field col-12 md:col-6">
+				        <p:outputLabel value="Data de Admissão" for="dataAdmissao" />
+				        <p:datePicker id="dataAdmissao" 
+				        			  value="#{funcionarioBean.entidade.dadosFuncionario.dataAdmissao}" 
+				                      pattern="dd/MM/yyyy" 
+				                      showIcon="true"
+				                      mask="true" />
+				        </div>
+				        <div class="field col-12 md:col-6">              
+						<p:outputLabel value="Data de Demissão" for="dataDemissao" />
+				        <p:datePicker id="dataDemissao" 
+				        			  value="#{funcionarioBean.entidade.dadosFuncionario.dataDemissao}" 
+				                      pattern="dd/MM/yyyy" 
+				                      showIcon="true"
+				                      mask="true" />
+				        </div>              
+					</div>
+				</p:tab>
+			</p:tabView>
+		</h:panelGroup>
     </ui:define>
 </ui:composition>

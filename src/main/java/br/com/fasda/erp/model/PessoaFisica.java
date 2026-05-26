@@ -9,6 +9,8 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.br.CPF;
 
+import br.com.fasda.erp.util.ObjetoFormataUtil;
+
 @Entity
 @Table(name = "pessoa_fisica")
 @PrimaryKeyJoinColumn(name = "pessoa_id")
@@ -34,6 +36,10 @@ public class PessoaFisica extends Pessoa {
     // Getters e Setters...
 	public String getCpf() {
 		return cpf;
+	}
+	
+	public String getCpfFormatado() {
+		return ObjetoFormataUtil.formatarDocumento(this.cpf);
 	}
 
 	public void setCpf(String cpf) {

@@ -10,7 +10,7 @@ public class DateUtils {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
     // Formata LocalDate (apenas data)
-    public static String formatarData(LocalDate data) {
+    public static String formatarDataOld(LocalDate data) {
         if (data == null) {
             return "";
         }
@@ -18,7 +18,7 @@ public class DateUtils {
     }
 
     // Formata LocalDateTime (data e hora, caso use no futuro para logs ou vendas)
-    public static String formatarDataHora(LocalDateTime dataHora) {
+    public static String formatarDataHoraOld(LocalDateTime dataHora) {
         if (dataHora == null) {
             return "";
         }

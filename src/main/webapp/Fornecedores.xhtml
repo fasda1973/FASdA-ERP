@@ -37,35 +37,98 @@
 	    </p:column>
     </ui:define>
 
-    <ui:define name="campos_formulario">   
-	    <p:selectOneButton value="#{fornecedorBean.tipoPessoa}" style="margin-bottom: 15px">
-	        <f:selectItem itemLabel="Jurídica" itemValue="JURIDICA" />
-	        <f:selectItem itemLabel="Física" itemValue="FISICA" />
-	        <p:ajax event="change" listener="#{fornecedorBean.prepararNovo}" 
-	                process="@this" update="gridCampos" />
-	    </p:selectOneButton>
-	
-	    <p:panelGrid columns="2" id="gridCampos" layout="grid">
-	        
-	        <p:outputLabel value="Nome/Razão Social" for="nome" />
-	        <p:inputText id="nome" value="#{fornecedorBean.entidade.nome}" required="true" />
-	
-	        <p:outputLabel value="CNPJ" for="cnpj" rendered="#{fornecedorBean.tipoPessoa == 'JURIDICA'}" />
-	        <p:inputMask id="cnpj" value="#{fornecedorBean.entidade.cnpj}" 
-	                     mask="99.999.999/9999-99" required="true"
-	                     rendered="#{fornecedorBean.tipoPessoa == 'JURIDICA'}" />
-	
-	        <p:outputLabel value="CPF" for="cpf" rendered="#{fornecedorBean.tipoPessoa == 'FISICA'}" />
-	        <p:inputMask id="cpf" value="#{fornecedorBean.entidade.cpf}" 
-	                     mask="999.999.999-99" required="true"
-	                     rendered="#{fornecedorBean.tipoPessoa == 'FISICA'}" />
-	
-	        <p:outputLabel value="E-mail" for="email" />
-	        <p:inputText id="email" value="#{fornecedorBean.entidade.email}" />
-	        
-	        <p:outputLabel value="Prazo Pagamento" for="prazoPagamento" />
-	        <p:inputText id="prazoPagamento" value="#{fornecedorBean.entidade.dadosFornecedor.prazoPagamento}" />
-	
-	    </p:panelGrid>
+    <ui:define name="campos_formulario">
+    	<h:panelGroup id="gridCampos" layout="block" style="width: 100%;">
+    		<div class="ui-fluid formgrid grid align-items-start" style="margin-bottom: 20px; background: #fdfdfd; padding: 20px; border-radius: 6px; border: 1px solid #e0e0e0; row-gap: 15px;">
+                <div class="field col-8 flex flex-wrap gap-5" style="margin-bottom: 2px;">
+                    <div>
+                    	<p:outputLabel value="Tipo de Pessoa" for="tipo" style="font-weight: bold; display: block; margin-bottom: 8px;" />
+                    	<div style="max-width: 300px;">   
+						    <p:selectOneButton id="tipo" value="#{fornecedorBean.tipoPessoa}" unselectable="false">
+						        <f:selectItem itemLabel="Jurídica" itemValue="JURIDICA" />
+						        <f:selectItem itemLabel="Física" itemValue="FISICA" />
+						        <p:ajax listener="#{fornecedorBean.alterarTipoPessoa}"
+						        		process="@this" 
+						                update="gridCampos" />
+						    </p:selectOneButton>
+					    </div>
+				    </div>
+			    </div>
+		    </div>
+		    
+		    <p:tabView id="tabFornecedor">
+		    	<p:tab title="Dados Fornecedor">
+		    		<div class="ui-fluid formgrid grid">
+		    			<div class="field col-12 md:col-8">		        
+					        <p:outputLabel value="Nome/Razão Social" for="nome" />
+					        <p:inputText id="nome" value="#{fornecedorBean.entidade.nome}" required="true" />
+				        </div>
+				        
+						<div class="field col-12 md:col-4">
+							<h:panelGroup rendered="#{fornecedorBean.tipoPessoa eq 'JURIDICA' 
+													and fornecedorBean.entidade.getClass().simpleName eq 'PessoaJuridica'}">
+					        <p:outputLabel value="CNPJ" for="cnpj" />
+					        <p:inputMask id="cnpj" 
+					        			 value="#{fornecedorBean.entidade.cnpj}" 
+					                     mask="99.999.999/9999-99" 
+					                     required="#{fornecedorBean.entidade.id == null}"
+					                     readonly="#{fornecedorBean.entidade.id != null}" /> 
+		                    </h:panelGroup>
+		                    <h:panelGroup rendered="#{fornecedorBean.tipoPessoa eq 'FISICA' 
+		                    						and fornecedorBean.entidade.getClass().simpleName eq 'PessoaFisica'}">                  
+				        	<p:outputLabel value="CPF" for="cpf" />
+					        <p:inputMask id="cpf" 
+					        			 value="#{fornecedorBean.entidade.cpf}" 
+					                     mask="999.999.999-99" 
+					                     required="#{fornecedorBean.entidade.id == null}" 
+					                     readonly="#{fornecedorBean.entidade.id != null}" />
+		                    </h:panelGroup>
+	                    </div>
+				        
+						<div class="field col-12 md:col-12">
+							<p:outputLabel value="Chave Pix" for="chavePix" />
+							<div class="ui-inputgroup">
+							    <div class="ui-inputgroup-addon"><i class="pi pi-wallet"></i></div>
+							    <p:inputText id="chavePix" value="#{fornecedorBean.entidade.dadosFornecedor.chavePix}" placeholder="CPF, CNPJ, E-mail, Celular ou Aleatória" />
+							</div>
+						</div>
+						
+						<div class="field col-12 md:col-12">
+							<p:outputLabel value="Dados Bancários" for="bancoDadosBancarios" />
+							<p:inputTextarea id="bancoDadosBancarios" 
+							                 value="#{fornecedorBean.entidade.dadosFornecedor.bancoDadosBancarios}" 
+							                 rows="1" 
+							                 autoResize="false" 
+							                 placeholder="Banco, Agência, Conta..." />
+		                </div>
+		                
+		                <div class="field col-12 md:col-3">
+					        <p:outputLabel value="Prazo Pgto. (Dias)" for="prazoPagamento" />
+							<p:inputNumber id="prazoPagamento" 
+							               value="#{fornecedorBean.entidade.dadosFornecedor.prazoPagamento}" 
+							               decimalPlaces="0" 
+							               minValue="0" 
+							               maxValue="360" />
+		                </div>
+						<div class="field col-12 md:col-9">
+							<p:outputLabel value="E-mail do xml NFe" for="emailXmlNfe" />
+							<p:inputText id="emailXmlNfe" value="#{fornecedorBean.entidade.dadosFornecedor.emailXmlNfe}" placeholder="exemplo@fornecedor.com">
+							    <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+							</p:inputText>
+						</div>
+						
+						<div class="field col-12 md:col-4">
+						<p:outputLabel value="Avaliação de Qualidade" for="avaliacaoQualidade" />
+						<p:selectOneMenu id="avaliacaoQualidade" value="#{fornecedorBean.entidade.dadosFornecedor.avaliacaoQualidade}">
+						    <f:selectItem itemLabel="Selecione uma nota..." itemValue="" noSelectionOption="true" />
+						    <f:selectItem itemLabel="A - Excelente" itemValue="A" />
+						    <f:selectItem itemLabel="B - Regular" itemValue="B" />
+						    <f:selectItem itemLabel="C - Ruim" itemValue="C" />
+						</p:selectOneMenu>
+						</div>
+					</div>
+				</p:tab>
+			</p:tabView>
+	    </h:panelGroup>
     </ui:define>
 </ui:composition>

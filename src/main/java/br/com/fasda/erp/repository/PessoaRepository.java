@@ -160,4 +160,19 @@ public class PessoaRepository implements Serializable {
         }
     }
     
+    public boolean existeMatricula(String matricula, Long idAtual) {
+	    String jpql = "select count(f) from DadosFuncionario f where f.matricula = :matricula";
+	    if (idAtual != null) {
+	        jpql += " and f.id != :id";
+	    }
+	    
+	    TypedQuery<Long> query = manager.createQuery(jpql, Long.class);
+	    query.setParameter("matricula", matricula);
+	    if (idAtual != null) {
+	        query.setParameter("id", idAtual);
+	    }
+	    
+	    return query.getSingleResult() > 0;
+	}
+    
 }

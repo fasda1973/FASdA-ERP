@@ -100,6 +100,13 @@ public class PessoaService implements Serializable {
             }
             // Vincula o "pai" ao "filho" para o @MapsId funcionar
             pessoa.getDadosFuncionario().setPessoa(pessoa);
+            
+            // O Service faz a verificação final
+    	    boolean jaExiste = pessoaRepository.existeMatricula(pessoa.getDadosFuncionario().getMatricula(), pessoa.getId());
+    	    
+    	    if (jaExiste) {
+    	        throw new NegocioException("Já existe pessoa com a matricula informada.");
+    	    }
         }
         
         // Se NÃO for funcionário, remove o objeto

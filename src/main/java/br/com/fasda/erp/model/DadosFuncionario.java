@@ -16,6 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import br.com.fasda.erp.util.DateUtils;
+import br.com.fasda.erp.util.ObjetoFormataUtil;
 
 @Entity
 @Table(name = "dados_funcionario")
@@ -84,6 +85,10 @@ public class DadosFuncionario implements Serializable {
 	public LocalDate getDataAdmissao() {
 		return dataAdmissao;
 	}
+	
+	public String getDataAdmissaoFormatada() {
+	    return ObjetoFormataUtil.formatarData(this.dataAdmissao);
+	}
 
 	public void setDataAdmissao(LocalDate dataAdmissao) {
 		this.dataAdmissao = dataAdmissao;
@@ -100,9 +105,51 @@ public class DadosFuncionario implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-	public String getDataFormatada() {
-	    return DateUtils.formatarData(this.dataAdmissao);
+
+	public String getCargo() {
+		return cargo;
 	}
+
+	public void setCargo(String cargo) {
+		this.cargo = cargo;
+	}
+
+	public BigDecimal getSalarioBase() {
+		return salarioBase;
+	}
+
+	public void setSalarioBase(BigDecimal salarioBase) {
+		this.salarioBase = salarioBase;
+	}
+
+	public LocalDate getDataDemissao() {
+		return dataDemissao;
+	}
+	
+	public String getDataDemissaoFormatada() {
+	    return ObjetoFormataUtil.formatarData(this.dataDemissao);
+	}
+
+	public void setDataDemissao(LocalDate dataDemissao) {
+		this.dataDemissao = dataDemissao;
+	}
+
+	public String getCtps() {
+		return ctps;
+	}
+
+	public void setCtps(String ctps) {
+		this.ctps = ctps;
+	}
+
+	public String getPisPasep() {
+		return pisPasep;
+	}
+
+	public void setPisPasep(String pisPasep) {
+		this.pisPasep = pisPasep;
+	}
+	
+	
     
 }

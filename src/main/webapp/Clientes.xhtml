@@ -31,24 +31,48 @@
 		    </h:panelGroup>
 		</p:column>
          
-	    <p:column headerText="Nome">
+	    <p:column headerText="Nome" style="text-align: center;">
 	        <h:outputText value="#{item.nome}" />
 	    </p:column>
 	    
-	    <p:column headerText="CPF" width="150">
-	        <h:outputText value="#{item.cpf}" />
+	    <p:column headerText="CPF" width="150" style="text-align: center;">
+	        <h:outputText value="#{item.cpfFormatado}" />
 	    </p:column> 
 	    
-	    <p:column headerText="Limite de Crédito" width="150">
-	    	<h:outputText value="#{item.dadosCliente.limiteCredito}" />
+	    <p:column width="130" style="text-align: right;">
+	    	<f:facet name="header">
+		        <h:outputText id="lblLimiteCredito" value="Limite de Crédito" style="cursor: help;" />
+		        
+		        <p:tooltip for="lblLimiteCredito" 
+		                   value="Limite só para Cliente que é Funcionário" 
+		                   position="top" />
+		    </f:facet>
+	    
+	    	<h:outputText value="#{item.dadosCliente.limiteCredito}">
+	    		<f:convertNumber type="currency" locale="pt_BR" currencySymbol="R$" />
+	    	</h:outputText>
 	    </p:column>
 	    
-	    <p:column headerText="Saldo Disponível" width="150">
-	    	<h:outputText value="#{item.dadosCliente.saldoCreditoUtilizado}" />
+	    <p:column width="130" style="text-align: right;">
+	    	<f:facet name="header">
+		        <h:outputText id="lblSaldoDisponivel" value="Saldo Disponível" style="cursor: help;" />
+		        
+		        <p:tooltip for="lblSaldoDisponivel" escape="false" position="top">
+		        	<strong>Instruções!</strong>
+		            <br/>
+		            Esse valor será:
+		            <br/>
+		            Limite de Crédito menos as compras em aberto.
+				</p:tooltip>
+		    </f:facet>
+	    
+	    	<h:outputText value="#{item.dadosCliente.saldoCreditoUtilizado}">
+	    		<f:convertNumber type="currency" locale="pt_BR" currencySymbol="R$" />
+	    	</h:outputText>
 	    </p:column>
 	    
-	    <p:column headerText="Última Compra" width="150">
-	    	<h:outputText value="#{item.dadosCliente.dataUltimaCompra}" />
+	    <p:column headerText="Última Compra" width="150" style="text-align: center;">
+	    	<h:outputText value="#{item.dadosCliente.dataUltimaCompraFormatada}" />
 	    </p:column> 
 	    
 	    <p:column headerText="Status do Saldo" style="text-align: center; width: 100px;">
@@ -90,9 +114,12 @@
 					                     readonly="#{clienteBean.entidade.id != null}" />
 	                    </div>
 					    <div class="field col-12 md:col-3">    
-					        <p:outputLabel value="Limite de Crédito" for="limite" />
+					        <p:outputLabel id="lblLimiteCredito" value="Limite de Crédito" for="limite" />
 					        <p:inputNumber id="limite" 
 					        			   value="#{clienteBean.entidade.dadosCliente.limiteCredito}" />
+	        			    <p:tooltip for="lblLimiteCredito" 
+									   value="Limite aplicado somente à clientes que são funcionarios." 
+									   position="top" />
 				        </div>
 				        <div class="field col-12 md:col-3">    
 					        <p:outputLabel value="Saldo Disponível" for="saldoCreditoUtilizado" />
