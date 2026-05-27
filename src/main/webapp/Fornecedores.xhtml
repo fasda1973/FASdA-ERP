@@ -19,21 +19,38 @@
                      size="30" value="#{pessoaBean.termoPesquisa}" />
     </ui:define>
 
-    <ui:define name="colunas">            
-	    <p:column headerText="Razão Social / Nome">
+    <ui:define name="colunas">
+    	<p:column headerText="Imagem" style="width: 70px; text-align: center;">
+		    <p:graphicImage value="/fotos/#{item.fotoCaminho}" 
+		                    cache="false" 
+		                    style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; object-position: 50% 10%;"
+		                    rendered="#{item.fotoCaminho != null}" />
+		    
+		    <h:panelGroup rendered="#{item.fotoCaminho == null}">
+		        <i class="pi pi-user" style="font-size: 1.5rem; color: #ccc;"></i>
+		    </h:panelGroup>
+		</p:column>
+                
+	    <p:column headerText="Razão Social / Nome" style="text-align: center;">
 	        <h:outputText value="#{item.nome}" />
 	    </p:column>
 	    
-	    <p:column headerText="Documento" width="150">
-	        <h:outputText value="#{item.documento}" />
+	    <p:column headerText="Documento" width="160" style="text-align: center;">
+	        <h:outputText value="#{item.documentoFormatado}" />
 	    </p:column>
 	    
-	    <p:column headerText="Prazo de Pagamento(dias)" width="120">
+	    <p:column headerText="Prazo de Pagamento(dias)" width="130" style="text-align: center;">
 	        <h:outputText value="#{item.dadosFornecedor.prazoPagamento}" />
 	    </p:column>
 	    
-	    <p:column headerText="E-mail"  width="240">
-	        <h:outputText value="#{item.email}" />
+	    <p:column headerText="E-mail XML NFe"  width="300" style="text-align: center;">
+	        <h:outputText value="#{item.dadosFornecedor.emailXmlNfe}" />
+	    </p:column>
+	    
+	    <p:column headerText="Avaliação"  width="150" style="text-align: center;">
+	        <p:rating value="#{item.dadosFornecedor.avaliacaoEstrelas}" 
+		              readonly="true" 
+		              stars="5" />
 	    </p:column>
     </ui:define>
 
@@ -119,12 +136,10 @@
 						
 						<div class="field col-12 md:col-4">
 						<p:outputLabel value="Avaliação de Qualidade" for="avaliacaoQualidade" />
-						<p:selectOneMenu id="avaliacaoQualidade" value="#{fornecedorBean.entidade.dadosFornecedor.avaliacaoQualidade}">
-						    <f:selectItem itemLabel="Selecione uma nota..." itemValue="" noSelectionOption="true" />
-						    <f:selectItem itemLabel="A - Excelente" itemValue="A" />
-						    <f:selectItem itemLabel="B - Regular" itemValue="B" />
-						    <f:selectItem itemLabel="C - Ruim" itemValue="C" />
-						</p:selectOneMenu>
+						<p:rating id="avaliacaoQualidade" 
+						          value="#{fornecedorBean.entidade.dadosFornecedor.avaliacaoEstrelas}" 
+						          stars="5" 
+						          cancel="true" />
 						</div>
 					</div>
 				</p:tab>

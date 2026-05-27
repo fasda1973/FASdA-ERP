@@ -87,6 +87,7 @@ public class FornecedorBean extends CrudBean<Pessoa> implements Serializable {
             messages.info("Fornecedor salvo com sucesso!");
             prepararNovo();
         } catch (NegocioException e) {
+        	e.printStackTrace();
             messages.error(e.getMessage());
         }
     }

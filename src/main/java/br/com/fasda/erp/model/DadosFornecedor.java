@@ -114,6 +114,20 @@ public class DadosFornecedor implements Serializable {
 		this.avaliacaoQualidade = avaliacaoQualidade;
 	}
 	
-	
+	// Método para a tela ler as estrelas (Conversão de Letra para Número)
+	public Integer getAvaliacaoEstrelas() {
+	    if ("A".equals(this.avaliacaoQualidade)) return 5; // Excelente
+	    if ("B".equals(this.avaliacaoQualidade)) return 3; // Regular
+	    if ("C".equals(this.avaliacaoQualidade)) return 1; // Ruim
+	    return 0; // Não avaliado
+	}
+
+	// Método para a tela salvar as estrelas (Conversão de Número para Letra)
+	public void setAvaliacaoEstrelas(Integer estrelas) {
+	    if (estrelas == null || estrelas == 0) this.avaliacaoQualidade = null;
+	    else if (estrelas >= 4) this.avaliacaoQualidade = "A";
+	    else if (estrelas == 3) this.avaliacaoQualidade = "B";
+	    else this.avaliacaoQualidade = "C";
+	}
     
 }

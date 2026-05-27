@@ -200,7 +200,7 @@ public class PessoaService implements Serializable {
                 logRepository.salvar(log);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             throw new NegocioException("Erro ao salvar no banco de dados. Operação cancelada. Detalhe: " + e.getMessage());
         }
     }

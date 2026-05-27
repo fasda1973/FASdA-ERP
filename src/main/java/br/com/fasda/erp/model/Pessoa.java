@@ -17,6 +17,8 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import br.com.fasda.erp.util.ObjetoFormataUtil;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "pessoa")
@@ -185,6 +187,15 @@ public abstract class Pessoa implements Serializable {
 	        return ((PessoaJuridica) this).getCnpj();
 	    } else if (this instanceof PessoaFisica) {
 	        return ((PessoaFisica) this).getCpf();
+	    }
+	    return "";
+	}
+	
+	public String getDocumentoFormatado() {
+	    if (this instanceof PessoaJuridica) {
+	        return ObjetoFormataUtil.formatarDocumento(((PessoaJuridica) this).getCnpj());
+	    } else if (this instanceof PessoaFisica) {
+	        return ObjetoFormataUtil.formatarDocumento(((PessoaFisica) this).getCpf());
 	    }
 	    return "";
 	}
