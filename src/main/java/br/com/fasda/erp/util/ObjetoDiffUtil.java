@@ -130,16 +130,18 @@ public class ObjetoDiffUtil {
                 
                 if (!Objects.equals(valAntigo, valNovo)) {
                 	
-                	String nomeCampo = f.getName();
+                	//String nomeCampo = f.getName();
                     
-                    System.out.println("##################################################");
-                    System.out.println("Nome do Campo em compararCamposInternos:: " + nomeCampo);
-                    System.out.println("##################################################");
+                    //System.out.println("##################################################");
+                    //System.out.println("Nome do Campo em compararCamposInternos:: " + nomeCampo);
+                    //System.out.println("##################################################");
                 	
                     if (f.getName().equals("dadosCliente") || 
                         f.getName().equals("dadosFornecedor") || 
-                        f.getName().equals("dadosFuncionario")) {
-                    	modificacoesInternas.add("em " + nomeCampo);
+                        f.getName().equals("dadosFuncionario") ||
+                        f.getName().equals("dataCadastro")) {
+                    	continue;
+                    	
                     } else {                    
                     	modificacoesInternas.add(f.getName() + ": " + (valAntigo == null ? "vazio" : valAntigo) + " -> " + (valNovo == null ? "vazio" : valNovo));
                     }

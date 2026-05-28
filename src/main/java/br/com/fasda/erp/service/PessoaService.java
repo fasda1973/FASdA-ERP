@@ -173,17 +173,19 @@ public class PessoaService implements Serializable {
                     logRepository.salvar(log);
                 }
                 
-            } else {
+            } else {	            	 
                 // Se o ID for nulo, a operação é CADASTRO (Mantenha igual ao seu)
                 String tipoOperacao = "CADASTRO";
                 //String acaoTexto = "Inclusão realizada";
-                
+                              
                 pessoa = pessoaRepository.guardar(pessoa);
-                
-                String detalheLog = String.format("Nome: %s", pessoa.getNome());
-                
+	                
+                String detalheLog = String.format("Nome: %s", pessoa.getNome() + " Cadastro: " + pessoa.getDataCadastro());
+	                
                 LogAuditoria log = new LogAuditoria(tipoOperacao, origemTela.toUpperCase(), pessoa.getId(), detalheLog, usuarioLogado);
+	                
                 logRepository.salvar(log);
+	                                	
             }
         } catch (Exception e) {
             //e.printStackTrace();
