@@ -160,17 +160,8 @@ public class PessoaService implements Serializable {
                 String celularPorigen = pOrigem.getCelular();
                 String celularPessoa = pessoa.getCelular();
                 
-                System.out.println("######### Antes da Comparação (String camposAlterados = ObjetoDiffUtil.compararAlteracoes(pOrigem, pessoa);) ##########");
-                System.out.println("celularPorigen: " + celularPorigen);
-                System.out.println("celularPessoa: " + celularPessoa);
-                System.out.println("#########################################");
-                
                 // 2. GERA O DETALHE DAS ALTERAÇÕES (Agora comparando o objeto do banco com o da tela)
                 String camposAlterados = ObjetoDiffUtil.compararAlteracoes(pOrigem, pessoa);
-                
-                System.out.println("##################################################");
-                System.out.println("Campos alterados: " + camposAlterados);
-                System.out.println("##################################################");
                 
                 // 3. SALVA A ENTIDADE ATUALIZADA
                 pessoa = pessoaRepository.guardar(pessoa);
