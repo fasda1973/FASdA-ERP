@@ -8,6 +8,10 @@ import java.util.Objects;
 public class ObjetoDiffUtil {
 
     public static String compararAlteracoes(Object antigo, Object novo) {
+    	 //System.out.println("##################################################");
+         //System.out.println("1- Entrou na Função compararAlteracoes");
+         //System.out.println("##################################################");
+    	
         if (antigo == null || novo == null) return "";
         if (!antigo.getClass().equals(novo.getClass())) return "";
 
@@ -28,6 +32,7 @@ public class ObjetoDiffUtil {
 
         // Agora o loop roda sobre a lista completa de atributos encontrados
         for (Field field : allFields) {
+        	
             // Ignora coleções (Lists) e o serialVersionUID para não dar erro
             if (field.getName().equals("serialVersionUID") || field.getType().equals(List.class)) {
                 continue;
@@ -47,9 +52,15 @@ public class ObjetoDiffUtil {
                         continue;
                     }
                     
+                    //if (field.getName().equals("dadosCliente")) {        	
+                    	//continue;
+                    //}
+                    
                     // Se a composição foi preenchida agora ou removida por completo
                     if (valorAntigo == null || valorNovo == null) {
-                        modificacoes.add(field.getName() + ": " + (valorAntigo == null ? "vazio" : "preenchido") + " -> " + (valorNovo == null ? "vazio" : "preenchido"));
+                    	                  	
+                    	modificacoes.add(field.getName() + ": " + (valorAntigo == null ? "vazio" : "preenchido") + " -> " + (valorNovo == null ? "vazio" : "preenchido"));
+                        
                     } else {
                         // Se ambos existem na memória, em vez de comparar as referências, comparamos seus campos reais de negócio
                         List<String> alteracoesInternas = compararCamposInternos(valorAntigo, valorNovo);
@@ -62,6 +73,7 @@ public class ObjetoDiffUtil {
             }
 
             try {
+            	
                 field.setAccessible(true); // Permite ler atributos privados
                 Object valorAntigo = field.get(antigo);
                 Object valorNovo = field.get(novo);
@@ -69,14 +81,16 @@ public class ObjetoDiffUtil {
                 // Se os valores forem diferentes, houve alteração!
                 if (!Objects.equals(valorAntigo, valorNovo)) {
                     String nomeCampo = field.getName();
-                    // Formata: NomeDoCampo: antigo -> novo (colocando 'vazio' se for nulo)
-                    modificacoes.add(nomeCampo + ": " + (valorAntigo == null ? "vazio" : valorAntigo) + " -> " + (valorNovo == null ? "vazio" : valorNovo));
+                                      
+	                // Formata: NomeDoCampo: antigo -> novo (colocando 'vazio' se for nulo)
+	                modificacoes.add(nomeCampo + ": " + (valorAntigo == null ? "vazio" : valorAntigo) + " -> " + (valorNovo == null ? "vazio" : valorNovo));
+                    
                 }
             } catch (IllegalAccessException e) {
                 // Trata ou ignora campos inacessíveis
             }
         }
-
+        
         // Junta todas as modificações separando por vírgula
         return String.join(", ", modificacoes);
     }
@@ -115,7 +129,20 @@ public class ObjetoDiffUtil {
                 }
                 
                 if (!Objects.equals(valAntigo, valNovo)) {
-                    modificacoesInternas.add(f.getName() + ": " + (valAntigo == null ? "vazio" : valAntigo) + " -> " + (valNovo == null ? "vazio" : valNovo));
+                	
+                	String nomeCampo = f.getName();
+                    
+                    System.out.println("##################################################");
+                    System.out.println("Nome do Campo em compararCamposInternos:: " + nomeCampo);
+                    System.out.println("##################################################");
+                	
+                    if (f.getName().equals("dadosCliente") || 
+                        f.getName().equals("dadosFornecedor") || 
+                        f.getName().equals("dadosFuncionario")) {
+                    	modificacoesInternas.add("em " + nomeCampo);
+                    } else {                    
+                    	modificacoesInternas.add(f.getName() + ": " + (valAntigo == null ? "vazio" : valAntigo) + " -> " + (valNovo == null ? "vazio" : valNovo));
+                    }
                 }
             } catch (IllegalAccessException e) {
                 // Ignora falhas de leitura
