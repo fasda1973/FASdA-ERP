@@ -81,7 +81,7 @@ public class FuncionarioBean extends CrudBean<Pessoa> implements Serializable {
                 loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
             }
             
-            pessoaService.salvar(entidade, "Cadastro de Funcionários", loginDoUsuario);
+            pessoaService.salvar(entidade, "Funcionários", loginDoUsuario);
             pesquisar(); // Atualiza a tabela
             messages.info("Funcionário salvo com sucesso!");
             prepararNovo();
@@ -97,7 +97,7 @@ public class FuncionarioBean extends CrudBean<Pessoa> implements Serializable {
     		
     		loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
     		
-            pessoaService.excluir(entidade, "Cadastro de Funcionários", loginDoUsuario);
+            pessoaService.excluir(entidade, "Funcionários", loginDoUsuario);
             pesquisar(); // Atualiza a tabela após excluir
             messages.info("Registro excluído com sucesso!");
         } catch (NegocioException e) {

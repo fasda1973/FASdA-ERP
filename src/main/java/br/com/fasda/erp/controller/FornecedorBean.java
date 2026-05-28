@@ -82,7 +82,7 @@ public class FornecedorBean extends CrudBean<Pessoa> implements Serializable {
                 loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
             }
             
-            pessoaService.salvar(entidade, "Cadastro de Fornecedores", loginDoUsuario);
+            pessoaService.salvar(entidade, "Fornecedores", loginDoUsuario);
             pesquisar(); // Atualiza a tabela
             messages.info("Fornecedor salvo com sucesso!");
             prepararNovo();
@@ -99,7 +99,7 @@ public class FornecedorBean extends CrudBean<Pessoa> implements Serializable {
     		
     		loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
     		
-            pessoaService.excluir(entidade, "Cadastro de Fornecedores", loginDoUsuario);
+            pessoaService.excluir(entidade, "Fornecedores", loginDoUsuario);
             pesquisar(); // Atualiza a tabela após excluir
             messages.info("Registro excluído com sucesso!");
         } catch (NegocioException e) {

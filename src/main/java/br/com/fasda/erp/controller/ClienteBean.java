@@ -80,7 +80,7 @@ public class ClienteBean extends CrudBean<Pessoa> implements Serializable {
                 loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
             }
             
-            pessoaService.salvar(entidade, "Cadastro de Clientes", loginDoUsuario);
+            pessoaService.salvar(entidade, "Clientes", loginDoUsuario);
             pesquisar(); // Atualiza a tabela
             messages.info("Cliente salvo com sucesso!");
             prepararNovo();
@@ -98,7 +98,7 @@ public class ClienteBean extends CrudBean<Pessoa> implements Serializable {
     		
     		loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
     		
-            pessoaService.excluir(entidade, "Cadastro de Clientes", loginDoUsuario);
+            pessoaService.excluir(entidade, "Clientes", loginDoUsuario);
             pesquisar(); // Atualiza a tabela após excluir
             messages.info("Registro excluído com sucesso!");
         } catch (NegocioException e) {

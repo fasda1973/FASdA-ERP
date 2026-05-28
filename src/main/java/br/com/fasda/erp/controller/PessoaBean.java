@@ -71,7 +71,7 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
             }
             
             // Chama o seu service especializado
-            pessoaService.salvar(getEntidade(), "Cadastro de Pessoas", loginDoUsuario);
+            pessoaService.salvar(getEntidade(), "Pessoas", loginDoUsuario);
             //atualizarRegistros();
             
             // 2. RECARREGA usando o método otimizado ANTES da tela renderizar
@@ -93,7 +93,7 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
     		
     		loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
     		
-    		pessoaService.excluir(this.entidade, "Cadastro de Pessoas", loginDoUsuario);
+    		pessoaService.excluir(this.entidade, "Pessoas", loginDoUsuario);
 	        this.entidade = null;
 	        atualizarRegistros(); // Atualiza a lista após remover
 	        messages.info("Pessoa excluída com sucesso!");

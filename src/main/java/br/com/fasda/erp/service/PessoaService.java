@@ -152,13 +152,10 @@ public class PessoaService implements Serializable {
                 manager.detach(pessoa);
                 
                 String tipoOperacao = "ALTERAÇÃO";
-                String acaoTexto = "Edição realizada";
+                //String acaoTexto = "Edição realizada";
                 
                 // 2. Agora buscamos o snapshot real do banco sem interferência
                 pOrigem = buscarSnapshotDoBanco(pessoa.getId());
-                
-                String celularPorigen = pOrigem.getCelular();
-                String celularPessoa = pessoa.getCelular();
                 
                 // 2. GERA O DETALHE DAS ALTERAÇÕES (Agora comparando o objeto do banco com o da tela)
                 String camposAlterados = ObjetoDiffUtil.compararAlteracoes(pOrigem, pessoa);
@@ -167,27 +164,25 @@ public class PessoaService implements Serializable {
                 pessoa = pessoaRepository.guardar(pessoa);
                 
                 // 4. GRAVA O LOG SE HOUVE MUDANÇAS
+                // Exemplo detalhaLog sendo, %s para String e %d para Numeros :
+                // ( "%s via tela [%s] - ID: %d | Nome: %s | Campos: %s", acaoTexto, origemTela.toUpperCase(), pessoa.getId(), pessoa.getNome(), camposAlterados);
                 if (camposAlterados != null && !camposAlterados.trim().isEmpty()) {
-                    String detalheLog = String.format(
-                        "%s via tela [%s] - ID: %d | Nome: %s | Campos: %s",
-                        acaoTexto, origemTela.toUpperCase(), pessoa.getId(), pessoa.getNome(), camposAlterados);
+                    String detalheLog = String.format("Campos: %s", camposAlterados);
                     
-                    LogAuditoria log = new LogAuditoria(tipoOperacao, detalheLog, usuarioLogado);
+                    LogAuditoria log = new LogAuditoria(tipoOperacao, origemTela.toUpperCase(), pessoa.getId(), detalheLog, usuarioLogado);
                     logRepository.salvar(log);
                 }
                 
             } else {
                 // Se o ID for nulo, a operação é CADASTRO (Mantenha igual ao seu)
                 String tipoOperacao = "CADASTRO";
-                String acaoTexto = "Inclusão realizada";
+                //String acaoTexto = "Inclusão realizada";
                 
                 pessoa = pessoaRepository.guardar(pessoa);
                 
-                String detalheLog = String.format(
-                	"%s via tela [%s] - ID: %d | Nome: %s", 
-                        acaoTexto, origemTela.toUpperCase(), pessoa.getId(), pessoa.getNome());
+                String detalheLog = String.format("Nome: %s", pessoa.getNome());
                 
-                LogAuditoria log = new LogAuditoria(tipoOperacao, detalheLog, usuarioLogado);
+                LogAuditoria log = new LogAuditoria(tipoOperacao, origemTela.toUpperCase(), pessoa.getId(), detalheLog, usuarioLogado);
                 logRepository.salvar(log);
             }
         } catch (Exception e) {
@@ -199,17 +194,16 @@ public class PessoaService implements Serializable {
     @Transacional
 	public void excluir(Pessoa pessoa, String origemTela, String usuarioLogado) throws NegocioException {
     	String tipoOperacao = "EXCLUSÃO";
-        String acaoTexto = "Exclução do registro";
+        //String acaoTexto = "Exclução do registro";
     	
     	try {
     		pessoaRepository.remover(pessoa);
     		
     		// Monta a mensagem incluindo a tela de origem
-	        String detalheLog = String.format("%s via tela [%s] - ID: %d | Nome: %s", 
-	                                          acaoTexto, origemTela.toUpperCase(), pessoa.getId(), pessoa.getNome());
+	        String detalheLog = String.format("Nome: %s", pessoa.getNome());
 	        
 	        // 4. Instancia e grava o log
-	        LogAuditoria log = new LogAuditoria(tipoOperacao, detalheLog, usuarioLogado);
+	        LogAuditoria log = new LogAuditoria(tipoOperacao, origemTela.toUpperCase(), pessoa.getId(), detalheLog, usuarioLogado);
 	        logRepository.salvar(log);
     	} catch (Exception e) {
     		throw new NegocioException("Erro ao salvar no banco de dados. Operação cancelada. Detalhe: " + e.getMessage());
