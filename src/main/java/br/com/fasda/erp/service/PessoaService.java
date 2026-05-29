@@ -179,8 +179,11 @@ public class PessoaService implements Serializable {
                 //String acaoTexto = "Inclusão realizada";
                               
                 pessoa = pessoaRepository.guardar(pessoa);
+                
+                // 2. GERA O DETALHE DOS CAMPOS PREENCHIDOS (Traz os campos que foram preenchidos no cadastro novo)
+                String camposPreenchidos = ObjetoDiffUtil.buscaCamposPreenchidos(pessoa);
 	                
-                String detalheLog = String.format("Nome: %s", pessoa.getNome() + " Cadastro: " + pessoa.getDataCadastro());
+                String detalheLog = String.format("Campos: %s", camposPreenchidos);
 	                
                 LogAuditoria log = new LogAuditoria(tipoOperacao, origemTela.toUpperCase(), pessoa.getId(), detalheLog, usuarioLogado);
 	                

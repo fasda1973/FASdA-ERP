@@ -114,7 +114,8 @@ public class ObjetoDiffUtil {
         for (Field f : fields) {
             // Ignora metadados, coleções e o mapeamento reverso que aponta de volta para o objeto Pessoa
             if (f.getName().equals("serialVersionUID") || 
-                f.getName().equalsIgnoreCase("pessoa") || 
+                f.getName().equalsIgnoreCase("pessoa") ||
+                f.getName().equalsIgnoreCase("dataCadastro") ||
                 f.getType().equals(List.class)) {
                 continue;
             }
@@ -152,6 +153,108 @@ public class ObjetoDiffUtil {
         }
         
         return modificacoesInternas;
+    }
+    
+    public static String buscaCamposPreenchidos(Object novo) {
+        // Correção: Comparação segura de String vazia/nula na entrada
+        if (novo == null || (novo instanceof String && ((String) novo).trim().isEmpty())) {
+            return "";
+        }
+        
+        List<String> camposNovos = new ArrayList<>();
+        List<Field> allFields = new ArrayList<>();
+        Class<?> currentClass = novo.getClass();
+        
+        while (currentClass != null && !currentClass.equals(Object.class)) {
+            Field[] declaredFields = currentClass.getDeclaredFields();
+            for (Field f : declaredFields) {
+                allFields.add(f);
+            }
+            currentClass = currentClass.getSuperclass();
+        }
+        
+        for (Field field : allFields) {
+            
+            if (field.getName().equals("serialVersionUID") || field.getType().equals(List.class)) {
+                continue;
+            }
+
+            try {
+                field.setAccessible(true);
+                Object valorNovo = field.get(novo);
+
+                // Se o campo for nulo, ignora imediatamente
+                if (valorNovo == null) {
+                    continue;
+                }
+                
+                // Não precisa no detalhe porque já tem um campo especifico para id do registro
+                if (field.getName().equals("id")) {
+                	continue;
+                }
+                
+                // Gerado pelo sistema e não pode ser alterado
+                if (field.getName().equals("datacadastro")) {
+                	continue;
+                }
+                
+                // === NOVO: Se for um Booleano e estiver falso, ignora ===
+                if (valorNovo instanceof Boolean && !((Boolean) valorNovo)) {
+                    continue;
+                }
+
+                // Se for uma String, verifica de forma correta se está vazia
+                if (valorNovo instanceof String && ((String) valorNovo).trim().isEmpty()) {
+                    continue;
+                }
+                
+                // === NOVO: Se for um BigDecimal, verifica de forma correta se o valor é ZERO ===
+                if (valorNovo instanceof java.math.BigDecimal && ((java.math.BigDecimal) valorNovo).compareTo(java.math.BigDecimal.ZERO) == 0) {
+                    continue;
+                }
+
+                // (Opcional) Se você usar Double/Integer e também quiser ignorar o zero puro:
+                if (valorNovo instanceof Number && ((Number) valorNovo).doubleValue() == 0.0) {
+                    continue;
+                }
+
+                // TRATAMENTO EXCLUSIVO PARA COMPOSIÇÕES DE DADOS ESPECÍFICOS
+                if (field.getName().equals("dadosCliente") || 
+                    field.getName().equals("dadosFornecedor") || 
+                    field.getName().equals("dadosFuncionario")) {
+                    
+                	// 1. Verifica se a composição tem algum dado preenchido dentro dela
+                    String camposInternosBrutos = buscaCamposPreenchidos(valorNovo);
+                    
+                    if (!camposInternosBrutos.trim().isEmpty()) {
+                        String nomeComposicao = field.getName(); // ex: "dadosCliente"
+                        
+                        // 2. Separamos os campos internos encontrados para formatar bonitinho
+                        String[] campos = camposInternosBrutos.split(", ");
+                        for (String campo : campos) {
+                            // Formata para o log: "dadosCliente.limiteCredito: 5000"
+                            camposNovos.add(campo);
+                        }
+                    }
+                    continue; // Avança para o próximo atributo
+                }
+
+                // Fluxo principal para atributos primitivos/Wrappers (String, Integer, BigDecimal)
+                String nomeCampo = field.getName();
+                
+                // Para não gravar "sujeira"
+                if (nomeCampo == "pessoa") {
+                	continue;
+                }
+                
+                camposNovos.add(nomeCampo + ": " + valorNovo);
+
+            } catch (IllegalAccessException e) {
+                // Trata ou ignora campos inacessíveis
+            }
+        }        
+        
+        return String.join(", ", camposNovos);
     }
  
 }
