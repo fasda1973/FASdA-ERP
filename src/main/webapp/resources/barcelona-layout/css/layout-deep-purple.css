@@ -710,7 +710,6 @@ body .ui-g-12 {
 .dashboard .chart-panel .ui-panel-content {
   overflow: auto;
 }
-
 .login-body {
   background-color: #f5f5f5;
   padding-top: 200px;
@@ -745,7 +744,7 @@ body .ui-g-12 {
 .login-body .login-panel .login-header img {
   width: 64px;
   position: absolute;
-  top: 24px;
+  top: 28px;
   right: 30px;
 }
 .login-body .login-panel .login-header.ui-g-12 {
