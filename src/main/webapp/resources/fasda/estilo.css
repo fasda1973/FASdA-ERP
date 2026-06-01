@@ -320,3 +320,56 @@ body.menu-aberto .layout-content {
 .tabela-valores table tbody td {
     text-align: right !important;
 }
+
+/* 1. Limpa o ícone antigo do Barcelona */
+.ui-growl-image-warn, 
+.ui-growl-image-error {
+    background-image: none !important;
+}
+
+/* 2. Injeta o ícone de exclamação correto usando o mapeamento padrão universal */
+.ui-growl-image-warn::before, 
+.ui-growl-image-error::before {
+    font-family: 'primeicons' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    display: block;
+    font-size: 32px;
+}
+
+/* Se for WARN (Aviso): Puxa o triângulo de exclamação tradicional */
+.ui-growl-image-warn::before {
+    content: "\e94b" !important; /* Código do pi-exclamation-triangle em versões estáveis */
+    color: #fbc02d !important; 
+}
+
+/* === SE OS CÓDIGOS DE CIMA AINDA ASSIM NÃO BATEREM POR CONTA DA SUA VERSÃO: ===
+   Você pode apagar os 'content' com "\e..." acima e usar este truque abaixo, 
+   onde o CSS injeta a própria imagem SVG do PrimeIcon de forma limpa: */
+
+.ui-growl-image-warn {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fbc02d'><path d='M12 2L1 21h22L12 2zm1 14h-2v-2h2v2zm0-4h-2V8h2v4z'/></svg>") !important;
+    background-size: contain !important;
+}
+.ui-growl-image-error {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e53935'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'/></svg>") !important;
+    background-size: contain !important;
+}
+
+/* === MANTER O TEXTO BRANCO E O FUNDO DARK === */
+.ui-growl-title, 
+.ui-growl-message p {
+    color: #ffffff !important;
+}
+
+.ui-growl-item-container {
+    background-color: rgba(30, 30, 30, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(5px);
+    border-radius: 8px;
+}
+
