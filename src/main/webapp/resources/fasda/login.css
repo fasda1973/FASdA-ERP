@@ -2,8 +2,15 @@
 
 /* 1. O fundo da tela inteira (Geralmente uma imagem bonita ou gradiente) */
 .login-body {
-	background: url("#{resource['fasda:images/login/BandeiraPE.jpg']}") no-repeat center center fixed;
-    background-size: cover;
+	/* 1. Definimos uma cor de fundo que combine com as pontas da bandeira (o azul ou o branco) */
+    background-color: #005599 !important;
+    
+    /* 2. Puxamos a imagem */	
+	background: url("#{resource['fasda:images/login/BandeiraPE1_1.png']}") no-repeat center center fixed;
+	
+	/* O PULO DO GATO: contain faz a imagem caber inteira na altura da tela, sem NENHUM corte */
+    /*background-size: contain;*/
+    
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     justify-content: center;
@@ -14,37 +21,125 @@
  
  /* 2. A caixa (card) de Login Semi-Transparente */
 .login-container {
-    /* 0.65 significa 65% de opacidade na cor branca */
-    background-color: rgba(255, 255, 255, 0.05); 
-    
-    /* O efeito do vidro fosco: borra o fundo da imagem em 10px */
+    background-color: rgba(255, 255, 255, 0.35) !important; 
     backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px); /* Suporte para Safari */
-    
+    -webkit-backdrop-filter: blur(10px);
     padding: 40px;
     border-radius: 12px;
     width: 350px;
+    height: 470px;
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.1); /* Borda sutil branca */
-    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Centraliza todo o conteúdo do cabeçalho do login */
+.login-body .login-container .login-header {
+    display: flex;
+    flex-direction: column; /* Empilha os elementos um embaixo do outro */
+    align-items: center;    /* Centraliza na horizontal */
+    text-align: center;     /* Garante que os textos fiquem centralizados */
+    margin-bottom: -10px;    /* Dá um espaço bacana entre o cabeçalho e o formulário */
+}
+
+/* Ajuste opcional para a sua imagem não vir grudada nas bordas */
+.login-body .login-container .logo-login {
+    display: block;
+    max-width: 100%;        /* Garante que o SVG não estoure o tamanho do card */
+    height: auto;
+    margin-top: 15px;       /* Espaçamento acima do logo */
+}
+
+* O seu estilo antigo do H2 modificado para herdar o alinhamento */
+.login-body .login-container .login-header h2 {
+    font-size: 20px;
+    font-weight: normal;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #00133E !important;
+}
+
+/* Se o H1 também precisar de ajuste de cor/margem */
+.login-body .login-container .login-header h1 {
+    margin-bottom: 0px;
+    color: #0051C0 !important;
 }
 
 /* 3. Estilização rápida dos inputs para combinar com o tema */
 .login-container input {
     width: 100%;
     padding: 12px;
-    margin: 10px 0;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 6px;
+    border-radius: 12px;
     background: rgba(255, 255, 255, 0.8);
     box-sizing: border-box;
 }
 
+/* Força o H1 a ficar branco, ignorando o tema do PrimeFaces */
+.login-header h1 {
+    color: #0051C0 !important;
+    margin-bottom: 0px;
+}
+
+/* Força o H2 a ficar branco, ignorando o tema do PrimeFaces */
 .login-header h2 {
-  font-size: 20px;
-  font-weight: normal;
-  margin-top: 0;
-  color: #ffffff;
+    font-size: 20px !important;
+    font-weight: normal !important;
+    color: #00133E !important;
+    margin-top: 0 !important;
+    margin-bottom: 60px !important;
+}
+
+/* Força o formulário e suas divisões internas a ficarem 100% transparentes */
+#frmn, 
+#frmn\:j_idt12 {  /* Garante contra IDs autogerados do JSF se houver */
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+/* === O PULO DO GATO PARA O PRIMEFACES === */
+/* Remove o fundo branco nativo do p:panelGrid, das linhas e das células */
+.painel-transparente, 
+.painel-transparente.ui-panelgrid,
+.painel-transparente .ui-panelgrid-data,
+.painel-transparente .ui-panelgrid-row,
+.painel-transparente .ui-panelgrid-cell {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+}
+
+/* Deixa as Labels escuras e nítidas por cima do fundo semi-transparente */
+.painel-transparente .ui-outputlabel {
+    font-weight: bold;
+    color: #222 !important;
+    text-align: left;
+    margin-top: 5px;
+}
+
+/* Estilização elegante para os inputs reais gerados pelo PrimeFaces */
+.painel-transparente .ui-inputfield {
+    width: 100% !important;
+    padding: 10px !important;
+    margin-bottom: 5px !important;
+    box-sizing: border-box;
+}
+
+/* Remove o fundo branco e as bordas que o PrimeFaces coloca nas linhas da tabela */
+.painel-transparente .ui-widget-content {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+}
+
+/* Garante também que as células (td) herdem a transparência */
+.painel-transparente .ui-panelgrid-cell {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+/* Zera qualquer fundo residual da tabela principal do PrimeFaces */
+.painel-transparente.ui-panelgrid {
+    background: transparent !important;
+    border: none !important;
 }
 
 .login-panel {

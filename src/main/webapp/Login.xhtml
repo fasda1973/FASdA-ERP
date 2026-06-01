@@ -27,37 +27,29 @@
 </h:head>
 
 <h:body styleClass="login-body">
+    <div class="login-container ui-fluid">
         
-	<div class="login-container ui-fluid">
-	
-		<div> 		        
-	        <div class="login-header">
-			    <h1>LOGIN</h1>
-			    <h2>Acesso ao Sistema</h2>
-			    <p:graphicImage name="logo-fasda.svg" library="fasda" styleClass="logo-login" />
-			</div>
-			<div>
-			
-		        <h:form id="frmn">
-		        	
-			            <p:messages autoUpdate="true" closable="true" /> 
-			            
-			            <p:panelGrid columns="1" styleClass="ui-noborder" >
-			                <p:outputLabel value="Usuário" for="usuario" />
-			                <p:inputText id="usuario" value="#{loginBean.nomeUsuario}" required="true" styleClass="login-container input"/>
-			
-			                <p:outputLabel value="Senha" for="senha" />
-			                <p:password id="senha" value="#{loginBean.senha}" required="true" styleClass="login-container input"/>
-			
-			                <h:panelGroup />
-			                <p:commandButton value="Login" action="#{loginBean.login}" update="@form" icon="pi pi-user" />               
-			            </p:panelGrid>
-		            	
-		        </h:form>
-	        </div>       			    
- 	    </div>
+        <div class="login-header">
+            <h1>LOGIN</h1>
+            <h2>Acesso ao Sistema</h2>
+            <p:graphicImage name="logo-fasda.svg" library="fasda" styleClass="logo-login" />
+        </div>
+        
+        <h:form id="frmn" style="background: transparent !important;">
+            <p:messages autoUpdate="true" closable="true" />
+             
+            <p:panelGrid columns="1" styleClass="ui-noborder painel-transparente">
+                <p:outputLabel value="Usuário" for="usuario" />
+                <p:inputText id="usuario" value="#{loginBean.nomeUsuario}" required="true"/>            
+                
+                <p:outputLabel value="Senha" for="senha" />
+                <p:password id="senha" value="#{loginBean.senha}" required="true"/>            
+                
+                <h:panelGroup />
+                <p:commandButton value="Entrar" action="#{loginBean.login}" update="@form" icon="pi pi-user" style="width: 100%;" />                
+            </p:panelGrid>                  
+        </h:form>
     </div>
-   
 </h:body>
 
 </html>
