@@ -56,7 +56,16 @@ public class PessoaRepository implements Serializable {
     
     // Busca todas as pessoas, independente de serem PF ou PJ
     public List<Pessoa> todas() {
-        return manager.createQuery("from Pessoa p order by p.nome", Pessoa.class).getResultList();
+        
+    	String jpql = "SELECT DISTINCT p FROM Pessoa p " +
+                "LEFT JOIN FETCH p.dadosCliente " +
+                "LEFT JOIN FETCH p.dadosFornecedor " +
+                "LEFT JOIN FETCH p.dadosFuncionario " +
+                "ORDER BY p.nome";
+  
+    	return manager.createQuery(jpql, Pessoa.class).getResultList();
+    	
+    	//return manager.createQuery("from Pessoa p order by p.nome", Pessoa.class).getResultList();
     }
     
     public Long contarTodas() {
