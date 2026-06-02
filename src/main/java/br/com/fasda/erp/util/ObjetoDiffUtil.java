@@ -58,6 +58,12 @@ public class ObjetoDiffUtil {
                     
                     // Se a composição foi preenchida agora ou removida por completo
                     if (valorAntigo == null || valorNovo == null) {
+                    	
+                    	if (field.getName().equals("dadosCliente") || 
+                            field.getName().equals("dadosFornecedor") || 
+                            field.getName().equals("dadosFuncionario")) {
+                    		continue;
+                    	}
                     	                  	
                     	modificacoes.add(field.getName() + ": " + (valorAntigo == null ? "vazio" : "preenchido") + " -> " + (valorNovo == null ? "vazio" : "preenchido"));
                         
