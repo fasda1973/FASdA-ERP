@@ -1,22 +1,28 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui"
-                template="/WEB-INF/template/Layout.xhtml">
+<ui:composition 
+	xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    template="/WEB-INF/template/templateCRUD.xhtml">
                 
-                <ui:define name="title">Pagina Limpa</ui:define>
+                <ui:param name="managedBean" value="#{pessoaBean}" />
                 
- 				<ui:define name="conteudo">
-                    <div class="ui-g">
-		            <div class="ui-g-12">
-		                <div class="card">
-		                    <h1>Pagina Limpa</h1>
-		                    <p>Use esta página para começar do zero e inserir seu conteúdo personalizado.</p>
-		                    <p:button outcome="GestaoEmpresas" value="Home" style="display:inline-block;margin-top:5px"/>
-		                </div>
-		            </div>
-		        </div>
-                </ui:define>  
+                <ui:define name="tituloHead">Pagina Testes</ui:define>
+                
+                <ui:define name="pesquisa">
+			        <p:inputText id="termoPesquisa" placeholder="Pesquisar pessoa..." 
+			                     size="30" value="#{pessoaBean.termoPesquisa}" />
+			    </ui:define>
+                
+ 				<ui:define name="colunas">
+                    
+                </ui:define>
+                
+                 <ui:define name="campos_formulario">
+			        <!-- Mantemos um container pai com o ID antigo para o AJAX do botão de Tipo continuar funcionando -->
+			        <h:panelGroup id="gridCampos" layout="block" style="width: 100%;">  
+		        	</h:panelGroup>
+    			 </ui:define>
                     
 </ui:composition>
