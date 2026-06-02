@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"> 
+                
+    <ui:define name="title">Configurações do Sistema</ui:define>
+
+    <ui:define name="content">
+        <h:form id="formConfig">
+            <p:growl id="msgs" showDetail="true" life="4000" />
+
+            <div class="card ui-fluid">
+                <h2><i class="pi pi-cog" style="margin-right: 10px;"></i>Painel de Configurações</h2>
+                
+                <p:tabView style="margin-top: 20px;">
+                    
+                    <p:tab title="Uploads &amp; Arquivos">
+                        <p:panelGrid columns="1" layout="grid" styleClass="ui-noborder">
+                            
+                            <p:outputLabel value="Diretório de Armazenamento das Imagens:" for="txtCaminho" style="font-weight: bold;" />
+                            <div class="ui-inputgroup">
+                                <span class="ui-inputgroup-addon"><i class="pi pi-folder-open"></i></span>
+                                <p:inputText id="txtCaminho" value="#{configuracaoBean.caminhoUploadImagens}" 
+                                             required="true" requiredMessage="O caminho de upload é obrigatório."
+                                             placeholder="Ex: /var/www/arquivos/imagens ou C:/uploads/imagens" />
+                            </div>
+                            <small class="text-muted">Certifique-se de que o servidor possui permissão de leitura e escrita nesta pasta.</small>
+                            
+                        </p:panelGrid>
+                    </p:tab>
+                    
+                    <p:tab title="Financeiro &amp; Vendas">
+				        <p:panelGrid columns="2" layout="grid" styleClass="ui-noborder" columnClasses="ui-grid-col-4, ui-grid-col-4">
+				            
+				            <p:outputLabel value="Margem de Lucro Mínima (%):" for="txtMargem" />
+				            <p:inputNumber id="txtMargem" value="#{configuracaoBean.margemLucroMinima}" symbol="%" symbolPosition="s" decimalPlaces="2" />
+				            
+				            <p:outputLabel value="Permitir Venda com Estoque Negativo?" for="swEstoque" />
+				            <p:toggleSwitch id="swEstoque" value="#{configuracaoBean.permitirEstoqueNegativo}" />
+				            
+				        </p:panelGrid>
+				    </p:tab>
+				
+				    <p:tab title="Configurações de E-mail">
+				        <p:panelGrid columns="2" layout="grid" styleClass="ui-noborder" columnClasses="ui-grid-col-3, ui-grid-col-9">
+				            
+				            <p:outputLabel value="Servidor SMTP:" for="smtpHost" />
+				            <p:inputText id="smtpHost" value="#{configuracaoBean.smtpHost}" placeholder="ex: smtp.gmail.com" />
+				            
+				            <p:outputLabel value="E-mail Remetente:" for="smtpUser" />
+				            <p:inputText id="smtpUser" value="#{configuracaoBean.smtpUsuario}" placeholder="ex: sistema@empresa.com" />
+				            
+				        </p:panelGrid>
+				    </p:tab>
+
+                    <p:tab title="Segurança &amp; Sistema">
+                        <p:panelGrid columns="2" layout="grid" styleClass="ui-noborder" columnClasses="ui-grid-col-4, ui-grid-col-8">
+                            
+                            <p:outputLabel value="Permitir novos cadastros na tela de login?" for="chkCadastro" />
+                            <p:toggleSwitch id="chkCadastro" value="#{configuracaoBean.permitirCadastroUsuarios}" />
+                            
+                        </p:panelGrid>
+                    </p:tab>
+                    
+                </p:tabView>
+
+                <div style="margin-top: 20px; text-align: right;">
+                    <p:commandButton value="Salvar Configurações" 
+                                     action="#{configuracaoBean.salvar}" 
+                                     update="formConfig:msgs" 
+                                     icon="pi pi-save" 
+                                     style="width: auto; padding: 10px 20px;" />
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
