@@ -3,7 +3,12 @@ package br.com.fasda.erp.service;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
+
+import br.com.fasda.erp.model.Configuracao;
+import br.com.fasda.erp.repository.ConfiguracaoRepository;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Named
@@ -14,19 +19,14 @@ public class ConfiguracaoService {
     private Map<String, String> mapaConfiguracoes = new HashMap<>();
 
     // @Inject
-    // private ConfiguracaoDAO configuracaoDAO;
+    private ConfiguracaoRepository configuracaoRepository;
 
     @PostConstruct
     public void carregarTodas() {
-        // Simulando a busca do banco de dados. 
-        // Na prática, você faria: List<Configuracao> lista = configuracaoDAO.listarTodas();
-        // e alimentaria o mapa.
-        
-        // Valores temporários para teste:
-        mapaConfiguracoes.put("CAMINHO_UPLOAD_IMAGENS", "/uploads/imagens");
-        mapaConfiguracoes.put("PERMITIR_ESTOQUE_NEGATIVO", "false");
-        mapaConfiguracoes.put("MARGEM_LUCRO_MINIMA", "15.00");
-        mapaConfiguracoes.put("DIAS_CARENCIA_COBRANCA", "5");
+    	List<Configuracao> lista = configuracaoRepository.listarTodas();
+        for (Configuracao config : lista) {
+            mapaConfiguracoes.put(config.getChave(), config.getValor());
+        }
     }
 
     // Métodos utilitários para ler os valores já convertidos no tipo certo

@@ -2,9 +2,13 @@ package br.com.fasda.erp.controller;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
+import br.com.fasda.erp.model.Configuracao;
+import br.com.fasda.erp.repository.ConfiguracaoRepository;
 import br.com.fasda.erp.service.ConfiguracaoService;
+import br.com.fasda.erp.util.Transacional;
 
 import java.io.Serializable;
 import javax.faces.context.FacesContext;
@@ -15,15 +19,18 @@ import javax.faces.application.FacesMessage;
 public class ConfiguracaoBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
+    @Inject
+    private ConfiguracaoService configuracaoService; // Sua classe de negócio
+    
+    @Inject
+    private ConfiguracaoRepository configuracaoRepository;
 
     // Atributos que serão espelhados na tela
     private String caminhoUploadImagens;
     private boolean permitirCadastroUsuarios; // Exemplo de campo booleano
     private boolean permitirEstoqueNegativo;
     private double margemLucroMinima;
-
-    // @Inject
-    private ConfiguracaoService configuracaoService; // Sua classe de negócio
 
     @PostConstruct
     public void init() {
@@ -37,7 +44,8 @@ public class ConfiguracaoBean implements Serializable {
             caminhoUploadImagens = System.getProperty("user.home") + "/uploads/imagens";
         }
     }
-
+    
+    @Transacional
     public void salvar() {
         try {
         	java.io.File pasta = new java.io.File(this.caminhoUploadImagens);
@@ -51,17 +59,26 @@ public class ConfiguracaoBean implements Serializable {
         	    }
         	}
         	
-            // Aqui você chama seu service para salvar no banco de dados
-            //configuracaoService.salvar("CAMINHO_UPLOAD_IMAGENS", this.caminhoUploadImagens);
+        	// 1. Instancia as entidades com os dados da tela
+            Configuracao cUpload = new Configuracao("CAMINHO_UPLOAD_IMAGENS", this.caminhoUploadImagens, "Diretório de uploads");
+            Configuracao cEstoque = new Configuracao("PERMITIR_ESTOQUE_NEGATIVO", String.valueOf(this.permitirEstoqueNegativo), "Estoque negativo");
+            Configuracao cMargem = new Configuracao("MARGEM_LUCRO_MINIMA", String.valueOf(this.margemLucroMinima), "Margem de lucro mínima");
+
+            // 2. Salva no banco via DAO
+            configuracaoRepository.salvar(cUpload);
+            configuracaoRepository.salvar(cEstoque);
+            configuracaoRepository.salvar(cMargem);
+
+            // 3. Atualiza a memória local da aplicação
             configuracaoService.atualizarConfiguracao("CAMINHO_UPLOAD_IMAGENS", this.caminhoUploadImagens);
             configuracaoService.atualizarConfiguracao("PERMITIR_ESTOQUE_NEGATIVO", String.valueOf(this.permitirEstoqueNegativo));
             configuracaoService.atualizarConfiguracao("MARGEM_LUCRO_MINIMA", String.valueOf(this.margemLucroMinima));
-            
+
             FacesContext.getCurrentInstance().addMessage(null, 
-                new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Configurações salvas com sucesso!"));
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Configurações salvas e aplicadas com sucesso!"));
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, 
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Falha ao salvar configurações."));
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Falha ao persistir dados no banco: " + e.getMessage()));
         }
     }
     
