@@ -1,6 +1,8 @@
 package br.com.fasda.erp.controller;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
@@ -15,6 +17,7 @@ import javax.inject.Named;
 
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.file.UploadedFile; // Dependendo da versão do PF
 
 import br.com.fasda.erp.model.DadosCliente;
 import br.com.fasda.erp.model.DadosFornecedor;
@@ -24,6 +27,7 @@ import br.com.fasda.erp.model.PessoaFisica;
 import br.com.fasda.erp.model.PessoaJuridica;
 import br.com.fasda.erp.repository.PessoaRepository;
 import br.com.fasda.erp.service.PessoaService;
+import br.com.fasda.erp.service.ConfiguracaoService;
 import br.com.fasda.erp.util.NegocioException;
 
 @Named
@@ -40,6 +44,9 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
     
     @Inject
     private LoginBean loginBean; // Injeta o seu bean de login/sessão
+    
+    @Inject
+    private ConfiguracaoService configuracaoService; // Injeta o serviço global
     
     private String tipoPessoa = "FISICA";
     
@@ -194,28 +201,37 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
         return termoPesquisa != null && !termoPesquisa.isEmpty();
     }
     
-    /* Salva o local da imagem(Ex: Foto do usuário) no banco */
-    public void handleFileUpload(FileUploadEvent event) {
+    public void handleFileUpload(org.primefaces.event.FileUploadEvent event) {
         try {
-            // 1. Define o caminho da pasta (Pode ser no C:/uploads ou /home/user/uploads)
-            String caminhoDestino = "C:/Dev/Java/fasda_erp/uploads/fotos"; 
-            File pasta = new File(caminhoDestino);
-            if (!pasta.exists()) pasta.mkdirs();
-
-            // 2. Cria o nome do arquivo (Dica: use o ID do usuário ou timestamp para evitar nomes iguais)
-            String nomeArquivo = System.currentTimeMillis() + "_" + event.getFile().getFileName();
-            File arquivoFinal = new File(pasta, nomeArquivo);
-
-            // 3. Salva o arquivo no servidor
-            Files.copy(event.getFile().getInputStream(), arquivoFinal.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-            // 4. Atualiza o objeto Pessoa para salvar o CAMINHO no banco depois
-            this.entidade.setFotoCaminho(nomeArquivo);
+            UploadedFile arquivoUpload = event.getFile();
             
-            FacesContext.getCurrentInstance().addMessage(null, 
-                new FacesMessage("Sucesso", "Foto " + nomeArquivo + " enviada!"));
+            // 1. BUSCA O CAMINHO DINÂMICO QUE VOCÊ CONFIGUROU NA TELA!
+            String diretorioDestino = configuracaoService.getCaminhoUpload();
+            
+            // 2. Garante que a pasta física existe no servidor. Se não existir, o Java cria!
+            File pasta = new File(diretorioDestino);
+            if (!pasta.exists()) {
+                pasta.mkdirs();
+            }
+            
+            // 3. Cria o arquivo final no diretório configurado
+            File arquivoFinal = new File(pasta, arquivoUpload.getFileName());
+            
+            // 4. Fluxo padrão de escrita do Java (Stream)
+            try (InputStream input = arquivoUpload.getInputStream();
+                 FileOutputStream output = new FileOutputStream(arquivoFinal)) {
                 
-        } catch (IOException e) {
+                byte[] buffer = new byte[1024];
+                int bytesLidos;
+                while ((bytesLidos = input.read(buffer)) != -1) {
+                    output.write(buffer, 0, bytesLidos);
+                }
+            }
+            
+            // Salva o caminho ou o nome do arquivo no seu objeto Produto antes de mandar pro banco...
+            System.out.println("Arquivo salvo com sucesso em: " + arquivoFinal.getAbsolutePath());
+            
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
