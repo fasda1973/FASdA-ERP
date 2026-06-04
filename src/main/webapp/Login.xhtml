@@ -37,7 +37,7 @@
             <p:graphicImage name="logo-fasda.svg" library="fasda" styleClass="logo-login" />
         </div>
         
-        <h:form id="frmn" style="background: transparent !important;">
+        <h:form id="formLogin" style="background: transparent !important;">
              
             <p:panelGrid columns="1" styleClass="ui-noborder painel-transparente">
                 <p:outputLabel value="Usuário" for="usuario" />
@@ -47,7 +47,12 @@
                 <p:password id="senha" value="#{loginBean.senha}" required="true"/>            
                 
                 <h:panelGroup />
-                <p:commandButton value="Entrar" action="#{loginBean.login}" update="@form :msgs" icon="pi pi-user" style="width: 100%;" />                
+                <p:commandButton value="Entrar" action="#{loginBean.login}" update="@form :msgs" icon="pi pi-user" style="width: 100%;" />
+                
+                <h:panelGroup rendered="#{loginBean.exibirBotaoCadastro}" layout="block" style="text-align: center; margin-top: 15px;">
+			        <p:link value="Não tem uma conta? Cadastre-se aqui" outcome="Usuarios.xhtml" 
+			                style="color: #ffffff; font-size: 13px; text-decoration: underline;" />
+			    </h:panelGroup>                
             </p:panelGrid>                  
         </h:form>
     </div>

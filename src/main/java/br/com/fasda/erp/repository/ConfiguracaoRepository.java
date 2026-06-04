@@ -1,10 +1,12 @@
 package br.com.fasda.erp.repository; // Ou .dao, dependendo da sua estrutura
 
 import br.com.fasda.erp.model.Configuracao;
+
 import java.io.Serializable;
 import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 public class ConfiguracaoRepository implements Serializable {
 
@@ -14,8 +16,16 @@ public class ConfiguracaoRepository implements Serializable {
     private EntityManager manager; // Injeção padrão do seu produtor do CDI
 
     // Busca uma configuração específica pela chave primária
-    public Configuracao buscarPorChave(String chave) {
-        return manager.find(Configuracao.class, chave);
+    public List<Configuracao> buscarPorChave(String chave) {
+    	String jpql = "from Configuracao where chave like :chave";
+		
+		TypedQuery<Configuracao> query = manager.createQuery(jpql,Configuracao.class);
+		
+		query.setParameter("chave", chave + "%");
+
+		return query.getResultList();
+    	
+        //return manager.find(Configuracao.class, chave);
     }
 
     // Busca todas as configurações para carregar na memória no startup

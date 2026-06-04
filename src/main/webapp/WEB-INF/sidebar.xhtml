@@ -21,13 +21,13 @@
                     <p:menuitem value="Usuários" icon="fa fa-fw fa-users" outcome="/Usuarios" />
                     
                 </p:submenu>
+
+                <p:submenu label="Auxiliar">
+                    <p:menuitem value="Configurações" icon="fa fa-fw fa-cog" outcome="/Configuracoes" />
+                </p:submenu>
                 
                 <p:submenu label="Sistema">
                     <p:menuitem value="Sair" icon="fa fa-fw fa-sign-out" action="#{loginBean.logout}" />
-                </p:submenu>
-                
-                <p:submenu label="Auxiliar">
-                    <p:menuitem value="Teste" icon="" outcome="/Teste" />
                 </p:submenu>
             </p:menu>
         </h:form>

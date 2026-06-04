@@ -9,6 +9,7 @@ import javax.inject.Named;
 
 import br.com.fasda.erp.model.Usuario;
 import br.com.fasda.erp.repository.UsuarioRepository;
+import br.com.fasda.erp.service.ConfiguracaoService;
 
 @Named
 @SessionScoped
@@ -17,6 +18,9 @@ public class LoginBean implements Serializable {
     
     @Inject
     private UsuarioRepository usuarios; // Injeta o novo repositório
+    
+    @Inject
+    private ConfiguracaoService configuracaoService;
     
     private String nomeUsuario;
     private String senha;
@@ -43,6 +47,11 @@ public class LoginBean implements Serializable {
     }
     
     // Getters e Setters para nomeUsuario e senha
+    
+    // Método que a tela de login vai usar para saber se exibe o botão de cadastro
+    public boolean isExibirBotaoCadastro() {
+        return configuracaoService.isPermitirCadastroUsuarios();
+    }
 
 	public UsuarioRepository getUsuarios() {
 		return usuarios;

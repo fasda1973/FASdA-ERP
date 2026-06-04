@@ -11,6 +11,7 @@ import br.com.fasda.erp.service.ConfiguracaoService;
 import br.com.fasda.erp.util.Transacional;
 
 import java.io.Serializable;
+
 import javax.faces.context.FacesContext;
 import javax.faces.application.FacesMessage;
 
@@ -31,6 +32,10 @@ public class ConfiguracaoBean implements Serializable {
     private boolean permitirCadastroUsuarios; // Exemplo de campo booleano
     private boolean permitirEstoqueNegativo;
     private double margemLucroMinima;
+    
+    private String smtpHost;
+    private String smtpUsuario;
+    
 
     @PostConstruct
     public void init() {
@@ -39,12 +44,17 @@ public class ConfiguracaoBean implements Serializable {
         this.permitirEstoqueNegativo = configuracaoService.isPermitirEstoqueNegativo();
         this.margemLucroMinima = configuracaoService.getMargemLucroMinima();
         
+        this.permitirCadastroUsuarios = configuracaoService.isPermitirCadastroUsuarios();
+        
         // Exemplo de valor padrão caso esteja vazio
         if (caminhoUploadImagens == null || caminhoUploadImagens.isEmpty()) {
             caminhoUploadImagens = System.getProperty("user.home") + "/uploads/imagens";
         }
+        
+     // Teste temporário: Force uma mensagem no console para ver se o Java leu algo
+        System.out.println("Caminho carregado na tela: " + this.caminhoUploadImagens);
     }
-    
+        
     @Transacional
     public void salvar() {
         try {
@@ -64,16 +74,22 @@ public class ConfiguracaoBean implements Serializable {
             Configuracao cEstoque = new Configuracao("PERMITIR_ESTOQUE_NEGATIVO", String.valueOf(this.permitirEstoqueNegativo), "Estoque negativo");
             Configuracao cMargem = new Configuracao("MARGEM_LUCRO_MINIMA", String.valueOf(this.margemLucroMinima), "Margem de lucro mínima");
 
+            Configuracao cUsuario = new Configuracao("PERMITIR_CADASTRO_USUARIOS", String.valueOf(this.permitirCadastroUsuarios), "Cadastro Usuario");
+            
             // 2. Salva no banco via DAO
             configuracaoRepository.salvar(cUpload);
             configuracaoRepository.salvar(cEstoque);
             configuracaoRepository.salvar(cMargem);
+            
+            configuracaoRepository.salvar(cUsuario);
 
             // 3. Atualiza a memória local da aplicação
             configuracaoService.atualizarConfiguracao("CAMINHO_UPLOAD_IMAGENS", this.caminhoUploadImagens);
             configuracaoService.atualizarConfiguracao("PERMITIR_ESTOQUE_NEGATIVO", String.valueOf(this.permitirEstoqueNegativo));
             configuracaoService.atualizarConfiguracao("MARGEM_LUCRO_MINIMA", String.valueOf(this.margemLucroMinima));
 
+            configuracaoService.atualizarConfiguracao("PERMITIR_CADASTRO_USUARIOS", String.valueOf(this.permitirCadastroUsuarios));
+            
             FacesContext.getCurrentInstance().addMessage(null, 
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Configurações salvas e aplicadas com sucesso!"));
         } catch (Exception e) {
@@ -102,4 +118,32 @@ public class ConfiguracaoBean implements Serializable {
     public void setPermitirEstoqueNegativo(boolean permitirEstoqueNegativo) { this.permitirEstoqueNegativo = permitirEstoqueNegativo; }
     public double getMargemLucroMinima() { return margemLucroMinima; }
     public void setMargemLucroMinima(double margemLucroMinima) { this.margemLucroMinima = margemLucroMinima; }
+    
+    public String getSmtpHost() { return smtpHost; }
+    public void setSmtpHost(String smtpHost) { this.smtpHost = smtpHost; }
+    
+    public String getSmtpUsuario() { return smtpUsuario; }
+    public void setSmtpUsuario(String smtpUsuario) { this.smtpUsuario = smtpUsuario; }
+
+	public ConfiguracaoService getConfiguracaoService() {
+		return configuracaoService;
+	}
+
+	public void setConfiguracaoService(ConfiguracaoService configuracaoService) {
+		this.configuracaoService = configuracaoService;
+	}
+
+	public ConfiguracaoRepository getConfiguracaoRepository() {
+		return configuracaoRepository;
+	}
+
+	public void setConfiguracaoRepository(ConfiguracaoRepository configuracaoRepository) {
+		this.configuracaoRepository = configuracaoRepository;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+   
+    
 }

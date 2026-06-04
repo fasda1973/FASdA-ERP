@@ -373,3 +373,61 @@ body.menu-aberto .layout-content {
     border-radius: 8px;
 }
 
+/* ==========================================================================
+   1. CORREÇÃO DO BOTÃO SALVAR (Alinha o ícone e o texto lado a lado)
+   ========================================================================== */
+.btn-salvar-fix {
+    width: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: row !important; /* Garante que o ícone fique na esquerda e o texto na direita */
+    padding: 10px 20px !important;
+}
+
+/* Força um espaçamento entre o ícone do disquete e o texto "Salvar..." */
+.btn-salvar-fix .ui-button-icon-left {
+    position: relative !important;
+    left: 0 !important;
+    margin-right: 8px !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+}
+
+.btn-salvar-fix .ui-button-text {
+    padding: 0 !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    white-space: nowrap !important; /* Impede o texto de quebrar linha */
+}
+
+
+/* ==========================================================================
+   2. CUSTOMIZAÇÃO CORES SIM/NÃO (Verde para ativo, Vermelho para inativo)
+   ========================================================================== */
+/* Quando o botão está CHECADO (Estado: SIM) -> Fundo Verde */
+.btn-liga-desliga.ui-state-active {
+    background-color: #2e7d32 !important; /* Verde escuro elegante */
+    border-color: #1b5e20 !important;
+    color: #ffffff !important;
+}
+
+/* Quando o botão NÃO está checado (Estado: NÃO) -> Fundo Vermelho */
+.btn-liga-desliga.ui-state-default:not(.ui-state-active) {
+    background-color: #c62828 !important; /* Vermelho escuro elegante */
+    border-color: #b71c1c !important;
+    color: #ffffff !important;
+}
+
+/* Remove os efeitos de degradê do tema padrão que possam manchar as cores limpas */
+.btn-liga-desliga {
+    background-image: none !important;
+    transition: background-color 0.3s ease !important;
+    width: 90px !important; /* Um pouquinho mais de largura para acomodar o ícone + texto sem esmagar */
+}
+
+/* Garante que a cor permaneça firme mesmo passando o mouse por cima (Hover) */
+.btn-liga-desliga.ui-state-hover {
+    filter: brightness(1.1);
+}
+
