@@ -205,8 +205,12 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
         try {
             UploadedFile arquivoUpload = event.getFile();
             
-            // 1. BUSCA O CAMINHO DINÂMICO QUE VOCÊ CONFIGUROU NA TELA!
-            String diretorioDestino = configuracaoService.getCaminhoUpload();
+            // Pasta da imagem salva no servidor
+            // ATENÇÃO!!! Se alterar o valor dessa variavel, precisa ajustar no ImageServlet.java
+            String pastaImagem = "/Imagens/Pessoa";
+            
+            // 1. BUSCA O CAMINHO INFORMADO EM Configuracoes.xhtml!
+            String diretorioDestino = configuracaoService.getCaminhoUpload() + pastaImagem;
             
             // 2. Garante que a pasta física existe no servidor. Se não existir, o Java cria!
             File pasta = new File(diretorioDestino);
@@ -216,6 +220,9 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
             
             // 3. Cria o arquivo final no diretório configurado
             File arquivoFinal = new File(pasta, arquivoUpload.getFileName());
+            
+            // O PULO DO GATO: Setar o caminho ou o NOME do arquivo diretamente no objeto que será salvo!
+            this.entidade.setFotoCaminho(arquivoUpload.getFileName());
             
             // 4. Fluxo padrão de escrita do Java (Stream)
             try (InputStream input = arquivoUpload.getInputStream();

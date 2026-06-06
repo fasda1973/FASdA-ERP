@@ -62,6 +62,18 @@ public class ConfiguracaoService implements Serializable {
         return Boolean.parseBoolean(mapaConfiguracoes.getOrDefault("PERMITIR_CADASTRO_USUARIOS", "false"));
     }
     
+    public String getSmtpHost() {
+        return mapaConfiguracoes.getOrDefault("SMTP_HOST", "smtp.gmail.com");
+    }
+    
+    public String getSmtpPort() {
+        return mapaConfiguracoes.getOrDefault("SMTP_PORT", "587");
+    }
+    
+    public String getSmtpUser() {
+        return mapaConfiguracoes.getOrDefault("SMTP_USER", "sistema@suaempresa.com");
+    }
+    
     // Método para atualizar a memória quando o usuário salvar na tela
     public void atualizarConfiguracao(String chave, String novoValor) {
         mapaConfiguracoes.put(chave, novoValor);

@@ -34,7 +34,8 @@ public class ConfiguracaoBean implements Serializable {
     private double margemLucroMinima;
     
     private String smtpHost;
-    private String smtpUsuario;
+    private String smtpPort;
+    private String smtpUser;
     
 
     @PostConstruct
@@ -45,6 +46,10 @@ public class ConfiguracaoBean implements Serializable {
         this.margemLucroMinima = configuracaoService.getMargemLucroMinima();
         
         this.permitirCadastroUsuarios = configuracaoService.isPermitirCadastroUsuarios();
+        
+        this.smtpHost = configuracaoService.getSmtpHost();
+        this.smtpPort = configuracaoService.getSmtpPort();
+        this.smtpUser = configuracaoService.getSmtpUser();
         
         // Exemplo de valor padrão caso esteja vazio
         if (caminhoUploadImagens == null || caminhoUploadImagens.isEmpty()) {
@@ -74,7 +79,11 @@ public class ConfiguracaoBean implements Serializable {
             Configuracao cEstoque = new Configuracao("PERMITIR_ESTOQUE_NEGATIVO", String.valueOf(this.permitirEstoqueNegativo), "Estoque negativo");
             Configuracao cMargem = new Configuracao("MARGEM_LUCRO_MINIMA", String.valueOf(this.margemLucroMinima), "Margem de lucro mínima");
 
-            Configuracao cUsuario = new Configuracao("PERMITIR_CADASTRO_USUARIOS", String.valueOf(this.permitirCadastroUsuarios), "Cadastro Usuario");
+            Configuracao cUsuario = new Configuracao("PERMITIR_CADASTRO_USUARIOS", String.valueOf(this.permitirCadastroUsuarios), "Cadastro Usuário");
+            
+            Configuracao cSmtpHost = new Configuracao("SMTP_HOST", String.valueOf(this.smtpHost), "Servidor de saída de e-mails");
+            Configuracao cSmtpPort = new Configuracao("SMTP_PORT", String.valueOf(this.smtpPort), "Porta do servidor SMTP");
+            Configuracao cSmtpUser = new Configuracao("SMTP_USER", String.valueOf(this.smtpUser), "Usuário do e-mail disparador");
             
             // 2. Salva no banco via DAO
             configuracaoRepository.salvar(cUpload);
@@ -82,6 +91,10 @@ public class ConfiguracaoBean implements Serializable {
             configuracaoRepository.salvar(cMargem);
             
             configuracaoRepository.salvar(cUsuario);
+            
+            configuracaoRepository.salvar(cSmtpHost);
+            configuracaoRepository.salvar(cSmtpPort);
+            configuracaoRepository.salvar(cSmtpUser);
 
             // 3. Atualiza a memória local da aplicação
             configuracaoService.atualizarConfiguracao("CAMINHO_UPLOAD_IMAGENS", this.caminhoUploadImagens);
@@ -89,6 +102,10 @@ public class ConfiguracaoBean implements Serializable {
             configuracaoService.atualizarConfiguracao("MARGEM_LUCRO_MINIMA", String.valueOf(this.margemLucroMinima));
 
             configuracaoService.atualizarConfiguracao("PERMITIR_CADASTRO_USUARIOS", String.valueOf(this.permitirCadastroUsuarios));
+            
+            configuracaoService.atualizarConfiguracao("SMTP_HOST", String.valueOf(this.smtpHost));
+            configuracaoService.atualizarConfiguracao("SMTP_PORT", String.valueOf(this.smtpPort));
+            configuracaoService.atualizarConfiguracao("SMTP_USER", String.valueOf(this.smtpUser));
             
             FacesContext.getCurrentInstance().addMessage(null, 
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Configurações salvas e aplicadas com sucesso!"));
@@ -122,8 +139,11 @@ public class ConfiguracaoBean implements Serializable {
     public String getSmtpHost() { return smtpHost; }
     public void setSmtpHost(String smtpHost) { this.smtpHost = smtpHost; }
     
-    public String getSmtpUsuario() { return smtpUsuario; }
-    public void setSmtpUsuario(String smtpUsuario) { this.smtpUsuario = smtpUsuario; }
+    public String getSmtpPort() { return smtpPort; }
+    public void setSmtpPort(String smtpPort) { this.smtpPort = smtpPort; }
+    
+    public String getSmtpUser() { return smtpUser; }
+    public void setSmtpUser(String smtpUser) { this.smtpUser = smtpUser; }
 
 	public ConfiguracaoService getConfiguracaoService() {
 		return configuracaoService;

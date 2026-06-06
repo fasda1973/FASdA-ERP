@@ -28,14 +28,18 @@
                         <p:panelGrid columns="1" layout="grid" styleClass="ui-noborder">
                             
                             <p:outputLabel value="Diretório de Armazenamento das Imagens:" for="txtCaminho" style="font-weight: bold;" />
-                            <div class="ui-inputgroup">
-                                <span class="ui-inputgroup-addon"><i class="pi pi-folder-open"></i></span>
-                                <p:inputText id="txtCaminho" value="#{configuracaoBean.caminhoUploadImagens}" 
-                                             required="true" requiredMessage="O caminho de upload é obrigatório."
-                                             placeholder="Ex: /var/www/arquivos/imagens ou C:/uploads/imagens" />
-                            </div>
-                            <small class="text-muted">Certifique-se de que o servidor possui permissão de leitura e escrita nesta pasta.</small>
                             
+                            <h:panelGroup layout="block" style="width: 100%;">
+	                            <div class="ui-inputgroup">
+	                                <span class="ui-inputgroup-addon"><i class="pi pi-folder-open"></i></span>
+	                                <p:inputText id="txtCaminho" value="#{configuracaoBean.caminhoUploadImagens}" 
+	                                             required="true" requiredMessage="O caminho de upload é obrigatório."
+	                                             placeholder="Ex: /var/www/arquivos/imagens ou C:/uploads/imagens" />
+	                            </div>
+	                           	<small class="text-muted" style="display: inline-block; margin-top: 5px; color: #6c757d;">
+	                           		* Certifique-se de que o servidor possui permissão de leitura e escrita nesta pasta.
+	                           	</small>
+                           	</h:panelGroup>
                         </p:panelGrid>
                     </p:tab>
                     
@@ -60,8 +64,11 @@
 				            <p:outputLabel value="Servidor SMTP:" for="smtpHost" />
 				            <p:inputText id="smtpHost" value="#{configuracaoBean.smtpHost}" placeholder="ex: smtp.gmail.com" />
 				            
+				            <p:outputLabel value="Porta:" for="smtpPort" />
+				            <p:inputText id="smtpPort" value="#{configuracaoBean.smtpPort}" placeholder="Digite o valor" />
+				            
 				            <p:outputLabel value="E-mail Remetente:" for="smtpUser" />
-				            <p:inputText id="smtpUser" value="#{configuracaoBean.smtpUsuario}" placeholder="ex: sistema@empresa.com" />
+				            <p:inputText id="smtpUser" value="#{configuracaoBean.smtpUser}" placeholder="ex: sistema@empresa.com" />
 				          
 				        </p:panelGrid>
 				    </p:tab>
