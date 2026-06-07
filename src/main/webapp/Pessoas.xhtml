@@ -137,10 +137,13 @@
 				    
 				    <p:outputLabel for="foto"/>
 				    <div style="max-width: 135px;">
+				    
+				    <p:growl id="msgs" showDetail="true" life="4000" />
+				    
 					<p:fileUpload id="foto" 
 					              listener="#{pessoaBean.handleFileUpload}"
 					              mode="advanced" 
-					              update="messages" 
+					              update="msgs" 
 					              auto="true" 
 					              sizeLimit="2000000" 
 					              allowTypes="/(\.|\/)(gif|jpe?g|png)$/"

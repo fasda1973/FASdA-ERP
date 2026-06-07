@@ -20,12 +20,8 @@
                      size="30" value="#{usuarioBean.termoPesquisa}" />
     </ui:define>
    
-    <ui:define name="colunas">
-        <p:column headerText="Usuário" style="width: 200px;">#{item.nomeUsuario}</p:column>
-        
-        <p:column headerText="Nome">#{item.nome}</p:column>
-        
-        <p:column headerText="Perfil" style="width: 60px; text-align: center;">
+    <ui:define name="colunas">      
+        <p:column headerText="Imagem" style="width: 70px; text-align: center;">
 		    <p:graphicImage value="/img-pessoas/#{item.fotoCaminho}" 
 		                    cache="false" 
 		                    style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; object-position: 50% 10%;"
@@ -35,6 +31,14 @@
 		        <i class="pi pi-user" style="font-size: 1.5rem; color: #ccc;"></i>
 		    </h:panelGroup>
 		</p:column>
+		
+		<p:column headerText="Usuário" style="width: 200px; text-align: center;">
+			#{item.nomeUsuario}
+		</p:column>
+        
+        <p:column headerText="Nome" style="text-align: center;">
+        	#{item.nome}
+        </p:column>
     </ui:define>
    
     <ui:define name="campos_formulario">
@@ -75,10 +79,13 @@
 		            		weakLabel="Fraca" goodLabel="Boa" strongLabel="Forte"/>
 	    
 		        <p:outputLabel for="foto" value="Foto do Perfil:" />
+		        
+		        <p:growl id="msgs" showDetail="true" life="4000" />
+		        
 				<p:fileUpload id="foto" 
 				              listener="#{usuarioBean.handleFileUpload}"
 				              mode="advanced" 
-				              update="messages" 
+				              update="msgs" 
 				              auto="true" 
 				              sizeLimit="2000000" 
 				              allowTypes="/(\.|\/)(gif|jpe?g|png)$/"

@@ -20,6 +20,7 @@ import br.com.fasda.erp.model.Usuario;
 import br.com.fasda.erp.repository.UsuarioRepository;
 import br.com.fasda.erp.service.ConfiguracaoService;
 import br.com.fasda.erp.service.UsuarioService;
+import br.com.fasda.erp.util.ArquivosUploads;
 import br.com.fasda.erp.util.NegocioException;
 
 @Named	
@@ -114,37 +115,15 @@ public class UsuarioBean extends CrudBean<Usuario> {
         return termoPesquisa != null && !termoPesquisa.isEmpty();
     }
     
-    /* Salva o local da imagem(Ex: Foto do usuário) no banco */
+    // Esse é o método que o p:fileUpload vai chamar no XHTML
     public void handleFileUpload(FileUploadEvent event) {
-        try {
-        	
-        	 // Pasta da imagem salva no servidor
-            // ATENÇÃO!!! Se alterar o valor dessa variavel, precisa ajustar no ImageServlet.java
-            String pastaImagem = "/Imagens/Pessoa";
-            
-            // 1. Define o caminho da pasta (Pode ser no C:/uploads ou /home/user/uploads)
-            String caminhoDestino = configuracaoService.getCaminhoUpload() + pastaImagem; 
-            
-            File pasta = new File(caminhoDestino);
-            if (!pasta.exists()) {
-            	pasta.mkdirs();
-            }
-
-            // 2. Cria o nome do arquivo (Dica: use o ID do usuário ou timestamp para evitar nomes iguais)
-            String nomeArquivo = System.currentTimeMillis() + "_" + event.getFile().getFileName();
-            File arquivoFinal = new File(pasta, nomeArquivo);
-
-            // 3. Salva o arquivo no servidor
-            Files.copy(event.getFile().getInputStream(), arquivoFinal.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-            // 4. Atualiza o objeto Usuario para salvar o CAMINHO no banco depois
-            this.entidade.setFotoCaminho(nomeArquivo);
-            
-            FacesContext.getCurrentInstance().addMessage(null, 
-                new FacesMessage("Sucesso", "Foto " + nomeArquivo + " enviada!"));
-                
-        } catch (IOException e) {
-            e.printStackTrace();
+        
+        // Chamamos a classe utilitária passando o evento, o serviço de configuração e a pasta destino
+        String nomeArquivoSalvo = ArquivosUploads.realizarUpload(event, configuracaoService, "/Imagens/Pessoa");
+        
+        if (nomeArquivoSalvo != null) {
+            // O Bean recebe o nome e seta no objeto correto!
+            this.entidade.setFotoCaminho(nomeArquivoSalvo);
         }
     }
     

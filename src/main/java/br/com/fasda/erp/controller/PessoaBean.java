@@ -1,23 +1,14 @@
 package br.com.fasda.erp.controller;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.IOException;
 import java.io.Serializable;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.file.UploadedFile; // Dependendo da versão do PF
 
 import br.com.fasda.erp.model.DadosCliente;
 import br.com.fasda.erp.model.DadosFornecedor;
@@ -28,6 +19,7 @@ import br.com.fasda.erp.model.PessoaJuridica;
 import br.com.fasda.erp.repository.PessoaRepository;
 import br.com.fasda.erp.service.PessoaService;
 import br.com.fasda.erp.service.ConfiguracaoService;
+import br.com.fasda.erp.util.ArquivosUploads;
 import br.com.fasda.erp.util.NegocioException;
 
 @Named
@@ -201,45 +193,15 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
         return termoPesquisa != null && !termoPesquisa.isEmpty();
     }
     
-    public void handleFileUpload(org.primefaces.event.FileUploadEvent event) {
-        try {
-            UploadedFile arquivoUpload = event.getFile();
-            
-            // Pasta da imagem salva no servidor
-            // ATENÇÃO!!! Se alterar o valor dessa variavel, precisa ajustar no ImageServlet.java
-            String pastaImagem = "/Imagens/Pessoa";
-            
-            // 1. BUSCA O CAMINHO INFORMADO EM Configuracoes.xhtml!
-            String diretorioDestino = configuracaoService.getCaminhoUpload() + pastaImagem;
-            
-            // 2. Garante que a pasta física existe no servidor. Se não existir, o Java cria!
-            File pasta = new File(diretorioDestino);
-            if (!pasta.exists()) {
-                pasta.mkdirs();
-            }
-            
-            // 3. Cria o arquivo final no diretório configurado
-            File arquivoFinal = new File(pasta, arquivoUpload.getFileName());
-            
-            // O PULO DO GATO: Setar o caminho ou o NOME do arquivo diretamente no objeto que será salvo!
-            this.entidade.setFotoCaminho(arquivoUpload.getFileName());
-            
-            // 4. Fluxo padrão de escrita do Java (Stream)
-            try (InputStream input = arquivoUpload.getInputStream();
-                 FileOutputStream output = new FileOutputStream(arquivoFinal)) {
-                
-                byte[] buffer = new byte[1024];
-                int bytesLidos;
-                while ((bytesLidos = input.read(buffer)) != -1) {
-                    output.write(buffer, 0, bytesLidos);
-                }
-            }
-            
-            // Salva o caminho ou o nome do arquivo no seu objeto Produto antes de mandar pro banco...
-            System.out.println("Arquivo salvo com sucesso em: " + arquivoFinal.getAbsolutePath());
-            
-        } catch (Exception e) {
-            e.printStackTrace();
+    // Esse é o método que o p:fileUpload vai chamar no XHTML
+    public void handleFileUpload(FileUploadEvent event) {
+        
+        // Chamamos a classe utilitária passando o evento, o serviço de configuração e a pasta destino
+        String nomeArquivoSalvo = ArquivosUploads.realizarUpload(event, configuracaoService, "/Imagens/Pessoa");
+        
+        if (nomeArquivoSalvo != null) {
+            // O Bean recebe o nome e seta no objeto correto!
+            this.entidade.setFotoCaminho(nomeArquivoSalvo);
         }
     }
 
