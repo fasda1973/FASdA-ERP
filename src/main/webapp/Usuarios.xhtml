@@ -26,7 +26,7 @@
         <p:column headerText="Nome">#{item.nome}</p:column>
         
         <p:column headerText="Perfil" style="width: 60px; text-align: center;">
-		    <p:graphicImage value="/fotos/#{item.fotoCaminho}" 
+		    <p:graphicImage value="/img-pessoas/#{item.fotoCaminho}" 
 		                    cache="false" 
 		                    style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; object-position: 50% 10%;"
 		                    rendered="#{item.fotoCaminho != null}" />
@@ -41,7 +41,7 @@
        	<p:panelGrid columns="2" id="gridCampos" layout="grid">	
 	    	<h:panelGroup id="fotoPanel" layout="block" style="text-align: center; margin-bottom: 20px;">
 	    	    
-			    <p:graphicImage value="/fotos/#{usuarioBean.entidade.fotoCaminho}" 
+			    <p:graphicImage value="/img-pessoas/#{usuarioBean.entidade.fotoCaminho}" 
 	                cache="false"
 	                style="width: 120px; height: 120px; border-radius: 50%;"
 	                rendered="#{usuarioBean.entidade.fotoCaminho != null}" />

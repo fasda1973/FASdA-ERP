@@ -18,6 +18,7 @@ import org.primefaces.event.FileUploadEvent;
 import br.com.fasda.erp.model.Pessoa;
 import br.com.fasda.erp.model.Usuario;
 import br.com.fasda.erp.repository.UsuarioRepository;
+import br.com.fasda.erp.service.ConfiguracaoService;
 import br.com.fasda.erp.service.UsuarioService;
 import br.com.fasda.erp.util.NegocioException;
 
@@ -29,6 +30,9 @@ public class UsuarioBean extends CrudBean<Usuario> {
 
     @Inject
     private UsuarioService usuarioService;
+    
+    @Inject
+    private ConfiguracaoService configuracaoService; // Injeta o serviço global
     
     @Inject
     private UsuarioRepository usuariosRepository;
@@ -113,10 +117,18 @@ public class UsuarioBean extends CrudBean<Usuario> {
     /* Salva o local da imagem(Ex: Foto do usuário) no banco */
     public void handleFileUpload(FileUploadEvent event) {
         try {
+        	
+        	 // Pasta da imagem salva no servidor
+            // ATENÇÃO!!! Se alterar o valor dessa variavel, precisa ajustar no ImageServlet.java
+            String pastaImagem = "/Imagens/Pessoa";
+            
             // 1. Define o caminho da pasta (Pode ser no C:/uploads ou /home/user/uploads)
-            String caminhoDestino = "C:/Dev/Java/fasda_erp/uploads/fotos"; 
+            String caminhoDestino = configuracaoService.getCaminhoUpload() + pastaImagem; 
+            
             File pasta = new File(caminhoDestino);
-            if (!pasta.exists()) pasta.mkdirs();
+            if (!pasta.exists()) {
+            	pasta.mkdirs();
+            }
 
             // 2. Cria o nome do arquivo (Dica: use o ID do usuário ou timestamp para evitar nomes iguais)
             String nomeArquivo = System.currentTimeMillis() + "_" + event.getFile().getFileName();
