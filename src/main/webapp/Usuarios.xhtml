@@ -42,8 +42,8 @@
     </ui:define>
    
     <ui:define name="campos_formulario">
-       	<p:panelGrid columns="2" id="gridCampos" layout="grid">	
-	    	<h:panelGroup id="fotoPanel" layout="block" style="text-align: center; margin-bottom: 20px;">
+       	<h:panelGroup id="gridCampos" layout="block" style="width: 100%;">	
+	    	<h:panelGroup id="fotoPanel" layout="block" style="text-align: left; margin-bottom: 20px;">
 	    	    
 			    <p:graphicImage value="/img-pessoas/#{usuarioBean.entidade.fotoCaminho}" 
 	                cache="false"
@@ -55,31 +55,9 @@
 			                    rendered="#{usuarioBean.entidade.fotoCaminho == null}" />
 			
 			</h:panelGroup>
-				<p:message id="msgUsuario" for="nomeUsuario" display="text" />
 			
-				<p:outputLabel value="Nome Completo" for="nome" />
-				<p:inputText id="nome" value="#{usuarioBean.entidade.nome}"
-							 size="30" 
-				             required="true" maxlength="100"
-				             placeholder="Ex: Flávio Almeida" /> 			             
-			   	    
-			    <p:outputLabel value="Usuário" for="nomeUsuario" />
-			    <p:inputText id="nomeUsuario" value="#{usuarioBean.entidade.nomeUsuario}" 
-			    			 size="30" required="true" >
-		    		<p:ajax event="blur" listener="#{usuarioBean.verificarDisponibilidade}" update="msgUsuario" />
-		    		
-		    	</p:inputText>	    
-			    
-			    <p:outputLabel value="Senha" for="senha" />
-			    <p:password id="senha" value="#{usuarioBean.entidade.senha}"
-			    			required="#{usuarioBean.entidade.id == null}" 
-			    			feedback="true"
-			    			size="30"
-			    			placeholder="#{usuarioBean.entidade.id == null ? 'Digite a senha' : 'Deixe em branco para manter a atual'}"
-		            		weakLabel="Fraca" goodLabel="Boa" strongLabel="Forte"/>
-	    
-		        <p:outputLabel for="foto" value="Foto do Perfil:" />
-		        
+			<p:outputLabel for="foto" />
+	        <div style="max-width: 135px;">
 		        <p:growl id="msgs" showDetail="true" life="4000" />
 		        
 				<p:fileUpload id="foto" 
@@ -90,8 +68,40 @@
 				              sizeLimit="2000000" 
 				              allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
 				              label="Escolher" />
-            
-		</p:panelGrid>
+			</div>			
+			<p:tabView id="tabUsuario">
+				<p:tab title="Dados Principais">
+					<div class="ui-fluid formgrid grid">
+						<p:message id="msgUsuario" for="nomeUsuario" display="text" />
+						
+						<div class="field col-12 md:col-12">
+							<p:outputLabel value="Nome Completo" for="nome" />
+							<p:inputText id="nome" value="#{usuarioBean.entidade.nome}"
+										 size="30" 
+							             required="true" maxlength="100"
+							             placeholder="Ex: Flávio Almeida" /> 			             
+					   	</div>
+					   	<div class="field col-12 md:col-12">    
+						    <p:outputLabel value="Usuário" for="nomeUsuario" />
+						    <p:inputText id="nomeUsuario" value="#{usuarioBean.entidade.nomeUsuario}" 
+						    			 size="30" required="true" >
+					    		<p:ajax event="blur" listener="#{usuarioBean.verificarDisponibilidade}" update="msgUsuario" />
+					    		
+					    	</p:inputText>	    
+						</div>
+						<div class="field col-12 md:col-12">    
+						    <p:outputLabel value="Senha" for="senha" />
+						    <p:password id="senha" value="#{usuarioBean.entidade.senha}"
+						    			required="#{usuarioBean.entidade.id == null}" 
+						    			feedback="true"
+						    			size="30"
+						    			placeholder="#{usuarioBean.entidade.id == null ? 'Digite a senha' : 'Deixe em branco para manter a atual'}"
+					            		weakLabel="Fraca" goodLabel="Boa" strongLabel="Forte"/>
+           				</div>
+           			</div>
+           		</p:tab>	        
+            </p:tabView>
+		</h:panelGroup>
 	</ui:define>
 
 </ui:composition>
