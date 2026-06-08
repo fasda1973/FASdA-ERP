@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Table(name = "usuario")
-public class Usuario implements Serializable {
+public class Usuario implements BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @Id

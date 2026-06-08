@@ -9,6 +9,7 @@ import br.com.fasda.erp.model.LogAuditoria;
 import br.com.fasda.erp.model.Usuario;
 import br.com.fasda.erp.repository.LogRepository;
 import br.com.fasda.erp.repository.UsuarioRepository;
+import br.com.fasda.erp.util.AuditoriaUtil;
 import br.com.fasda.erp.util.NegocioException;
 import br.com.fasda.erp.util.ObjetoDiffUtil;
 import br.com.fasda.erp.util.Transacional;
@@ -56,6 +57,13 @@ public class UsuarioService implements Serializable {
 	    }
 	    
 	    try {
+	    	
+	    	//usuario = usuarioRepository.guardar(usuario);
+	    	
+	    	// Toda a complexidade foi abstraída em uma linha genérica!
+	        AuditoriaUtil.salvarComAuditoria(usuario, manager, logRepository, origemTela, usuarioLogado);
+	    	
+	    	/*
 	    	Usuario uOrigem = null;
 	    		    	
 	    	if (usuario.getId() != null) { // Edição
@@ -96,6 +104,7 @@ public class UsuarioService implements Serializable {
                 logRepository.salvar(log);
 	    		
 	    	}
+	    	*/
 	    	
 	    	
 	    
@@ -107,9 +116,15 @@ public class UsuarioService implements Serializable {
 	
 	@Transacional
 	public void excluir(Usuario usuario, String origemTela, String usuarioLogado) throws NegocioException {
-		String tipoOperacao = "EXCLUSÃO";
-		
+				
 		try {
+			
+			
+			// Abstração total da exclusão com auditoria
+		    AuditoriaUtil.removerComAuditoria(usuario, Usuario.class, manager, logRepository, origemTela, usuarioLogado);
+			
+			/*
+			String tipoOperacao = "EXCLUSÃO";
 			
 			usuarioRepository.remover(usuario);
 			
@@ -119,11 +134,12 @@ public class UsuarioService implements Serializable {
 	        // 4. Instancia e grava o log
 	        LogAuditoria log = new LogAuditoria(tipoOperacao, origemTela.toUpperCase(), usuario.getId(), detalheLog, usuarioLogado);
 	        logRepository.salvar(log);
-			
+			*/
 		} catch (Exception e) {
 			throw new NegocioException("Erro ao salvar no banco de dados. Operação cancelada. Detalhe: " + e.getMessage());
 			
 		}
+		
 			
 	}
 
