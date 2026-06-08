@@ -36,6 +36,9 @@ public class UsuarioBean extends CrudBean<Usuario> {
     private ConfiguracaoService configuracaoService; // Injeta o serviço global
     
     @Inject
+    private LoginBean loginBean; // Injeta o seu bean de login/sessão
+    
+    @Inject
     private UsuarioRepository usuariosRepository;
     
     public UsuarioBean() {
@@ -57,18 +60,26 @@ public class UsuarioBean extends CrudBean<Usuario> {
     @Override
     public void salvar() {
     	try {
-    	// Usamos 'entidade' que vem do CrudBean (substitui 'usuario')
-    	usuarioService.salvar(this.entidade); // Tenta salvar através do Service
-    	
-        atualizarRegistros();
-        
-        // Se chegou aqui, deu certo!
-        messages.info("Usuario salvo com sucesso!");
-        
-        // limpar o formulário após salvar:
-        this.entidade = new Usuario();
-                
-        PrimeFaces.current().ajax().update(Arrays.asList("frm:dataTable", "frm:messages"));
+    		// Prepara loginAuditoria
+        	String loginDoUsuario = "SISTEMA"; // Valor padrão de segurança      	
+        	// 1. Verifica se o loginBean e o usuário logado não estão nulos
+            if (loginBean != null && loginBean.getUsuarioLogado() != null) {                
+                // 2. Pega o login através do getNomeUsuario
+                loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
+            }	
+    		
+	    	// Usamos 'entidade' que vem do CrudBean (substitui 'usuario')
+	    	usuarioService.salvar(this.entidade, "Usuario", loginDoUsuario); // Tenta salvar através do Service
+	    	
+	        atualizarRegistros();
+	        
+	        // Se chegou aqui, deu certo!
+	        messages.info("Usuario salvo com sucesso!");
+	        
+	        // limpar o formulário após salvar:
+	        this.entidade = new Usuario();
+	                
+	        PrimeFaces.current().ajax().update(Arrays.asList("frm:dataTable", "frm:messages"));
         
     	} catch (NegocioException e) {
     		// Usando o novo método que criamos para direcionar ao campo específico
@@ -77,11 +88,19 @@ public class UsuarioBean extends CrudBean<Usuario> {
     }
     
     @Override
-    public void excluir() {
-    	usuarioService.excluir(this.entidade);
-    	this.entidade = null;
-    	atualizarRegistros(); // Atualiza a lista após remover
-        messages.info("Usuário excluído com sucesso!");
+    public void excluir() {    	
+    	try {
+    		String loginDoUsuario = "SISTEMA"; // Valor padrão de segurança
+    		
+    		loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
+    		
+	    	usuarioService.excluir(this.entidade, "Usuario", loginDoUsuario);
+	    	this.entidade = null;
+	    	atualizarRegistros(); // Atualiza a lista após remover
+	        messages.info("Usuário excluído com sucesso!");
+    	} catch (NegocioException e) {
+            messages.error(e.getMessage());
+        }
     }
     
     @Override
