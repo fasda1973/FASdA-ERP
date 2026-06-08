@@ -71,7 +71,7 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
             
             // Chama o seu service especializado
             pessoaService.salvar(getEntidade(), "Pessoas", loginDoUsuario);
-            //atualizarRegistros();
+            atualizarRegistros();
             
             // 2. RECARREGA usando o método otimizado ANTES da tela renderizar
             pessoaRepository.porId(this.entidade.getId());
