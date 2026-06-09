@@ -1,0 +1,1 @@
+ALTER TABLE log_auditoria MODIFY id_registro VARCHAR(255);

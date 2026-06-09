@@ -12,7 +12,7 @@ public class AuditoriaUtil {
      * Retorna a entidade persistida e atualizada pelo banco.
      */
     @SuppressWarnings("unchecked")
-    public static <T extends BaseEntity> T salvarComAuditoria(
+    public static <T extends BaseEntity<?>> T salvarComAuditoria(
             T entidade, 
             EntityManager manager, 
             LogRepository logRepository, 
@@ -41,8 +41,11 @@ public class AuditoriaUtil {
             if (camposAlterados != null && !camposAlterados.trim().isEmpty()) {
                 String detalheLog = String.format("Campos: %s", camposAlterados);
                 
+                // Criamos uma variável convertendo o ID para String de forma segura
+                String idString = entidadeSalva.getId() != null ? entidadeSalva.getId().toString() : null;
+                
                 LogAuditoria log = new LogAuditoria(tipoOperacao, origemTela.toUpperCase(), 
-                        entidadeSalva.getId(), detalheLog, usuarioLogado);
+                		idString, detalheLog, usuarioLogado);
                 logRepository.salvar(log);
             }
             
@@ -57,9 +60,12 @@ public class AuditoriaUtil {
             String camposPreenchidos = ObjetoDiffUtil.buscaCamposPreenchidos(entidadeSalva);
             String detalheLog = String.format("Campos: %s", camposPreenchidos);
             
+            // Criamos uma variável convertendo o ID para String de forma segura
+            String idString = entidadeSalva.getId() != null ? entidadeSalva.getId().toString() : null;
+            
             // 3. Grava o log do novo cadastro
             LogAuditoria log = new LogAuditoria(tipoOperacao, origemTela.toUpperCase(), 
-                    entidadeSalva.getId(), detalheLog, usuarioLogado);
+            		idString, detalheLog, usuarioLogado);
             logRepository.salvar(log);
         }
         
@@ -69,7 +75,7 @@ public class AuditoriaUtil {
     /**
      * Processa, grava o log de auditoria e remove a entidade do banco de dados.
      */
-    public static <T extends BaseEntity> void removerComAuditoria(
+    public static <T extends BaseEntity<?>> void removerComAuditoria(
             T entidade,
             Class<T> classe, // Passa a classe explicitamente aqui
             EntityManager manager, 
@@ -92,9 +98,12 @@ public class AuditoriaUtil {
             // 3. Executa a remoção física no banco de dados
             manager.remove(entidadeGerenciada);
             
+            // Criamos uma variável convertendo o ID para String de forma segura
+            String idString = entidadeGerenciada.getId() != null ? entidadeGerenciada.getId().toString() : null;
+            
             // 4. Se a remoção ocorreu sem erros, grava o log de auditoria
             LogAuditoria log = new LogAuditoria(tipoOperacao, origemTela.toUpperCase(), 
-                    entidadeGerenciada.getId(), detalheLog, usuarioLogado);
+            		idString, detalheLog, usuarioLogado);
             logRepository.salvar(log);
         }
     }

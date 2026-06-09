@@ -2,7 +2,8 @@ package br.com.fasda.erp.model;
 
 import java.io.Serializable;
 
-public interface BaseEntity extends Serializable {
-    Long getId();
-    String getNome(); // Se um produto tiver 'getDescricao', adapte para retornar o campo de texto principal
+//O <ID> permite que cada classe decida se o ID é Long, String, Integer, etc.
+public interface BaseEntity<ID> extends Serializable {
+	ID getId();
+	String getNome();
 }
