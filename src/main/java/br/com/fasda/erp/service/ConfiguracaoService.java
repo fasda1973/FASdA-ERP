@@ -7,6 +7,8 @@ import javax.inject.Named;
 
 import br.com.fasda.erp.model.Configuracao;
 import br.com.fasda.erp.repository.ConfiguracaoRepository;
+import br.com.fasda.erp.util.NegocioException;
+import br.com.fasda.erp.util.Transacional;
 
 import java.io.Serializable;
 
@@ -77,5 +79,17 @@ public class ConfiguracaoService implements Serializable {
     // Método para atualizar a memória quando o usuário salvar na tela
     public void atualizarConfiguracao(String chave, String novoValor) {
         mapaConfiguracoes.put(chave, novoValor);
+    }
+    
+    @Transacional
+    public void salvar(Configuracao configuracao, String origemTela, String usuarioLogado) throws NegocioException {
+    	try {
+    		
+    		configuracaoRepository.guardarComAuditoria(configuracao, origemTela, usuarioLogado);
+    		
+    	} catch (Exception e) {
+            //e.printStackTrace();
+            throw new NegocioException("Erro ao salvar no banco de dados. Operação cancelada. Detalhe: " + e.getMessage());
+        }
     }
 }

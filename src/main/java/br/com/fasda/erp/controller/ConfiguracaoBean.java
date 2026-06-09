@@ -26,6 +26,12 @@ public class ConfiguracaoBean implements Serializable {
     
     @Inject
     private ConfiguracaoRepository configuracaoRepository;
+    
+    @Inject
+    private Configuracao configuracao;
+    
+    @Inject
+    private LoginBean loginBean; // Injeta o seu bean de login/sessão
 
     // Atributos que serão espelhados na tela
     private String caminhoUploadImagens;
@@ -62,7 +68,15 @@ public class ConfiguracaoBean implements Serializable {
         
     @Transacional
     public void salvar() {
-        try {
+        try {        	
+        	String loginDoUsuario = "SISTEMA"; // Valor padrão de segurança 
+			if (loginBean != null && loginBean.getUsuarioLogado() != null) {                
+			     // 2. Pega o login através do getNomeUsuario
+				loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
+			}	
+        	
+			//configuracaoService.salvar(this.configuracao, "Configuração", loginDoUsuario);
+			
         	java.io.File pasta = new java.io.File(this.caminhoUploadImagens);
         	if (!pasta.exists()) {
         	    // Tenta criar a pasta automaticamente se ela não existir
@@ -78,31 +92,25 @@ public class ConfiguracaoBean implements Serializable {
             Configuracao cUpload = new Configuracao("CAMINHO_UPLOAD_IMAGENS", this.caminhoUploadImagens, "Diretório de uploads");
             Configuracao cEstoque = new Configuracao("PERMITIR_ESTOQUE_NEGATIVO", String.valueOf(this.permitirEstoqueNegativo), "Estoque negativo");
             Configuracao cMargem = new Configuracao("MARGEM_LUCRO_MINIMA", String.valueOf(this.margemLucroMinima), "Margem de lucro mínima");
-
-            Configuracao cUsuario = new Configuracao("PERMITIR_CADASTRO_USUARIOS", String.valueOf(this.permitirCadastroUsuarios), "Cadastro Usuário");
-            
+            Configuracao cUsuario = new Configuracao("PERMITIR_CADASTRO_USUARIOS", String.valueOf(this.permitirCadastroUsuarios), "Cadastro Usuário");            
             Configuracao cSmtpHost = new Configuracao("SMTP_HOST", String.valueOf(this.smtpHost), "Servidor de saída de e-mails");
             Configuracao cSmtpPort = new Configuracao("SMTP_PORT", String.valueOf(this.smtpPort), "Porta do servidor SMTP");
             Configuracao cSmtpUser = new Configuracao("SMTP_USER", String.valueOf(this.smtpUser), "Usuário do e-mail disparador");
             
-            // 2. Salva no banco via DAO
-            configuracaoRepository.salvar(cUpload);
-            configuracaoRepository.salvar(cEstoque);
-            configuracaoRepository.salvar(cMargem);
-            
-            configuracaoRepository.salvar(cUsuario);
-            
-            configuracaoRepository.salvar(cSmtpHost);
-            configuracaoRepository.salvar(cSmtpPort);
-            configuracaoRepository.salvar(cSmtpUser);
+            // 2. SALVAMENTO CORRETO: Envia cada um para o Service tratar com Auditoria
+            configuracaoService.salvar(cUpload, "Configuração", loginDoUsuario);
+            configuracaoService.salvar(cEstoque, "Configuração", loginDoUsuario);
+            configuracaoService.salvar(cMargem, "Configuração", loginDoUsuario);            
+            configuracaoService.salvar(cUsuario, "Configuração", loginDoUsuario);            
+            configuracaoService.salvar(cSmtpHost, "Configuração", loginDoUsuario);
+            configuracaoService.salvar(cSmtpPort, "Configuração", loginDoUsuario);
+            configuracaoService.salvar(cSmtpUser, "Configuração", loginDoUsuario);
 
             // 3. Atualiza a memória local da aplicação
             configuracaoService.atualizarConfiguracao("CAMINHO_UPLOAD_IMAGENS", this.caminhoUploadImagens);
             configuracaoService.atualizarConfiguracao("PERMITIR_ESTOQUE_NEGATIVO", String.valueOf(this.permitirEstoqueNegativo));
             configuracaoService.atualizarConfiguracao("MARGEM_LUCRO_MINIMA", String.valueOf(this.margemLucroMinima));
-
-            configuracaoService.atualizarConfiguracao("PERMITIR_CADASTRO_USUARIOS", String.valueOf(this.permitirCadastroUsuarios));
-            
+            configuracaoService.atualizarConfiguracao("PERMITIR_CADASTRO_USUARIOS", String.valueOf(this.permitirCadastroUsuarios));           
             configuracaoService.atualizarConfiguracao("SMTP_HOST", String.valueOf(this.smtpHost));
             configuracaoService.atualizarConfiguracao("SMTP_PORT", String.valueOf(this.smtpPort));
             configuracaoService.atualizarConfiguracao("SMTP_USER", String.valueOf(this.smtpUser));

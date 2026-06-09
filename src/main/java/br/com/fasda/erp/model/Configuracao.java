@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "configuracao")
-public class Configuracao implements Serializable {
+public class Configuracao implements BaseEntity<String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,6 +32,16 @@ public class Configuracao implements Serializable {
         this.chave = chave;
         this.valor = valor;
         this.descricao = descricao;
+    }
+    
+    @Override
+    public String getId() {
+        return this.chave; // Retorna a String perfeitamente!
+    }
+
+    @Override
+    public String getNome() {
+        return this.chave; 
     }
 
     // Getters e Setters
