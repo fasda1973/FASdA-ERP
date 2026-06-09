@@ -169,8 +169,8 @@ public class PessoaService implements Serializable {
                 if (camposAlterados != null && !camposAlterados.trim().isEmpty()) {
                     String detalheLog = String.format("Campos: %s", camposAlterados);
                     
-                    LogAuditoria log = new LogAuditoria(tipoOperacao, origemTela.toUpperCase(), pessoa.getId(), detalheLog, usuarioLogado);
-                    logRepository.salvar(log);
+                    //LogAuditoria log = new LogAuditoria(tipoOperacao, origemTela.toUpperCase(), pessoa.getId(), detalheLog, usuarioLogado);
+                    //logRepository.salvar(log);
                 }
                 
             } else {	            	 
@@ -185,9 +185,9 @@ public class PessoaService implements Serializable {
 	                
                 String detalheLog = String.format("Campos: %s", camposPreenchidos);
 	                
-                LogAuditoria log = new LogAuditoria(tipoOperacao, origemTela.toUpperCase(), pessoa.getId(), detalheLog, usuarioLogado);
+                //LogAuditoria log = new LogAuditoria(tipoOperacao, origemTela.toUpperCase(), pessoa.getId(), detalheLog, usuarioLogado);
 	                
-                logRepository.salvar(log);
+                //logRepository.salvar(log);
 	                                	
             }
         } catch (Exception e) {
@@ -208,8 +208,8 @@ public class PessoaService implements Serializable {
 	        String detalheLog = String.format("Nome: %s", pessoa.getNome());
 	        
 	        // 4. Instancia e grava o log
-	        LogAuditoria log = new LogAuditoria(tipoOperacao, origemTela.toUpperCase(), pessoa.getId(), detalheLog, usuarioLogado);
-	        logRepository.salvar(log);
+	        //LogAuditoria log = new LogAuditoria(tipoOperacao, origemTela.toUpperCase(), pessoa.getId(), detalheLog, usuarioLogado);
+	        //logRepository.salvar(log);
     	} catch (Exception e) {
     		throw new NegocioException("Erro ao salvar no banco de dados. Operação cancelada. Detalhe: " + e.getMessage());
     	}
