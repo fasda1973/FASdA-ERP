@@ -9,6 +9,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import br.com.fasda.erp.model.Usuario;
+import br.com.fasda.erp.util.AuditoriaUtil;
 import br.com.fasda.erp.util.Transacional;
 
 public class UsuarioRepository implements Serializable {
@@ -17,6 +18,9 @@ public class UsuarioRepository implements Serializable {
 
     @Inject
     private EntityManager manager;
+    
+    @Inject
+    private LogRepository logRepository; // 1. Injetar o repositório de logs
     
     public UsuarioRepository() {
 
@@ -44,10 +48,19 @@ public class UsuarioRepository implements Serializable {
         return manager.createQuery("from Usuario", Usuario.class).getResultList();
     }
     
+    public Usuario guardarComAuditoria(Usuario usuario, String origemTela, String usuarioLogado) {
+        // É aqui dentro que a mágica da persistência com auditoria se consolida!
+        return AuditoriaUtil.salvarComAuditoria(usuario, manager, logRepository, origemTela, usuarioLogado);
+    }
+    
     @Transacional
     public Usuario guardar(Usuario usuario) {
         // Como é uma inserção, precisamos de uma transação se não estiver usando @Transactional
         return manager.merge(usuario);
+    }
+    
+    public void removerComAuditoria(Usuario usuario, String origemTela, String usuarioLogado) {
+    	AuditoriaUtil.removerComAuditoria(usuario, Usuario.class, manager, logRepository, origemTela, usuarioLogado);
     }
     
     public void remover(Usuario usuario) {

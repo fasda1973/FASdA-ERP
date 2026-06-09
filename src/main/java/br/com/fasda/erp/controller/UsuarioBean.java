@@ -1,9 +1,5 @@
 package br.com.fasda.erp.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 
 import javax.faces.application.FacesMessage;
@@ -15,7 +11,6 @@ import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
 
-import br.com.fasda.erp.model.Pessoa;
 import br.com.fasda.erp.model.Usuario;
 import br.com.fasda.erp.repository.UsuarioRepository;
 import br.com.fasda.erp.service.ConfiguracaoService;
