@@ -2,11 +2,14 @@
 FROM maven:3.6.3-jdk-8 AS build
 WORKDIR /app
 
-# Copia apenas o pom.xml primeiro para baixar as dependências separadamente
+# Copia o pom.xml E a pasta com o arquivo do tema pago
 COPY pom.xml .
+COPY local-repo ./local-repo
+
+# Agora o Maven vai encontrar o Barcelona localmente sem falhar!
 RUN mvn dependency:go-offline -B
 
-# Agora copia o código fonte e compila sem precisar baixar tudo de novo
+# Copia o restante do código fonte e compila
 COPY src ./src
 RUN mvn clean package -DskipTests -B
 
