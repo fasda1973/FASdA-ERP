@@ -37,6 +37,7 @@
         <component-class>org.primefaces.barcelona.component.Tab</component-class>
     </component>
     
+    <!--
     <render-kit>
         <renderer>
             <component-family>org.primefaces.component</component-family>
@@ -49,5 +50,5 @@
             <renderer-class>org.primefaces.barcelona.component.TabMenuRenderer</renderer-class>
         </renderer>
     </render-kit>
-    
+    -->
 </faces-config>
