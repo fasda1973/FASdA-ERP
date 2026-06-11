@@ -1,11 +1,11 @@
-package br.com.fasda.erp.model;
+package old;
 
 public enum TipoEmpresa {
 	
 	MEI("Microempreendedor Individual"),
 	EIRELI("Empresa individual de Reponsabilidade Limitada"),
 	LTDA("Sociedade Limitada"),
-	SA("Sociedade Anônima");
+	SA("Sociedade Anï¿½nima");
 	
 	private String descricao;
 	

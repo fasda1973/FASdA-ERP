@@ -1,11 +1,9 @@
-package br.com.fasda.erp.service;
+package old;
 
 import java.io.Serializable;
 
 import javax.inject.Inject;
 
-import br.com.fasda.erp.model.Empresa;
-import br.com.fasda.erp.repository.EmpresaRepository;
 import br.com.fasda.erp.util.Transacional;
 
 public class EmpresaService implements Serializable {

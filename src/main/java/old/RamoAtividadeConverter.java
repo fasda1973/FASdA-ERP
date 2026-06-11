@@ -1,12 +1,10 @@
-package br.com.fasda.erp.controller;
+package old;
 
 import java.util.List;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-
-import br.com.fasda.erp.model.RamoAtividade;
 
 public class RamoAtividadeConverter implements Converter {
 	

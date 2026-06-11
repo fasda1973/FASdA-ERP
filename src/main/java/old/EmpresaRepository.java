@@ -1,4 +1,4 @@
-package br.com.fasda.erp.repository;
+package old;
 
 import java.io.Serializable;
 import java.util.List;
@@ -6,8 +6,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-
-import br.com.fasda.erp.model.Empresa;
 
 public class EmpresaRepository implements Serializable {
 

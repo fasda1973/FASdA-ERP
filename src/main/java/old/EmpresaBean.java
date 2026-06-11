@@ -1,4 +1,4 @@
-package br.com.fasda.erp.controller;
+package old;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,13 +10,8 @@ import javax.inject.Named;
 
 import org.primefaces.PrimeFaces;
 
-import br.com.fasda.erp.model.Empresa;
+import br.com.fasda.erp.controller.CrudBean;
 import br.com.fasda.erp.model.Pessoa;
-import br.com.fasda.erp.model.RamoAtividade;
-import br.com.fasda.erp.model.TipoEmpresa;
-import br.com.fasda.erp.repository.EmpresaRepository;
-import br.com.fasda.erp.repository.RamoAtividades;
-import br.com.fasda.erp.service.EmpresaService;
 
 @Named
 @ViewScoped
