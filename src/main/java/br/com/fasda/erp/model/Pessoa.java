@@ -22,7 +22,7 @@ import br.com.fasda.erp.util.ObjetoFormataUtil;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "pessoa")
-public abstract class Pessoa implements Serializable {
+public abstract class Pessoa implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

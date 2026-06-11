@@ -9,24 +9,19 @@ import javax.persistence.EntityManager;
 import br.com.fasda.erp.model.DadosCliente;
 import br.com.fasda.erp.model.DadosFornecedor;
 import br.com.fasda.erp.model.DadosFuncionario;
-import br.com.fasda.erp.model.LogAuditoria;
 import br.com.fasda.erp.model.Pessoa;
 import br.com.fasda.erp.model.PessoaFisica;
 import br.com.fasda.erp.model.PessoaJuridica;
-import br.com.fasda.erp.repository.LogRepository;
 import br.com.fasda.erp.repository.PessoaRepository;
 import br.com.fasda.erp.util.NegocioException;
-import br.com.fasda.erp.util.ObjetoDiffUtil;
 import br.com.fasda.erp.util.Transacional;
 
 public class PessoaService implements Serializable {
+	private static final long serialVersionUID = 1L;
 
     @Inject
     private PessoaRepository pessoaRepository;
-    
-    @Inject
-    private LogRepository logRepository; // 1. Injetar o repositório de logs
-    
+      
     // 1. Injeta o seu EntityManager no Service se já não estiver injetado:
     @Inject 
     private EntityManager manager;
@@ -128,6 +123,10 @@ public class PessoaService implements Serializable {
         }
 
         try {
+        	
+        	pessoaRepository.guardarComAuditoria(pessoa, origemTela, usuarioLogado);
+        	
+        	/*
             Pessoa pOrigem = null;
             
             // Se já tiver ID, precisamos capturar o "Antes" direto do banco para o Log
@@ -190,6 +189,7 @@ public class PessoaService implements Serializable {
                 //logRepository.salvar(log);
 	                                	
             }
+            */
         } catch (Exception e) {
             //e.printStackTrace();
             throw new NegocioException("Erro ao salvar no banco de dados. Operação cancelada. Detalhe: " + e.getMessage());
@@ -198,10 +198,13 @@ public class PessoaService implements Serializable {
     
     @Transacional
 	public void excluir(Pessoa pessoa, String origemTela, String usuarioLogado) throws NegocioException {
-    	String tipoOperacao = "EXCLUSÃO";
+    	//String tipoOperacao = "EXCLUSÃO";
         //String acaoTexto = "Exclução do registro";
     	
     	try {
+    		pessoaRepository.removerComAuditoria(pessoa, origemTela, usuarioLogado);
+    		
+    		/*
     		pessoaRepository.remover(pessoa);
     		
     		// Monta a mensagem incluindo a tela de origem
@@ -210,6 +213,7 @@ public class PessoaService implements Serializable {
 	        // 4. Instancia e grava o log
 	        //LogAuditoria log = new LogAuditoria(tipoOperacao, origemTela.toUpperCase(), pessoa.getId(), detalheLog, usuarioLogado);
 	        //logRepository.salvar(log);
+	        */
     	} catch (Exception e) {
     		throw new NegocioException("Erro ao salvar no banco de dados. Operação cancelada. Detalhe: " + e.getMessage());
     	}

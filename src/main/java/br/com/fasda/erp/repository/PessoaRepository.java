@@ -8,8 +8,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
-import br.com.fasda.erp.model.LogAuditoria;
 import br.com.fasda.erp.model.Pessoa;
+import br.com.fasda.erp.util.AuditoriaUtil;
 
 public class PessoaRepository implements Serializable {
 	
@@ -17,6 +17,9 @@ public class PessoaRepository implements Serializable {
 
     @Inject
     private EntityManager manager;
+    
+    @Inject
+    private LogRepository logRepository;
     
     public PessoaRepository() {
     	
@@ -102,6 +105,10 @@ public class PessoaRepository implements Serializable {
         return manager.createQuery("select count(p) from Pessoa p where p.fornecedor = true", Long.class)
                       .getSingleResult();
     }
+    
+    public Pessoa guardarComAuditoria(Pessoa pessoa, String origemTela, String usuarioLogado) {
+    	return AuditoriaUtil.salvarComAuditoria(pessoa, manager, logRepository, origemTela, usuarioLogado);  
+    }
 
     public Pessoa guardar(Pessoa pessoa) {
     	if (pessoa.getId() == null) {
@@ -114,7 +121,9 @@ public class PessoaRepository implements Serializable {
         return pessoa;
     }
     
-    
+    public void removerComAuditoria(Pessoa pessoa, String origemTela, String usuarioLogado) {
+    	AuditoriaUtil.removerComAuditoria(pessoa, Pessoa.class, manager, logRepository, origemTela, usuarioLogado);
+    }
 
     public void remover(Pessoa pessoa) {
         pessoa = porId(pessoa.getId());
