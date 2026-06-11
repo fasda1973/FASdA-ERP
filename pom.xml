@@ -60,6 +60,8 @@
 			<groupId>org.primefaces.themes</groupId>
 			<artifactId>barcelona</artifactId>
 			<version> 1.0.0 </version>
+			<scope>system</scope>
+    		<systemPath>${project.basedir}/local-repo/barcelona-1.0.0.jar</systemPath>
 		</dependency>
 		
 		<dependency>
