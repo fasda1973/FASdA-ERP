@@ -4,30 +4,14 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 	
-	<persistence-unit name="AlgaWorksPU">
+	<persistence-unit name="FasdaPU">
 		<properties>
-			<property name="javax.persistence.jdbc.url" value="${db.url}" />
-			<property name="javax.persistence.jdbc.user" value="${db.user}" />
-			<property name="javax.persistence.jdbc.password" value="${db.password}" />
-			<!--
-			<property name="javax.persistence.jdbc.url"
-				value="jdbc:mysql://localhost:3306/fasda_erp?allowPublicKeyRetrieval=true&amp;useTimezone=true&amp;serverTimezone=America/Sao_Paulo&amp;useSSL=false" />			
-			<property name="javax.persistence.jdbc.user" value="root" />
-			<property name="javax.persistence.jdbc.password"
-				value="brcd2605" />
-			-->
-			<property name="javax.persistence.jdbc.driver"
-				value="com.mysql.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL57Dialect" />
 
-			<property name="hibernate.dialect"
-				value="org.hibernate.dialect.MySQL5Dialect" />
-
-			<property name="hibernate.hbm2ddl.auto"
-				value="validate" />
+			<property name="hibernate.hbm2ddl.auto" value="validate" />
 			
-			<!-- A linha abaixo mostra o resultado no console -->
 			<property name="hibernate.show_sql" value="true" />
-			<!-- Essa outra formata para que seja mais legivel... -->
 			<property name="hibernate.format_sql" value="true" />
 		</properties>
 	</persistence-unit>
