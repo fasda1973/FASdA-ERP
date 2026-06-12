@@ -3,30 +3,26 @@ package br.com.fasda.erp.util;
 import java.util.HashMap;
 import java.util.Map;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.Initialized;
-import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 import org.flywaydb.core.Flyway;
 
+@WebListener // ISSO OBRIGA O TOMCAT NA NUVEM A RODAR ESSA CLASSE NA SUBIDA!
 @ApplicationScoped
-public class EntityManagerProducer {
+public class EntityManagerProducer implements ServletContextListener {
 
-    private EntityManagerFactory factory;
+    // Transformamos em estático para garantir que o CDI consiga enxergar a fábrica
+    private static EntityManagerFactory factory;
 
-    // Construtor padrão do CDI (precisa ficar vazio ou simples)
-    public EntityManagerProducer() {
-    }
-
-    /**
-     * Este método monitora a inicialização da aplicação. 
-     * O CDI é OBRIGADO a rodar este método assim que o Tomcat sobe!
-     */
-    public void init(@Observes @Initialized(ApplicationScoped.class) Object init) {
-        System.out.println("[FASdA-ERP] >>> SISTEMA INICIALIZADO - ACORDANDO EM_PRODUCER <<<");
+    @Override
+    public void contextInitialized(ServletContextEvent sce) {
+        System.out.println("[FASdA-ERP] >>> TOMCAT ACORDOU O EM_PRODUCER VIA WEBLISTENER <<<");
         
         String railwayUrl = System.getenv("MYSQL_URL");
         String railwayUser = System.getenv("MYSQLUSER");
@@ -39,11 +35,8 @@ public class EntityManagerProducer {
             railwayUrl = "jdbc:" + railwayUrl;
         }
 
-        // Configura conexões mantendo os parâmetros idênticos ao seu persistence.xml
         if (railwayUrl != null && !railwayUrl.isEmpty()) {
             System.out.println("[FASdA-ERP] Configurando conexão de Produção (Railway)...");
-            
-            // Garantindo os parâmetros de Timezone e SSL iguais aos que você usa localmente
             String sufixo = "?allowPublicKeyRetrieval=true&useTimezone=true&serverTimezone=America/Sao_Paulo&useSSL=false";
             
             dataSource.setURL(railwayUrl + sufixo);
@@ -55,15 +48,14 @@ public class EntityManagerProducer {
             propriedades.put("javax.persistence.jdbc.password", railwayPassword);
         } else {
             System.out.println("[FASdA-ERP] Configurando conexão Local (Localhost)...");
-            // Usando exatamente a string do seu persistence.xml para não dar divergência local
             dataSource.setURL("jdbc:mysql://localhost:3306/fasda_erp?allowPublicKeyRetrieval=true&useTimezone=true&serverTimezone=America/Sao_Paulo&useSSL=false");
             dataSource.setUser("root");
             dataSource.setPassword("brcd2605");
         }
 
-        // Executa o Flyway imediatamente na subida
+        // DISPARA O FLYWAY
         try {
-            System.out.println("[FASdA-ERP] Flyway disparando migrações obrigatórias...");
+            System.out.println("[FASdA-ERP] Flyway disparando migrações obrigatórias via WebListener...");
             Flyway flyway = Flyway.configure()
                 .dataSource(dataSource)
                 .baselineOnMigrate(true) 
@@ -77,10 +69,10 @@ public class EntityManagerProducer {
             e.printStackTrace();
         }
 
-        // Inicializa o Hibernate de forma síncrona
+        // INICIALIZA O HIBERNATE
         try {
             System.out.println("[FASdA-ERP] Inicializando EntityManagerFactory do Hibernate...");
-            this.factory = Persistence.createEntityManagerFactory("AlgaWorksPU", propriedades);
+            factory = Persistence.createEntityManagerFactory("AlgaWorksPU", propriedades);
             System.out.println("[FASdA-ERP] Hibernate pronto para uso!");
         } catch (Exception e) {
             System.err.println("[FASdA-ERP] ERRO CRÍTICO AO INICIALIZAR O HIBERNATE:");
@@ -88,11 +80,18 @@ public class EntityManagerProducer {
         }
     }
 
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        if (factory != null && factory.isOpen()) {
+            factory.close();
+        }
+    }
+
     @Produces
     @RequestScoped
     public EntityManager createEntityManager() {
-        if (this.factory == null) {
-            throw new IllegalStateException("Fábrica de conexões não foi inicializada corretamente na subida.");
+        if (factory == null) {
+            throw new IllegalStateException("Fábrica de conexões não foi inicializada na subida do Tomcat.");
         }
         return factory.createEntityManager();
     }
