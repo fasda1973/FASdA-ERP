@@ -31,7 +31,7 @@ public class JpaUtil {
 		} else {
 			// Se for nulo, significa que você deu Play no Eclipse/sua máquina local. Usa o seu localhost!
 			String urlLocal = "jdbc:mysql://localhost:3306/fasda_erp"
-					+ "?allowPublicKeyRetrieval=true&useTimezone=true&serverTimezone=America/Sao_Paulo&useSSL=false";
+					+ "?allowPublicKeyRetrieval=true&amp;useTimezone=true&amp;serverTimezone=America/Sao_Paulo&amp;useSSL=false";
 			
 			propriedades.put("javax.persistence.jdbc.url", urlLocal);
 			propriedades.put("javax.persistence.jdbc.user", "root");

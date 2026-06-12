@@ -7,12 +7,19 @@
 	<persistence-unit name="AlgaWorksPU">
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
-			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
-			
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect" />
+			<!--
 			<property name="javax.persistence.jdbc.url" value="${env.MYSQL_URL}" />
 			<property name="javax.persistence.jdbc.user" value="${env.MYSQLUSER}" />
 			<property name="javax.persistence.jdbc.password" value="${env.MYSQLPASSWORD}" />
-
+			-->
+			
+			<property name="javax.persistence.jdbc.url"
+				value="jdbc:mysql://localhost:3306/fasda_erp?allowPublicKeyRetrieval=true&amp;useTimezone=true&amp;serverTimezone=America/Sao_Paulo&amp;useSSL=false" />			
+			<property name="javax.persistence.jdbc.user" value="root" />
+			<property name="javax.persistence.jdbc.password"
+				value="brcd2605" />
+			
 			<property name="hibernate.hbm2ddl.auto" value="validate" />
 			
 			<property name="hibernate.show_sql" value="true" />
