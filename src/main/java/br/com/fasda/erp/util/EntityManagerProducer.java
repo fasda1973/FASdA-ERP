@@ -13,7 +13,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import org.flywaydb.core.Flyway;
 
-@WebListener // ISSO OBRIGA O TOMCAT NA NUVEM A RODAR ESSA CLASSE NA SUBIDA!
+@WebListener // ISSO OBRIGA O TOMCAT NA NUVEM A RODAR ESSA CLASSE NA SUBIDA!!
 @ApplicationScoped
 public class EntityManagerProducer implements ServletContextListener {
 
