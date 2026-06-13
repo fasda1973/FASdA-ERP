@@ -58,8 +58,6 @@ public class EntityManagerProducer implements ServletContextListener {
             System.out.println("[FASdA-ERP] Flyway disparando migrações obrigatórias via WebListener...");
             Flyway flyway = Flyway.configure()
                 .dataSource(dataSource)
-                .baselineOnMigrate(true) 
-                .baselineVersion("1") 
                 .load();
             
             flyway.migrate();
