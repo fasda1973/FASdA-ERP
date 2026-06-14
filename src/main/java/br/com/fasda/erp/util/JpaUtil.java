@@ -39,7 +39,7 @@ public class JpaUtil {
 		}
 
 		// Cria a fábrica do Hibernate injetando as propriedades dinâmicas
-		factory = Persistence.createEntityManagerFactory("AlgaWorksPU", propriedades);
+		factory = Persistence.createEntityManagerFactory("FASdAPU", propriedades);
 	}
 
 	public static EntityManager getEntityManager() {

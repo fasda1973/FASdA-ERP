@@ -70,7 +70,7 @@ public class EntityManagerProducer implements ServletContextListener {
         // INICIALIZA O HIBERNATE
         try {
             System.out.println("[FASdA-ERP] Inicializando EntityManagerFactory do Hibernate...");
-            factory = Persistence.createEntityManagerFactory("AlgaWorksPU", propriedades);
+            factory = Persistence.createEntityManagerFactory("FASdAPU", propriedades);
             System.out.println("[FASdA-ERP] Hibernate pronto para uso!");
         } catch (Exception e) {
             System.err.println("[FASdA-ERP] ERRO CRÍTICO AO INICIALIZAR O HIBERNATE:");
