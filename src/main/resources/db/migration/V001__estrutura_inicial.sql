@@ -133,8 +133,7 @@ CREATE TABLE dados_funcionario (
 -- Como seu script V002 faz "ALTER TABLE usuario ADD COLUMN...", criamos a tabela base aqui.
 CREATE TABLE usuario (
     id BIGINT AUTO_INCREMENT NOT NULL,
-    nome VARCHAR(100) NOT NULL,
-    login VARCHAR(50) NOT NULL UNIQUE,
+    nome_Usuario VARCHAR(50) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
     CONSTRAINT pk_usuario PRIMARY KEY (id)
 );
