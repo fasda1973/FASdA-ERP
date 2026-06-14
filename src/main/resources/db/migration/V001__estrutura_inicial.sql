@@ -2,7 +2,6 @@
 CREATE TABLE cliente (
     id BIGINT AUTO_INCREMENT NOT NULL,
     nome_cliente VARCHAR(255) NOT NULL, -- @NotBlank gera NOT NULL
-    endereco VARCHAR(255),
     CONSTRAINT pk_cliente_legado PRIMARY KEY (id)
 );
 
