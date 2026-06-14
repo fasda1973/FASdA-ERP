@@ -15,8 +15,8 @@ public class Usuario implements BaseEntity<Long> {
     private Long id;
 
     @NotBlank // Garante que não seja nulo nem vazio ("")
-    @Column(name = "nome_Usuario", nullable = false, unique = true, length = 20)
-    private String nomeUsuario;
+    @Column(name = "login", nullable = false, unique = true, length = 20)
+    private String login;
 
     @Column(nullable = false)
     private String senha;
@@ -28,12 +28,12 @@ public class Usuario implements BaseEntity<Long> {
     private String nome;
 
 	// Getters e Setters
-	public String getNomeUsuario() {
-		return nomeUsuario;
+	public String getLogin() {
+		return login;
 	}
 
-	public void setNomeUsuario(String nomeUsuario) {
-		this.nomeUsuario = nomeUsuario;
+	public void setLogin(String login) {
+		this.login = login;
 	}
 
 	public String getSenha() {

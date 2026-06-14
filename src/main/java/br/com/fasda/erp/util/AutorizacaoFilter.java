@@ -45,7 +45,7 @@ public class AutorizacaoFilter implements Filter {
         boolean recursoJSF = requestURI.contains("/javax.faces.resource/");
 
         // --- A DECISÃO ---
-        if (paginaLogin || recursoJSF || (paginaCadastro && cadastroLiberado) || (loginBean != null && loginBean.getNomeUsuario() != null)) {
+        if (paginaLogin || recursoJSF || (paginaCadastro && cadastroLiberado) || (loginBean != null && loginBean.getLogin() != null)) {
             // Passagem livre!
             chain.doFilter(req, res);
         } else {

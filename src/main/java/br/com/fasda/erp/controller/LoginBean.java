@@ -22,14 +22,14 @@ public class LoginBean implements Serializable {
     @Inject
     private ConfiguracaoService configuracaoService;
     
-    private String nomeUsuario;
+    private String login;
     private String senha;
     private Usuario usuarioLogado; // Guarda o objeto completo do banco
 
     public String login() {
     	
     	// Busca no banco
-        this.usuarioLogado = usuarios.porLogin(nomeUsuario, senha);
+        this.usuarioLogado = usuarios.porLogin(login, senha);
     	
         // Lógica simples para exemplo (você pode buscar no banco depois)
     	if (this.usuarioLogado != null) {
@@ -46,7 +46,7 @@ public class LoginBean implements Serializable {
         return "/Login?faces-redirect=true";
     }
     
-    // Getters e Setters para nomeUsuario e senha
+    // Getters e Setters para login e senha
     
     // Método que a tela de login vai usar para saber se exibe o botão de cadastro
     public boolean isExibirBotaoCadastro() {
@@ -61,12 +61,12 @@ public class LoginBean implements Serializable {
 		this.usuarios = usuarios;
 	}
 
-	public String getNomeUsuario() {
-		return nomeUsuario;
+	public String getLogin() {
+		return login;
 	}
 
-	public void setNomeUsuario(String nomeUsuario) {
-		this.nomeUsuario = nomeUsuario;
+	public void setLogin(String login) {
+		this.login = login;
 	}
 
 	public String getSenha() {

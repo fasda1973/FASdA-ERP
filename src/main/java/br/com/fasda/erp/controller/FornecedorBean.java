@@ -79,7 +79,7 @@ public class FornecedorBean extends CrudBean<Pessoa> implements Serializable {
             if (loginBean != null && loginBean.getUsuarioLogado() != null) {
                 
                 // 2. Pega o login (se na sua classe Usuario o método for getLogin())
-                loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
+                loginDoUsuario = loginBean.getUsuarioLogado().getLogin();
             }
             
             pessoaService.salvar(entidade, "Fornecedores", loginDoUsuario);
@@ -97,7 +97,7 @@ public class FornecedorBean extends CrudBean<Pessoa> implements Serializable {
     	try {
     		String loginDoUsuario = "SISTEMA"; // Valor padrão de segurança
     		
-    		loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
+    		loginDoUsuario = loginBean.getUsuarioLogado().getLogin();
     		
             pessoaService.excluir(entidade, "Fornecedores", loginDoUsuario);
             pesquisar(); // Atualiza a tabela após excluir

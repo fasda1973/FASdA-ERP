@@ -35,11 +35,11 @@ public class UsuarioRepository implements Serializable {
     }
     
     public List<Usuario> pesquisar(String nome) {
-		String jpql = "from Usuario where nomeUsuario like :nomeUsuario";
+		String jpql = "from Usuario where login like :login";
 		
 		TypedQuery<Usuario> query = manager.createQuery(jpql,Usuario.class);
 		
-		query.setParameter("nomeUsuario", nome + "%");
+		query.setParameter("login", nome + "%");
 
 		return query.getResultList();
 	}
@@ -69,10 +69,10 @@ public class UsuarioRepository implements Serializable {
     }
     
     /* PRA TELA DE LOGIN (CUIDADO AO MODIFICAR) */
-    public Usuario porLogin(String nomeUsuario, String senha) {
+    public Usuario porLogin(String login, String senha) {
         try {
-            return manager.createQuery("from Usuario where nomeUsuario = :nome and senha = :senha", Usuario.class)
-                .setParameter("nome", nomeUsuario)
+            return manager.createQuery("from Usuario where login = :nome and senha = :senha", Usuario.class)
+                .setParameter("nome", login)
                 .setParameter("senha", senha)
                 .getSingleResult();
         } catch (NoResultException e) {
@@ -87,7 +87,7 @@ public class UsuarioRepository implements Serializable {
 	}
 	
 	public boolean existeLogin(String login, Long idAtual) {
-	    String jpql = "select count(u) from Usuario u where u.nomeUsuario = :login";
+	    String jpql = "select count(u) from Usuario u where u.login = :login";
 	    if (idAtual != null) {
 	        jpql += " and u.id != :id";
 	    }

@@ -71,8 +71,8 @@ public class ConfiguracaoBean implements Serializable {
         try {        	
         	String loginDoUsuario = "SISTEMA"; // Valor padrão de segurança 
 			if (loginBean != null && loginBean.getUsuarioLogado() != null) {                
-			     // 2. Pega o login através do getNomeUsuario
-				loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
+			     // 2. Pega o login através do getLogin
+				loginDoUsuario = loginBean.getUsuarioLogado().getLogin();
 			}	
         	
 			//configuracaoService.salvar(this.configuracao, "Configuração", loginDoUsuario);

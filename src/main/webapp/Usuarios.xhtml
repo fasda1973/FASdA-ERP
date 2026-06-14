@@ -33,7 +33,7 @@
 		</p:column>
 		
 		<p:column headerText="Usuário" style="width: 200px; text-align: center;">
-			#{item.nomeUsuario}
+			#{item.login}
 		</p:column>
         
         <p:column headerText="Nome" style="text-align: center;">
@@ -72,7 +72,7 @@
 			<p:tabView id="tabUsuario">
 				<p:tab title="Dados Principais">
 					<div class="ui-fluid formgrid grid">
-						<p:message id="msgUsuario" for="nomeUsuario" display="text" />
+						<p:message id="msgUsuario" for="login" display="text" />
 						
 						<div class="field col-12 md:col-12">
 							<p:outputLabel value="Nome Completo" for="nome" />
@@ -82,8 +82,8 @@
 							             placeholder="Ex: Flávio Almeida" /> 			             
 					   	</div>
 					   	<div class="field col-12 md:col-12">    
-						    <p:outputLabel value="Usuário" for="nomeUsuario" />
-						    <p:inputText id="nomeUsuario" value="#{usuarioBean.entidade.nomeUsuario}" 
+						    <p:outputLabel value="Usuário" for="login" />
+						    <p:inputText id="login" value="#{usuarioBean.entidade.login}" 
 						    			 size="30" required="true" >
 					    		<p:ajax event="blur" listener="#{usuarioBean.verificarDisponibilidade}" update="msgUsuario" />
 					    		

@@ -25,7 +25,7 @@ public class UsuarioService implements Serializable {
 	    }
 	    
 	    // O Service faz a verificação final
-	    boolean jaExiste = usuarioRepository.existeLogin(usuario.getNomeUsuario(), usuario.getId());
+	    boolean jaExiste = usuarioRepository.existeLogin(usuario.getLogin(), usuario.getId());
 	    
 	    if (jaExiste) {
 	        throw new NegocioException("Já existe um usuário com o login informado.");

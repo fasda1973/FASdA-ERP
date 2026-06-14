@@ -59,8 +59,8 @@ public class UsuarioBean extends CrudBean<Usuario> {
         	String loginDoUsuario = "SISTEMA"; // Valor padrão de segurança      	
         	// 1. Verifica se o loginBean e o usuário logado não estão nulos
             if (loginBean != null && loginBean.getUsuarioLogado() != null) {                
-                // 2. Pega o login através do getNomeUsuario
-                loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
+                // 2. Pega o login através do getLogin
+                loginDoUsuario = loginBean.getUsuarioLogado().getLogin();
             }	
     		
 	    	// Usamos 'entidade' que vem do CrudBean (substitui 'usuario')
@@ -78,7 +78,7 @@ public class UsuarioBean extends CrudBean<Usuario> {
         
     	} catch (NegocioException e) {
     		// Usando o novo método que criamos para direcionar ao campo específico
-            messages.error("frm:nomeUsuario", e.getMessage());
+            messages.error("frm:login", e.getMessage());
     	}
     }
     
@@ -87,7 +87,7 @@ public class UsuarioBean extends CrudBean<Usuario> {
     	try {
     		String loginDoUsuario = "SISTEMA"; // Valor padrão de segurança
     		
-    		loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
+    		loginDoUsuario = loginBean.getUsuarioLogado().getLogin();
     		
 	    	usuarioService.excluir(this.entidade, "Usuario", loginDoUsuario);
 	    	this.entidade = null;
@@ -143,7 +143,7 @@ public class UsuarioBean extends CrudBean<Usuario> {
     
     // Verifica disponibilidade de nome de usuario
     public void verificarDisponibilidade() {
-        String login = entidade.getNomeUsuario();
+        String login = entidade.getLogin();
         
         if (login != null && !login.trim().isEmpty()) {
             // Busca no repositório se já existe alguém com esse login
@@ -154,8 +154,8 @@ public class UsuarioBean extends CrudBean<Usuario> {
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário já cadastrado", null);
                 
                 // O segredo está aqui: o primeiro parâmetro é o "Client ID" do componente
-                // Se o campo estiver dentro de um form 'frm', o ID costuma ser 'frm:nomeUsuario'
-                context.addMessage("frm:nomeUsuario", msg);
+                // Se o campo estiver dentro de um form 'frm', o ID costuma ser 'frm:login'
+                context.addMessage("frm:login", msg);
             }
         }
     }

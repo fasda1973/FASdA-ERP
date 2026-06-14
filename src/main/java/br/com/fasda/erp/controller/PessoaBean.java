@@ -65,8 +65,8 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
         	String loginDoUsuario = "SISTEMA"; // Valor padrão de segurança      	
         	// 1. Verifica se o loginBean e o usuário logado não estão nulos
             if (loginBean != null && loginBean.getUsuarioLogado() != null) {                
-                // 2. Pega o login através do getNomeUsuario
-                loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
+                // 2. Pega o login através do getLogin
+                loginDoUsuario = loginBean.getUsuarioLogado().getLogin();
             }
             
             // Chama o seu service especializado
@@ -90,7 +90,7 @@ public class PessoaBean extends CrudBean<Pessoa> implements Serializable {
     	try {
     		String loginDoUsuario = "SISTEMA"; // Valor padrão de segurança
     		
-    		loginDoUsuario = loginBean.getUsuarioLogado().getNomeUsuario();
+    		loginDoUsuario = loginBean.getUsuarioLogado().getLogin();
     		
     		pessoaService.excluir(this.entidade, "Pessoas", loginDoUsuario);
 	        this.entidade = null;
