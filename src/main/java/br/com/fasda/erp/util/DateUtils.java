@@ -17,7 +17,7 @@ public class DateUtils {
         return data.format(DATE_FORMATTER);
     }
 
-    // Formata LocalDateTime (data e hora, caso use no futuro para logs ou vendas)
+    // Formata LocalDateTime (data e hora, caso use no futuro para logs ou venda)
     public static String formatarDataHoraOld(LocalDateTime dataHora) {
         if (dataHora == null) {
             return "";
