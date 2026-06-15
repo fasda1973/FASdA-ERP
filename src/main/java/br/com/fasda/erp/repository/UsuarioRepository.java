@@ -10,6 +10,7 @@ import javax.persistence.TypedQuery;
 
 import br.com.fasda.erp.model.Usuario;
 import br.com.fasda.erp.util.AuditoriaUtil;
+import br.com.fasda.erp.util.SenhaUtil;
 import br.com.fasda.erp.util.Transacional;
 
 public class UsuarioRepository implements Serializable {
@@ -70,11 +71,21 @@ public class UsuarioRepository implements Serializable {
     
     /* PRA TELA DE LOGIN (CUIDADO AO MODIFICAR) */
     public Usuario porLogin(String login, String senha) {
-        try {
-            return manager.createQuery("from Usuario where login = :nome and senha = :senha", Usuario.class)
-                .setParameter("nome", login)
-                .setParameter("senha", senha)
+        try {           
+        	// 1. Busque o usuário no banco usando apenas o login/username
+        	Usuario usuario = manager.createQuery("from Usuario where login = :login", Usuario.class)
+                .setParameter("login", login)
                 .getSingleResult();
+        	
+        	// 2. Valide a senha usando a nossa utilitária
+        	if (usuario != null && SenhaUtil.verificar(senha, usuario.getSenha())) {
+        	    // Login com sucesso!
+        		return usuario;
+        	} else {
+        	    // Usuário ou senha inválidos
+        		return null;
+        	}
+        	
         } catch (NoResultException e) {
             return null; // Usuário ou senha incorretos
         }

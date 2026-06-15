@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import br.com.fasda.erp.model.Usuario;
 import br.com.fasda.erp.repository.UsuarioRepository;
 import br.com.fasda.erp.util.NegocioException;
+import br.com.fasda.erp.util.SenhaUtil;
 import br.com.fasda.erp.util.Transacional;
 
 public class UsuarioService implements Serializable {
@@ -32,6 +33,10 @@ public class UsuarioService implements Serializable {
 	    }
 	    
 	    try {
+	    	
+	    	// Antes de salvar no banco
+	    	String senhaCriptografada = SenhaUtil.criptografar(usuario.getSenha());
+	    	usuario.setSenha(senhaCriptografada);
 	    	   	
 	        usuarioRepository.guardarComAuditoria(usuario, origemTela, usuarioLogado);
 	    
