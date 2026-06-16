@@ -1,9 +1,10 @@
 package br.com.fasda.erp.model;
 
-import java.io.Serializable;
 import javax.persistence.*;
 
 import org.hibernate.validator.constraints.NotBlank;
+
+import br.com.fasda.erp.enums.PerfilUsuario;
 
 @Entity
 @Table(name = "usuario")
@@ -26,6 +27,10 @@ public class Usuario implements BaseEntity<Long> {
     
     @Column(name = "nome")
     private String nome;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name = "perfil", nullable = false, length = 30)
+    private PerfilUsuario perfil = PerfilUsuario.COMUM; // Default para novos cadastros
 
 	// Getters e Setters
 	public String getLogin() {
@@ -68,4 +73,11 @@ public class Usuario implements BaseEntity<Long> {
 		this.nome = nome;
 	}
     
+	public PerfilUsuario getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(PerfilUsuario perfil) {
+        this.perfil = perfil;
+    }
 }
