@@ -7,6 +7,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import br.com.fasda.erp.enums.PerfilUsuario;
 import br.com.fasda.erp.model.Usuario;
 import br.com.fasda.erp.repository.UsuarioRepository;
 import br.com.fasda.erp.service.ConfiguracaoService;
@@ -89,4 +90,15 @@ public class LoginBean implements Serializable {
 		return serialVersionUID;
 	}
 	
+	// --- MÉTODOS DE SEGURANÇA PARA AS PÁGINAS XHTML ---
+
+    // Verifica se o usuário é Administrador
+    public boolean isAdmin() {
+        return usuarioLogado != null && usuarioLogado.getPerfil() == PerfilUsuario.ADMINISTRADOR;
+    }
+
+    // Verifica se o usuário é Comum
+    public boolean isComum() {
+        return usuarioLogado != null && usuarioLogado.getPerfil() == PerfilUsuario.COMUM;
+    }
 }
