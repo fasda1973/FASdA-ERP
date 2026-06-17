@@ -74,16 +74,41 @@
 				    </p:tab>
 
                     <p:tab title="Segurança &amp; Sistema">
-                        <p:panelGrid columns="2" layout="grid" styleClass="ui-noborder" columnClasses="ui-grid-col-4, ui-grid-col-8">
-                            
-                            <p:outputLabel value="Permitir novos cadastros na tela de login?" for="chkCadastro" />
-                            <p:selectBooleanButton id="chkCadastro" value="#{configuracaoBean.permitirCadastroUsuarios}" 
-					                            	onLabel="Sim" offLabel="Não" 
-					                               	onIcon="pi pi-check" offIcon="pi pi-times" 
-					                               	styleClass="btn-liga-desliga" />
-                            
-                        </p:panelGrid>
-                    </p:tab>
+					    <br />
+					    <h3>Controle de Cadastro na Tela de Login</h3>
+					    <p:separator />
+					    <p:panelGrid columns="2" layout="grid" styleClass="ui-noborder" columnClasses="ui-grid-col-4, ui-grid-col-8">
+					        
+					        <p:outputLabel value="Permitir novos cadastros na tela de login?" for="chkCadastro" />
+					        <p:selectBooleanButton id="chkCadastro" value="#{configuracaoBean.permitirCadastroUsuarios}" 
+					                               onLabel="Sim" offLabel="Não" 
+					                               onIcon="pi pi-check" offIcon="pi pi-times" 
+					                               styleClass="btn-liga-desliga" />
+					    </p:panelGrid>
+					    
+					    <br />
+					    <h3>Permissões do Perfil Comum (Menu Lateral)</h3>
+					    <p:separator />
+					    
+					    <p:panelGrid columns="2" layout="grid" styleClass="ui-noborder" columnClasses="ui-grid-col-4, ui-grid-col-8">
+					        
+					        <p:outputLabel value="Usuário Comum pode ver Clientes?" for="chkComumClientes" />
+					        <p:selectBooleanButton id="chkComumClientes" value="#{configuracaoBean.comumPodeVerClientes}" 
+					                               onLabel="Sim" offLabel="Não" onIcon="pi pi-check" offIcon="pi pi-times" 
+					                               styleClass="btn-liga-desliga" />
+					
+					        <p:outputLabel value="Usuário Comum pode ver Fornecedores?" for="chkComumForn" />
+					        <p:selectBooleanButton id="chkComumForn" value="#{configuracaoBean.comumPodeVerFornecedores}" 
+					                               onLabel="Sim" offLabel="Não" onIcon="pi pi-check" offIcon="pi pi-times" 
+					                               styleClass="btn-liga-desliga" />
+					
+					        <p:outputLabel value="Usuário Comum pode ver Funcionários?" for="chkComumFunc" />
+					        <p:selectBooleanButton id="chkComumFunc" value="#{configuracaoBean.comumPodeVerFuncionarios}" 
+					                               onLabel="Sim" offLabel="Não" onIcon="pi pi-check" offIcon="pi pi-times" 
+					                               styleClass="btn-liga-desliga" />
+					
+					    </p:panelGrid>
+					</p:tab>
                     
                 </p:tabView>
 

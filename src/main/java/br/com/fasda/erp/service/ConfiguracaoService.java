@@ -64,6 +64,18 @@ public class ConfiguracaoService implements Serializable {
         return Boolean.parseBoolean(mapaConfiguracoes.getOrDefault("PERMITIR_CADASTRO_USUARIOS", "false"));
     }
     
+    public boolean isComumPodeVerClientes() {
+        return Boolean.parseBoolean(mapaConfiguracoes.getOrDefault("COMUM_PODE_VER_CLIENTES", "false"));
+    }
+
+    public boolean isComumPodeVerFornecedores() {
+        return Boolean.parseBoolean(mapaConfiguracoes.getOrDefault("COMUM_PODE_VER_FORNECEDORES", "false"));
+    }
+
+    public boolean isComumPodeVerFuncionarios() {
+        return Boolean.parseBoolean(mapaConfiguracoes.getOrDefault("COMUM_PODE_VER_FUNCIONARIOS", "false"));
+    }
+    
     public String getSmtpHost() {
         return mapaConfiguracoes.getOrDefault("SMTP_HOST", "smtp.gmail.com");
     }

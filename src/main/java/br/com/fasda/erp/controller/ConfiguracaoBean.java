@@ -37,11 +37,14 @@ public class ConfiguracaoBean implements Serializable {
     private String caminhoUploadImagens;
     private boolean permitirCadastroUsuarios; // Exemplo de campo booleano
     private boolean permitirEstoqueNegativo;
-    private double margemLucroMinima;
-    
+    private double margemLucroMinima;    
     private String smtpHost;
     private String smtpPort;
     private String smtpUser;
+    
+    private boolean comumPodeVerClientes;
+    private boolean comumPodeVerFornecedores;
+    private boolean comumPodeVerFuncionarios;
     
 
     @PostConstruct
@@ -49,13 +52,15 @@ public class ConfiguracaoBean implements Serializable {
     	// Carrega o estado atual que está na memória da aplicação
         this.caminhoUploadImagens = configuracaoService.getCaminhoUpload();
         this.permitirEstoqueNegativo = configuracaoService.isPermitirEstoqueNegativo();
-        this.margemLucroMinima = configuracaoService.getMargemLucroMinima();
-        
-        this.permitirCadastroUsuarios = configuracaoService.isPermitirCadastroUsuarios();
-        
+        this.margemLucroMinima = configuracaoService.getMargemLucroMinima();        
+        this.permitirCadastroUsuarios = configuracaoService.isPermitirCadastroUsuarios();        
         this.smtpHost = configuracaoService.getSmtpHost();
         this.smtpPort = configuracaoService.getSmtpPort();
         this.smtpUser = configuracaoService.getSmtpUser();
+        
+        this.comumPodeVerClientes = configuracaoService.isComumPodeVerClientes();
+        this.comumPodeVerFornecedores = configuracaoService.isComumPodeVerFornecedores();
+        this.comumPodeVerFuncionarios = configuracaoService.isComumPodeVerFuncionarios();
         
         // Exemplo de valor padrão caso esteja vazio
         if (caminhoUploadImagens == null || caminhoUploadImagens.isEmpty()) {
@@ -97,6 +102,11 @@ public class ConfiguracaoBean implements Serializable {
             Configuracao cSmtpPort = new Configuracao("SMTP_PORT", String.valueOf(this.smtpPort), "Porta do servidor SMTP");
             Configuracao cSmtpUser = new Configuracao("SMTP_USER", String.valueOf(this.smtpUser), "Usuário do e-mail disparador");
             
+            Configuracao cComumClientes = new Configuracao("COMUM_PODE_VER_CLIENTES", String.valueOf(this.comumPodeVerClientes), "Permissão menu Clientes");
+            Configuracao cComumForn = new Configuracao("COMUM_PODE_VER_FORNECEDORES", String.valueOf(this.comumPodeVerFornecedores), "Permissão menu Fornecedores");
+            Configuracao cComumFunc = new Configuracao("COMUM_PODE_VER_FUNCIONARIOS", String.valueOf(this.comumPodeVerFuncionarios), "Permissão menu Funcionários");
+            
+            
             // 2. SALVAMENTO CORRETO: Envia cada um para o Service tratar com Auditoria
             configuracaoService.salvar(cUpload, "Configuração", loginDoUsuario);
             configuracaoService.salvar(cEstoque, "Configuração", loginDoUsuario);
@@ -105,6 +115,10 @@ public class ConfiguracaoBean implements Serializable {
             configuracaoService.salvar(cSmtpHost, "Configuração", loginDoUsuario);
             configuracaoService.salvar(cSmtpPort, "Configuração", loginDoUsuario);
             configuracaoService.salvar(cSmtpUser, "Configuração", loginDoUsuario);
+            
+            configuracaoService.salvar(cComumClientes, "Configuração", loginDoUsuario);
+            configuracaoService.salvar(cComumForn, "Configuração", loginDoUsuario);
+            configuracaoService.salvar(cComumFunc, "Configuração", loginDoUsuario);
 
             // 3. Atualiza a memória local da aplicação
             configuracaoService.atualizarConfiguracao("CAMINHO_UPLOAD_IMAGENS", this.caminhoUploadImagens);
@@ -114,6 +128,10 @@ public class ConfiguracaoBean implements Serializable {
             configuracaoService.atualizarConfiguracao("SMTP_HOST", String.valueOf(this.smtpHost));
             configuracaoService.atualizarConfiguracao("SMTP_PORT", String.valueOf(this.smtpPort));
             configuracaoService.atualizarConfiguracao("SMTP_USER", String.valueOf(this.smtpUser));
+            
+            configuracaoService.atualizarConfiguracao("COMUM_PODE_VER_CLIENTES", String.valueOf(this.comumPodeVerClientes));
+            configuracaoService.atualizarConfiguracao("COMUM_PODE_VER_FORNECEDORES", String.valueOf(this.comumPodeVerFornecedores));
+            configuracaoService.atualizarConfiguracao("COMUM_PODE_VER_FUNCIONARIOS", String.valueOf(this.comumPodeVerFuncionarios));
             
             FacesContext.getCurrentInstance().addMessage(null, 
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Configurações salvas e aplicadas com sucesso!"));
@@ -142,36 +160,25 @@ public class ConfiguracaoBean implements Serializable {
     public boolean isPermitirEstoqueNegativo() { return permitirEstoqueNegativo; }
     public void setPermitirEstoqueNegativo(boolean permitirEstoqueNegativo) { this.permitirEstoqueNegativo = permitirEstoqueNegativo; }
     public double getMargemLucroMinima() { return margemLucroMinima; }
-    public void setMargemLucroMinima(double margemLucroMinima) { this.margemLucroMinima = margemLucroMinima; }
-    
+    public void setMargemLucroMinima(double margemLucroMinima) { this.margemLucroMinima = margemLucroMinima; }    
     public String getSmtpHost() { return smtpHost; }
-    public void setSmtpHost(String smtpHost) { this.smtpHost = smtpHost; }
-    
+    public void setSmtpHost(String smtpHost) { this.smtpHost = smtpHost; }    
     public String getSmtpPort() { return smtpPort; }
-    public void setSmtpPort(String smtpPort) { this.smtpPort = smtpPort; }
-    
+    public void setSmtpPort(String smtpPort) { this.smtpPort = smtpPort; }    
     public String getSmtpUser() { return smtpUser; }
-    public void setSmtpUser(String smtpUser) { this.smtpUser = smtpUser; }
-
-	public ConfiguracaoService getConfiguracaoService() {
-		return configuracaoService;
-	}
-
-	public void setConfiguracaoService(ConfiguracaoService configuracaoService) {
-		this.configuracaoService = configuracaoService;
-	}
-
-	public ConfiguracaoRepository getConfiguracaoRepository() {
-		return configuracaoRepository;
-	}
-
-	public void setConfiguracaoRepository(ConfiguracaoRepository configuracaoRepository) {
-		this.configuracaoRepository = configuracaoRepository;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
+    public void setSmtpUser(String smtpUser) { this.smtpUser = smtpUser; }	
+    public boolean isComumPodeVerClientes() { return comumPodeVerClientes; }
+    public void setComumPodeVerClientes(boolean comumPodeVerClientes) { this.comumPodeVerClientes = comumPodeVerClientes; }
+    public boolean isComumPodeVerFornecedores() { return comumPodeVerFornecedores; }
+    public void setComumPodeVerFornecedores(boolean comumPodeVerFornecedores) { this.comumPodeVerFornecedores = comumPodeVerFornecedores; }
+    public boolean isComumPodeVerFuncionarios() { return comumPodeVerFuncionarios; }
+    public void setComumPodeVerFuncionarios(boolean comumPodeVerFuncionarios) { this.comumPodeVerFuncionarios = comumPodeVerFuncionarios; }
+    
+    public ConfiguracaoService getConfiguracaoService() { return configuracaoService; }
+	public void setConfiguracaoService(ConfiguracaoService configuracaoService) { this.configuracaoService = configuracaoService; }
+	public ConfiguracaoRepository getConfiguracaoRepository() { return configuracaoRepository; }
+	public void setConfiguracaoRepository(ConfiguracaoRepository configuracaoRepository) { this.configuracaoRepository = configuracaoRepository; }
+	public static long getSerialversionuid() { return serialVersionUID; }
    
     
 }
