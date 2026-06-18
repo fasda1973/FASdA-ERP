@@ -20,7 +20,17 @@
             <p:growl id="msgs" showDetail="true" life="4000" />
 
             <div class="card ui-fluid">
-                <h2><i class="pi pi-cog" style="margin-right: 10px;"></i>Painel de Configurações</h2>
+            	<div class="flex align-items-center justify-content-between" style="margin-bottom: 10px;">
+	                <h2><i class="pi pi-cog" style="margin-right: 10px;"></i>Painel de Configurações</h2>
+	                
+	                <div style="margin-top: 10px; text-align: right;">
+	                    <p:commandButton value="Salvar Configurações" 
+	                                     action="#{configuracaoBean.salvar}" 
+	                                     update="formConfig:msgs" 
+	                                     icon="pi pi-save"
+	                                     styleClass="btn-salvar-fix" />
+	                </div>
+                </div>
                 
                 <p:tabView style="margin-top: 20px;">
                     
@@ -74,51 +84,48 @@
 				    </p:tab>
 
                     <p:tab title="Segurança &amp; Sistema">
-					    <br />
-					    <h3>Controle de Cadastro na Tela de Login</h3>
-					    <p:separator />
-					    <p:panelGrid columns="2" layout="grid" styleClass="ui-noborder" columnClasses="ui-grid-col-4, ui-grid-col-8">
-					        
-					        <p:outputLabel value="Permitir novos cadastros na tela de login?" for="chkCadastro" />
-					        <p:selectBooleanButton id="chkCadastro" value="#{configuracaoBean.permitirCadastroUsuarios}" 
-					                               onLabel="Sim" offLabel="Não" 
-					                               onIcon="pi pi-check" offIcon="pi pi-times" 
-					                               styleClass="btn-liga-desliga" />
-					    </p:panelGrid>
-					    
-					    <br />
-					    <h3>Permissões do Perfil Comum (Menu Lateral)</h3>
-					    <p:separator />
-					    
-					    <p:panelGrid columns="2" layout="grid" styleClass="ui-noborder" columnClasses="ui-grid-col-4, ui-grid-col-8">
-					        
-					        <p:outputLabel value="Usuário Comum pode ver Clientes?" for="chkComumClientes" />
-					        <p:selectBooleanButton id="chkComumClientes" value="#{configuracaoBean.comumPodeVerClientes}" 
-					                               onLabel="Sim" offLabel="Não" onIcon="pi pi-check" offIcon="pi pi-times" 
-					                               styleClass="btn-liga-desliga" />
-					
-					        <p:outputLabel value="Usuário Comum pode ver Fornecedores?" for="chkComumForn" />
-					        <p:selectBooleanButton id="chkComumForn" value="#{configuracaoBean.comumPodeVerFornecedores}" 
-					                               onLabel="Sim" offLabel="Não" onIcon="pi pi-check" offIcon="pi pi-times" 
-					                               styleClass="btn-liga-desliga" />
-					
-					        <p:outputLabel value="Usuário Comum pode ver Funcionários?" for="chkComumFunc" />
-					        <p:selectBooleanButton id="chkComumFunc" value="#{configuracaoBean.comumPodeVerFuncionarios}" 
-					                               onLabel="Sim" offLabel="Não" onIcon="pi pi-check" offIcon="pi pi-times" 
-					                               styleClass="btn-liga-desliga" />
-					
-					    </p:panelGrid>
+					    <p:tabView style="margin-top: 10px;">
+						    <p:tab title="Login">
+						    	<br />
+							    <h3>Controle de Cadastro na Tela de Login</h3>
+							    <p:separator />
+							    <p:panelGrid columns="2" layout="grid" styleClass="ui-noborder" columnClasses="ui-grid-col-4, ui-grid-col-8">
+							        
+							        <p:outputLabel value="Permitir novos cadastros na tela de login?" for="chkCadastro" />
+							        <p:selectBooleanButton id="chkCadastro" value="#{configuracaoBean.permitirCadastroUsuarios}" 
+							                               onLabel="Sim" offLabel="Não" 
+							                               onIcon="pi pi-check" offIcon="pi pi-times" 
+							                               styleClass="btn-liga-desliga" />
+							    </p:panelGrid>
+						    </p:tab>							    
+						    <p:tab title="Permissões">
+							    <br />
+							    <h3>Permissões do Perfil Comum (Menu Lateral)</h3>
+							    <p:separator />							    
+							    <p:panelGrid columns="2" layout="grid" styleClass="ui-noborder" columnClasses="ui-grid-col-4, ui-grid-col-8">
+							        
+							        <p:outputLabel value="Usuário Comum pode ver Clientes?" for="chkComumClientes" />
+							        <p:selectBooleanButton id="chkComumClientes" value="#{configuracaoBean.comumPodeVerClientes}" 
+							                               onLabel="Sim" offLabel="Não" onIcon="pi pi-check" offIcon="pi pi-times" 
+							                               styleClass="btn-liga-desliga" />
+							
+							        <p:outputLabel value="Usuário Comum pode ver Fornecedores?" for="chkComumForn" />
+							        <p:selectBooleanButton id="chkComumForn" value="#{configuracaoBean.comumPodeVerFornecedores}" 
+							                               onLabel="Sim" offLabel="Não" onIcon="pi pi-check" offIcon="pi pi-times" 
+							                               styleClass="btn-liga-desliga" />
+							
+							        <p:outputLabel value="Usuário Comum pode ver Funcionários?" for="chkComumFunc" />
+							        <p:selectBooleanButton id="chkComumFunc" value="#{configuracaoBean.comumPodeVerFuncionarios}" 
+							                               onLabel="Sim" offLabel="Não" onIcon="pi pi-check" offIcon="pi pi-times" 
+							                               styleClass="btn-liga-desliga" />							
+							    </p:panelGrid>
+						    </p:tab>						    
+				
+					    </p:tabView>
 					</p:tab>
                     
                 </p:tabView>
 
-                <div style="margin-top: 20px; text-align: right;">
-                    <p:commandButton value="Salvar Configurações" 
-                                     action="#{configuracaoBean.salvar}" 
-                                     update="formConfig:msgs" 
-                                     icon="pi pi-save"
-                                     styleClass="btn-salvar-fix" />
-                </div>
             </div>
         </h:form>
     </ui:define>
