@@ -21,7 +21,7 @@
      	<div class="topbar-items">
 		    <p:menuButton value="#{loginBean.usuarioLogado.nome}" icon="fa fa-user" styleClass="btn-usuario-menu">
 		        <p:menuitem value="Meu Perfil" icon="fa fa-id-card" outcome="/Perfil" />
-		        <p:menuitem value="Configurações" icon="fa fa-cog" outcome="/Config" rendered="#{loginBean.admin}" />
+		        <p:menuitem value="Configurações" icon="fa fa-cog" outcome="/Configuracoes" rendered="#{loginBean.admin}" />
 		        <p:separator />
 		        <p:menuitem value="Sair" action="#{loginBean.logout}" icon="fa fa-power-off" />
 		    </p:menuButton>
