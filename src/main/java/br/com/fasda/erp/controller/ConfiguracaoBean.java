@@ -148,14 +148,34 @@ public class ConfiguracaoBean implements Serializable {
             // Cria uma lista de todas as chaves folha possíveis para saber quem foi desmarcado
             java.util.Map<String, String> todasAsPermissoes = new java.util.HashMap<>();
             todasAsPermissoes.put("COMUM_CLIENTES_VER", "false");
+            todasAsPermissoes.put("COMUM_CLIENTES_NOVO", "false");
             todasAsPermissoes.put("COMUM_CLIENTES_EDITAR", "false");
             todasAsPermissoes.put("COMUM_CLIENTES_EXCLUIR", "false");
+            
             todasAsPermissoes.put("COMUM_FORN_VER", "false");
+            todasAsPermissoes.put("COMUM_FORN_NOVO", "false");
             todasAsPermissoes.put("COMUM_FORN_EDITAR", "false");
             todasAsPermissoes.put("COMUM_FORN_EXCLUIR", "false");
+            
             todasAsPermissoes.put("COMUM_FUNC_VER", "false");
+            todasAsPermissoes.put("COMUM_FUNC_NOVO", "false");
             todasAsPermissoes.put("COMUM_FUNC_EDITAR", "false");
             todasAsPermissoes.put("COMUM_FUNC_EXCLUIR", "false");
+            
+            todasAsPermissoes.put("COMUM_PESSOAS_VER", "false");
+            todasAsPermissoes.put("COMUM_PESSOAS_NOVO", "false");
+            todasAsPermissoes.put("COMUM_PESSOAS_EDITAR", "false");
+            todasAsPermissoes.put("COMUM_PESSOAS_EXCLUIR", "false");
+            
+            todasAsPermissoes.put("COMUM_USUARIOS_VER", "false");
+            todasAsPermissoes.put("COMUM_USUARIOS_NOVO", "false");
+            todasAsPermissoes.put("COMUM_USUARIOS_EDITAR", "false");
+            todasAsPermissoes.put("COMUM_USUARIOS_EXCLUIR", "false");
+            
+            todasAsPermissoes.put("COMUM_CONFIG_VER", "false");
+            todasAsPermissoes.put("COMUM_CONFIG_NOVO", "false");
+            todasAsPermissoes.put("COMUM_CONFIG_EDITAR", "false");
+            todasAsPermissoes.put("COMUM_CONFIG_EXCLUIR", "false");
             
             // Sobrescreve para "true" quem de fato estiver selecionado na tela
             if (nosSelecionados != null) {
@@ -197,50 +217,92 @@ public class ConfiguracaoBean implements Serializable {
         // Nível 1: Raiz Invisível do PrimeFaces (obrigatório) ou Nó "Usuários"
         raizPermissoes = new DefaultTreeNode(new PermissaoNo("Root", ""), null);
         TreeNode noUsuarios = new DefaultTreeNode(new PermissaoNo("Usuários", ""), raizPermissoes);
-        noUsuarios.setExpanded(true);
+        noUsuarios.setExpanded(false);
 
         // Nível 2: Perfil Comum
         TreeNode noComum = new DefaultTreeNode(new PermissaoNo("Comum", ""), noUsuarios);
         TreeNode noAdmin = new DefaultTreeNode(new PermissaoNo("Admin", ""), noUsuarios);
-        noComum.setExpanded(true);
-        noAdmin.setExpanded(true);
+        noComum.setExpanded(false);
+        noAdmin.setExpanded(false);
 
         // Nível 3: Telas (.xhtml)
         TreeNode noClientes = new DefaultTreeNode("tela", new PermissaoNo("Clientes", ""), noComum);
         TreeNode noFornecedores = new DefaultTreeNode("tela", new PermissaoNo("Fornecedores", ""), noComum);
         TreeNode noFuncionarios = new DefaultTreeNode("tela", new PermissaoNo("Funcionários", ""), noComum);
+        TreeNode noPessoas = new DefaultTreeNode("tela", new PermissaoNo("Pessoas", ""), noComum);
+        TreeNode noTelaUsuarios = new DefaultTreeNode("tela", new PermissaoNo("Usuários", ""), noComum);
+        TreeNode noConfiguracoes = new DefaultTreeNode("tela", new PermissaoNo("Configurações", ""), noComum);
         
         TreeNode noClientesAdm = new DefaultTreeNode("tela", new PermissaoNo("Clientes", ""), noAdmin);
         TreeNode noFornecedoresAdm = new DefaultTreeNode("tela", new PermissaoNo("Fornecedores", ""), noAdmin);
         TreeNode noFuncionariosAdm = new DefaultTreeNode("tela", new PermissaoNo("Funcionários", ""), noAdmin);
+        TreeNode noPessoasAdm = new DefaultTreeNode("tela", new PermissaoNo("Pessoas", ""), noAdmin);
+        TreeNode noTelaUsuariosAdm = new DefaultTreeNode("tela", new PermissaoNo("Usuários", ""), noAdmin);
+        TreeNode noConfiguracoesAdm = new DefaultTreeNode("tela", new PermissaoNo("Configurações", ""), noAdmin);
 
         // Nível 4: Ações com suas respectivas Chaves do Banco de Dados
         java.util.List<TreeNode> nosFolha = new java.util.ArrayList<>();
         
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "COMUM_CLIENTES_VER"), noClientes));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "COMUM_CLIENTES_NOVO"), noClientes));
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "COMUM_CLIENTES_EDITAR"), noClientes));
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "COMUM_CLIENTES_EXCLUIR"), noClientes));
 
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "COMUM_FORN_VER"), noFornecedores));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "COMUM_FORN_NOVO"), noFornecedores));
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "COMUM_FORN_EDITAR"), noFornecedores));
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "COMUM_FORN_EXCLUIR"), noFornecedores));
 
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "COMUM_FUNC_VER"), noFuncionarios));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "COMUM_FUNC_NOVO"), noFuncionarios));
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "COMUM_FUNC_EDITAR"), noFuncionarios));
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "COMUM_FUNC_EXCLUIR"), noFuncionarios));
         
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "COMUM_PESSOAS_VER"), noPessoas));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "COMUM_PESSOAS_NOVO"), noPessoas));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "COMUM_PESSOAS_EDITAR"), noPessoas));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "COMUM_PESSOAS_EXCLUIR"), noPessoas));
+        
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "COMUM_USUARIOS_VER"), noTelaUsuarios));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "COMUM_USUARIOS_NOVO"), noTelaUsuarios));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "COMUM_USUARIOS_EDITAR"), noTelaUsuarios));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "COMUM_USUARIOS_EXCLUIR"), noTelaUsuarios));
+        
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "COMUM_CONFIG_VER"), noConfiguracoes));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "COMUM_CONFIG_NOVO"), noConfiguracoes));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "COMUM_CONFIG_EDITAR"), noConfiguracoes));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "COMUM_CONFIG_EXCLUIR"), noConfiguracoes));
+        
         // Admin
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "ADMIN_CLIENTES_VER"), noClientesAdm));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "ADMIN_CLIENTES_NOVO"), noClientesAdm));
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "ADMIN_CLIENTES_EDITAR"), noClientesAdm));
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "ADMIN_CLIENTES_EXCLUIR"), noClientesAdm));
 
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "ADMIN_FORN_VER"), noFornecedoresAdm));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "ADMIN_FORN_NOVO"), noFornecedoresAdm));
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "ADMIN_FORN_EDITAR"), noFornecedoresAdm));
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "ADMIN_FORN_EXCLUIR"), noFornecedoresAdm));
 
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "ADMIN_FUNC_VER"), noFuncionariosAdm));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "ADMIN_FUNC_NOVO"), noFuncionariosAdm));
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "ADMIN_FUNC_EDITAR"), noFuncionariosAdm));
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "ADMIN_FUNC_EXCLUIR"), noFuncionariosAdm));
+        
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "ADMIN_PESSOAS_VER"), noPessoasAdm));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "ADMIN_PESSOAS_NOVO"), noPessoasAdm));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "ADMIN_PESSOAS_EDITAR"), noPessoasAdm));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "ADMIN_PESSOAS_EXCLUIR"), noPessoasAdm));
+        
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "ADMIN_USUARIOS_VER"), noTelaUsuariosAdm));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "ADMIN_USUARIOS_NOVO"), noTelaUsuariosAdm));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "ADMIN_USUARIOS_EDITAR"), noTelaUsuariosAdm));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "ADMIN_USUARIOS_EXCLUIR"), noTelaUsuariosAdm));
+        
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "ADMIN_CONFIG_VER"), noConfiguracoesAdm));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "ADMIN_CONFIG_NOVO"), noConfiguracoesAdm));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "ADMIN_CONFIG_EDITAR"), noConfiguracoesAdm));
+        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "ADMIN_CONFIG_EXCLUIR"), noConfiguracoesAdm));
 
         // Pré-marcar os checkboxes baseado no que já está salvo no banco
         java.util.List<TreeNode> marcados = new java.util.ArrayList<>();
