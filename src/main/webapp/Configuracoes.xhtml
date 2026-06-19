@@ -100,25 +100,30 @@
 						    </p:tab>							    
 						    <p:tab title="Permissões">
 							    <br />
-							    <h3>Permissões do Perfil Comum (Menu Lateral)</h3>
-							    <p:separator />							    
-							    <p:panelGrid columns="2" layout="grid" styleClass="ui-noborder" columnClasses="ui-grid-col-4, ui-grid-col-8">
-							        
-							        <p:outputLabel value="Usuário Comum pode ver Clientes?" for="chkComumClientes" />
-							        <p:selectBooleanButton id="chkComumClientes" value="#{configuracaoBean.comumPodeVerClientes}" 
-							                               onLabel="Sim" offLabel="Não" onIcon="pi pi-check" offIcon="pi pi-times" 
-							                               styleClass="btn-liga-desliga" />
-							
-							        <p:outputLabel value="Usuário Comum pode ver Fornecedores?" for="chkComumForn" />
-							        <p:selectBooleanButton id="chkComumForn" value="#{configuracaoBean.comumPodeVerFornecedores}" 
-							                               onLabel="Sim" offLabel="Não" onIcon="pi pi-check" offIcon="pi pi-times" 
-							                               styleClass="btn-liga-desliga" />
-							
-							        <p:outputLabel value="Usuário Comum pode ver Funcionários?" for="chkComumFunc" />
-							        <p:selectBooleanButton id="chkComumFunc" value="#{configuracaoBean.comumPodeVerFuncionarios}" 
-							                               onLabel="Sim" offLabel="Não" onIcon="pi pi-check" offIcon="pi pi-times" 
-							                               styleClass="btn-liga-desliga" />							
-							    </p:panelGrid>
+							    <h3>Matriz de Permissões por Perfil</h3>
+							    <p:separator />
+							    <div class="ui-g">
+							        <div class="ui-g-12">
+							            <p:tree value="#{configuracaoBean.raizPermissoes}" 
+							                    var="no" 
+							                    selectionMode="checkbox" 
+							                    selection="#{configuracaoBean.nosSelecionados}"
+							                    style="width: 100%; max-width: 600px; border: none; background: none;">
+							                
+							                <p:treeNode icon="pi pi-folder">
+							                    <h:outputText value="#{no}" />
+							                </p:treeNode>
+							                
+							                <p:treeNode type="tela" icon="pi pi-desktop">
+							                    <h:outputText value="#{no}" style="font-weight: bold; color: #2196F3;" />
+							                </p:treeNode>
+							                
+							                <p:treeNode type="acao" icon="pi pi-key">
+							                    <h:outputText value="#{no}" />
+							                </p:treeNode>
+							            </p:tree>
+							        </div>
+							    </div>
 						    </p:tab>						    
 				
 					    </p:tabView>

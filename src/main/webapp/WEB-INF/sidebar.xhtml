@@ -14,19 +14,22 @@
 			
             <p:menu toggleable="true" styleClass="menu-customizado">
                 <p:submenu label="Cadastros">
-                	<p:menuitem value="Pessoas" icon="fa fa-fw fa-person" outcome="/Pessoas" />
+                	<p:menuitem value="Pessoas" icon="fa fa-fw fa-person" outcome="/Pessoas"
+                				rendered="#{loginBean.admin or configuracaoService.temAcesso('COMUM_PESSOAS_VER')}" />
                 	<p:menuitem value="Clientes" icon="fa fa-fw fa-handshake" outcome="/Clientes"
-                				rendered="#{loginBean.admin or configuracaoBean.comumPodeVerClientes}" />               	
+                				rendered="#{loginBean.admin or configuracaoService.temAcesso('COMUM_CLIENTES_VER')}" />               	
                 	<p:menuitem value="Funcionarios" icon="fa fa-fw fa-users-gear" outcome="/Funcionarios" 
-                				rendered="#{loginBean.admin or configuracaoBean.comumPodeVerFuncionarios}" />
+                				rendered="#{loginBean.admin or configuracaoService.temAcesso('COMUM_FUNC_VER')}" />
                     <p:menuitem value="Fornecedores" icon="fa fa-fw fa-building" outcome="/Fornecedores"
-                    			rendered="#{loginBean.admin or configuracaoBean.comumPodeVerFornecedores}" />
-                    <p:menuitem value="Usuários" icon="fa fa-fw fa-users" outcome="/Usuarios" />
+                    			rendered="#{loginBean.admin or configuracaoService.temAcesso('COMUM_FORN_VER')}" />
+                    <p:menuitem value="Usuários" icon="fa fa-fw fa-users" outcome="/Usuarios"
+                    			rendered="#{loginBean.admin or configuracaoService.temAcesso('COMUM_USUARIOS_VER')}" />
                     
                 </p:submenu>
 
                 <p:submenu label="Auxiliar">
-                    <p:menuitem value="Configurações" icon="fa fa-fw fa-cog" outcome="/Configuracoes" />
+                    <p:menuitem value="Configurações" icon="fa fa-fw fa-cog" outcome="/Configuracoes"
+                    			rendered="#{loginBean.admin or configuracaoService.temAcesso('COMUM_CONFIG_VER')}" />
                 </p:submenu>
                 
                 <p:submenu label="Sistema">
