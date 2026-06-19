@@ -28,7 +28,8 @@
                         oncomplete="PF('widgetVarDialog').show()"
                         update="dialogId" 
                         process="@this"
-                        immediate="true">
+                        immediate="true"
+                        rendered="#{loginBean.admin or configuracaoService.temAcesso(loginBean.usuarioLogado.perfil.name().concat('_').concat(prefixoPermissao).concat('_NOVO'))}">
                         <p:resetInput target="dialogId" />
                     </p:commandButton>
                     
@@ -36,14 +37,16 @@
                         actionListener="#{managedBean.prepararEdicao}"
                         oncomplete="PF('widgetVarDialog').show()"
                         update=":formCadastro:gridCampos" 
-                        process="@this">
+                        process="@this"
+                        rendered="#{loginBean.admin or configuracaoService.temAcesso(loginBean.usuarioLogado.perfil.name().concat('_').concat(prefixoPermissao).concat('_EDITAR'))}">
                         
                     </p:commandButton>
 
                     <p:commandButton value="Excluir" icon="fa fa-trash"
                         disabled="#{not managedBean.itemSelecionado}"
                         actionListener="#{managedBean.excluir}"
-                        update="msgs dataTable toolbar" process="@this">
+                        update="msgs dataTable toolbar" process="@this"
+                        rendered="#{loginBean.admin or configuracaoService.temAcesso(loginBean.usuarioLogado.perfil.name().concat('_').concat(prefixoPermissao).concat('_EXCLUIR'))}">
                         <p:confirm icon="pi pi-exclamation-triangle" header="Confirmação" message="Excluir este registro?" />
                     </p:commandButton>
                 </f:facet>
