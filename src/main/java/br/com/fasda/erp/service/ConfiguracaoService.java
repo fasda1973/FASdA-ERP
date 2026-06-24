@@ -32,7 +32,9 @@ public class ConfiguracaoService implements Serializable {
     public void carregarTodas() {
     	// Proteção contra NullPointerException caso o banco falhe
         if (configuracaoRepository == null) {
+        	System.out.println("###########################################################");
             System.out.println("ERRO CRÍTICO: O CDI não injetou o ConfiguracaoDAO!");
+            System.out.println("###########################################################");
             return;
         }
     	
@@ -40,7 +42,9 @@ public class ConfiguracaoService implements Serializable {
     	
     	if (lista != null) {
 	        for (Configuracao config : lista) {
+	        	System.out.println("###########################################################");
 	        	System.out.println("Chave carregada: " + config.getChave() + " | Valor: " + config.getValor());
+	        	System.out.println("###########################################################");
 	            mapaConfiguracoes.put(config.getChave(), config.getValor());
 	        }
     	}
@@ -64,20 +68,6 @@ public class ConfiguracaoService implements Serializable {
         return Boolean.parseBoolean(mapaConfiguracoes.getOrDefault("PERMITIR_CADASTRO_USUARIOS", "false"));
     }
     
-    /*
-    public boolean isComumPodeVerClientes() {
-        return Boolean.parseBoolean(mapaConfiguracoes.getOrDefault("COMUM_PODE_VER_CLIENTES", "false"));
-    }
-
-    public boolean isComumPodeVerFornecedores() {
-        return Boolean.parseBoolean(mapaConfiguracoes.getOrDefault("COMUM_PODE_VER_FORNECEDORES", "false"));
-    }
-
-    public boolean isComumPodeVerFuncionarios() {
-        return Boolean.parseBoolean(mapaConfiguracoes.getOrDefault("COMUM_PODE_VER_FUNCIONARIOS", "false"));
-    }
-    */
-    
     public String getSmtpHost() {
         return mapaConfiguracoes.getOrDefault("SMTP_HOST", "smtp.gmail.com");
     }
@@ -92,7 +82,7 @@ public class ConfiguracaoService implements Serializable {
     
     public boolean temAcesso(String chavePermissao) {
         // Se não achar a chave, o padrão é true (padrão do sistema)
-        return Boolean.parseBoolean(mapaConfiguracoes.getOrDefault(chavePermissao, "false"));
+        return Boolean.parseBoolean(mapaConfiguracoes.getOrDefault(chavePermissao, "true"));
     }
     
     // Método para atualizar a memória quando o usuário salvar na tela

@@ -25,8 +25,8 @@
 	                
 	                <div style="margin-top: 10px; text-align: right;">
 	                    <p:commandButton value="Salvar Configurações" 
-	                                     action="#{configuracaoBean.salvar}" 
-	                                     update="formConfig:msgs" 
+	                                     action="#{configuracaoBean.salvar}"
+	                                     update=":formConfig:msgs"
 	                                     icon="pi pi-save"
 	                                     styleClass="btn-salvar-fix" />
 	                </div>
@@ -100,28 +100,27 @@
 						    </p:tab>							    
 						    <p:tab title="Permissões">
 							    <br />
-							    <h3>Matriz de Permissões por Perfil</h3>
+							    <h3 class="title" style="margin-bottom: 15px;">Matriz de Permissões por Perfil</h3>
 							    <p:separator />
 							    <div class="ui-g">
 							        <div class="ui-g-12">
-							            <p:tree value="#{configuracaoBean.raizPermissoes}" 
-							                    var="no" 
-							                    selectionMode="checkbox" 
-							                    selection="#{configuracaoBean.nosSelecionados}"
-							                    style="width: 100%; max-width: 600px; border: none; background: none;">
-							                
-							                <p:treeNode icon="pi pi-folder">
-							                    <h:outputText value="#{no}" />
-							                </p:treeNode>
-							                
-							                <p:treeNode type="tela" icon="pi pi-desktop">
-							                    <h:outputText value="#{no}" style="font-weight: bold; color: #2196F3;" />
-							                </p:treeNode>
-							                
-							                <p:treeNode type="acao" icon="pi pi-key">
-							                    <h:outputText value="#{no}" />
-							                </p:treeNode>
-							            </p:tree>
+							        	<p:tree value="#{configuracaoBean.raizPermissoes}" 
+							        			var="no" 
+							        			selectionMode="checkbox" 
+							        			selection="#{configuracaoBean.nosSelecionados}">
+					                        
+					                        <p:treeNode icon="pi pi-folder">
+					                            <h:outputText value="#{no}" />
+					                        </p:treeNode>
+					                        
+					                        <p:treeNode type="tela" icon="pi pi-desktop">					                        	
+					                            <h:outputText value="#{no}" />
+					                        </p:treeNode>
+					                        
+					                        <p:treeNode type="acao" icon="pi pi-key">
+					                            <h:outputText value="#{no}" />
+					                        </p:treeNode>
+					                    </p:tree>    
 							        </div>
 							    </div>
 						    </p:tab>						    

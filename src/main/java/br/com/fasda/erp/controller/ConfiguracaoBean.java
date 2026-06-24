@@ -5,6 +5,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.PrimeFaces;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
@@ -15,6 +16,9 @@ import br.com.fasda.erp.service.ConfiguracaoService;
 import br.com.fasda.erp.util.Transacional;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.faces.application.FacesMessage;
@@ -45,14 +49,13 @@ public class ConfiguracaoBean implements Serializable {
     private String smtpHost;
     private String smtpPort;
     private String smtpUser;
-    /*
-    private boolean comumPodeVerClientes;
-    private boolean comumPodeVerFornecedores;
-    private boolean comumPodeVerFuncionarios;
-    */
-    // Permissões de usuario
+    
+    // Adicione estes atributos ao seu ConfiguracaoBean
     private TreeNode raizPermissoes;
     private TreeNode[] nosSelecionados;
+    
+    // 1. Substitua o atributo raizPermissoes por este:
+    private List<LinhaPermissao> listaPermissoes;
     
 
     @PostConstruct
@@ -65,12 +68,7 @@ public class ConfiguracaoBean implements Serializable {
         this.smtpHost = configuracaoService.getSmtpHost();
         this.smtpPort = configuracaoService.getSmtpPort();
         this.smtpUser = configuracaoService.getSmtpUser();
-        /*
-        this.comumPodeVerClientes = configuracaoService.isComumPodeVerClientes();
-        this.comumPodeVerFornecedores = configuracaoService.isComumPodeVerFornecedores();
-        this.comumPodeVerFuncionarios = configuracaoService.isComumPodeVerFuncionarios();
-        */
-        
+               
         // Exemplo de valor padrão caso esteja vazio
         if (caminhoUploadImagens == null || caminhoUploadImagens.isEmpty()) {
             caminhoUploadImagens = System.getProperty("user.home") + "/uploads/imagens";
@@ -78,9 +76,11 @@ public class ConfiguracaoBean implements Serializable {
         
         // Teste temporário: Force uma mensagem no console para ver se o Java leu algo
         System.out.println("Caminho carregado na tela: " + this.caminhoUploadImagens);
-        
+         
         // Monta a estrutura lógica da árvore
         montarArvorePermissoes();
+        
+        //inicializarMatriz();
     }
         
     @Transacional
@@ -91,8 +91,6 @@ public class ConfiguracaoBean implements Serializable {
 			     // 2. Pega o login através do getLogin
 				loginDoUsuario = loginBean.getUsuarioLogado().getLogin();
 			}	
-        	
-			//configuracaoService.salvar(this.configuracao, "Configuração", loginDoUsuario);
 			
         	java.io.File pasta = new java.io.File(this.caminhoUploadImagens);
         	if (!pasta.exists()) {
@@ -113,12 +111,7 @@ public class ConfiguracaoBean implements Serializable {
             Configuracao cSmtpHost = new Configuracao("SMTP_HOST", String.valueOf(this.smtpHost), "Servidor de saída de e-mails");
             Configuracao cSmtpPort = new Configuracao("SMTP_PORT", String.valueOf(this.smtpPort), "Porta do servidor SMTP");
             Configuracao cSmtpUser = new Configuracao("SMTP_USER", String.valueOf(this.smtpUser), "Usuário do e-mail disparador");
-            /*
-            Configuracao cComumClientes = new Configuracao("COMUM_PODE_VER_CLIENTES", String.valueOf(this.comumPodeVerClientes), "Permissão menu Clientes");
-            Configuracao cComumForn = new Configuracao("COMUM_PODE_VER_FORNECEDORES", String.valueOf(this.comumPodeVerFornecedores), "Permissão menu Fornecedores");
-            Configuracao cComumFunc = new Configuracao("COMUM_PODE_VER_FUNCIONARIOS", String.valueOf(this.comumPodeVerFuncionarios), "Permissão menu Funcionários");
-            */
-            
+                        
             // 2. SALVAMENTO CORRETO: Envia cada um para o Service tratar com Auditoria
             configuracaoService.salvar(cUpload, "Configuração", loginDoUsuario);
             configuracaoService.salvar(cEstoque, "Configuração", loginDoUsuario);
@@ -127,11 +120,7 @@ public class ConfiguracaoBean implements Serializable {
             configuracaoService.salvar(cSmtpHost, "Configuração", loginDoUsuario);
             configuracaoService.salvar(cSmtpPort, "Configuração", loginDoUsuario);
             configuracaoService.salvar(cSmtpUser, "Configuração", loginDoUsuario);
-            /*
-            configuracaoService.salvar(cComumClientes, "Configuração", loginDoUsuario);
-            configuracaoService.salvar(cComumForn, "Configuração", loginDoUsuario);
-            configuracaoService.salvar(cComumFunc, "Configuração", loginDoUsuario);
-            */
+            
             // 3. Atualiza a memória local da aplicação
             configuracaoService.atualizarConfiguracao("CAMINHO_UPLOAD_IMAGENS", this.caminhoUploadImagens);
             configuracaoService.atualizarConfiguracao("PERMITIR_ESTOQUE_NEGATIVO", String.valueOf(this.permitirEstoqueNegativo));
@@ -140,42 +129,41 @@ public class ConfiguracaoBean implements Serializable {
             configuracaoService.atualizarConfiguracao("SMTP_HOST", String.valueOf(this.smtpHost));
             configuracaoService.atualizarConfiguracao("SMTP_PORT", String.valueOf(this.smtpPort));
             configuracaoService.atualizarConfiguracao("SMTP_USER", String.valueOf(this.smtpUser));
-            /*
-            configuracaoService.atualizarConfiguracao("COMUM_PODE_VER_CLIENTES", String.valueOf(this.comumPodeVerClientes));
-            configuracaoService.atualizarConfiguracao("COMUM_PODE_VER_FORNECEDORES", String.valueOf(this.comumPodeVerFornecedores));
-            configuracaoService.atualizarConfiguracao("COMUM_PODE_VER_FUNCIONARIOS", String.valueOf(this.comumPodeVerFuncionarios));
-            */
-            // Cria uma lista de todas as chaves folha possíveis para saber quem foi desmarcado
+            
+            /*/ Cria uma lista de todas as chaves folha possíveis para saber quem foi desmarcado
             java.util.Map<String, String> todasAsPermissoes = new java.util.HashMap<>();
             todasAsPermissoes.put("COMUM_CLIENTES_VER", "false");
-            todasAsPermissoes.put("COMUM_CLIENTES_NOVO", "false");
             todasAsPermissoes.put("COMUM_CLIENTES_EDITAR", "false");
             todasAsPermissoes.put("COMUM_CLIENTES_EXCLUIR", "false");
-            
             todasAsPermissoes.put("COMUM_FORN_VER", "false");
-            todasAsPermissoes.put("COMUM_FORN_NOVO", "false");
             todasAsPermissoes.put("COMUM_FORN_EDITAR", "false");
             todasAsPermissoes.put("COMUM_FORN_EXCLUIR", "false");
-            
             todasAsPermissoes.put("COMUM_FUNC_VER", "false");
-            todasAsPermissoes.put("COMUM_FUNC_NOVO", "false");
             todasAsPermissoes.put("COMUM_FUNC_EDITAR", "false");
             todasAsPermissoes.put("COMUM_FUNC_EXCLUIR", "false");
+            */
             
-            todasAsPermissoes.put("COMUM_PESSOAS_VER", "false");
-            todasAsPermissoes.put("COMUM_PESSOAS_NOVO", "false");
-            todasAsPermissoes.put("COMUM_PESSOAS_EDITAR", "false");
-            todasAsPermissoes.put("COMUM_PESSOAS_EXCLUIR", "false");
+            // Arrays com as definições da sua matriz (Deixe em CAIXA ALTA para bater com o padrão de chaves do banco)
+            String[] perfis = {"ADMIN", "COMUM"};
+            String[] telas = {"CLIENTES", "FORN", "FUNC", "PESSOAS", "USUARIOS", "CONFIG"};
+            String[] acoes = {"VER", "NOVO", "EDITAR", "EXCLUIR"};
             
-            todasAsPermissoes.put("COMUM_USUARIOS_VER", "false");
-            todasAsPermissoes.put("COMUM_USUARIOS_NOVO", "false");
-            todasAsPermissoes.put("COMUM_USUARIOS_EDITAR", "false");
-            todasAsPermissoes.put("COMUM_USUARIOS_EXCLUIR", "false");
+            java.util.Map<String, String> todasAsPermissoes = new java.util.HashMap<>();
             
-            todasAsPermissoes.put("COMUM_CONFIG_VER", "false");
-            todasAsPermissoes.put("COMUM_CONFIG_NOVO", "false");
-            todasAsPermissoes.put("COMUM_CONFIG_EDITAR", "false");
-            todasAsPermissoes.put("COMUM_CONFIG_EXCLUIR", "false");
+            // Loops aninhados corrigidos usando a sintaxe nativa do Java
+            for (String perfil : perfis) {
+                for (String tela : telas) {
+                    for (String acao : acoes) {
+                        // Concatena as strings gerando: PERFIL_TELA_ACAO (Ex: COMUM_CLIENTES_VER)
+                        String chaveRegra = perfil + "_" + tela + "_" + acao;
+                        
+                        // Define o valor padrão inicial como "false" para todo mundo
+                        todasAsPermissoes.put(chaveRegra, "false");
+                        
+                        System.out.println("Loop: " + chaveRegra);
+                    }
+                }
+            }
             
             // Sobrescreve para "true" quem de fato estiver selecionado na tela
             if (nosSelecionados != null) {
@@ -183,6 +171,8 @@ public class ConfiguracaoBean implements Serializable {
                     PermissaoNo noInfo = (PermissaoNo) no.getData();
                     if (noInfo.getChaveConfig() != null && !noInfo.getChaveConfig().isEmpty()) {
                         todasAsPermissoes.put(noInfo.getChaveConfig(), "true");
+                        
+                        System.out.println("Sobrescreve: " + noInfo.getChaveConfig());
                     }
                 }
             }
@@ -194,14 +184,30 @@ public class ConfiguracaoBean implements Serializable {
                 configuracaoService.atualizarConfiguracao(permissao.getKey(), permissao.getValue());
             }
             
+            /*
+            if (this.listaPermissoes != null) {
+                for (LinhaPermissao linha : this.listaPermissoes) {
+                    String valorFinal = linha.isSelecionado() ? "true" : "false";
+
+                    Configuracao cPerm = new Configuracao(linha.getChaveConfig(), valorFinal, "Controle de Acesso Matriz");
+                    configuracaoService.salvar(cPerm, "Configuração", loginDoUsuario);
+                    configuracaoService.atualizarConfiguracao(linha.getChaveConfig(), valorFinal);
+                }
+                inicializarMatriz();
+            }
+            */
+            
             FacesContext.getCurrentInstance().addMessage(null, 
-                new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Configurações salvas e aplicadas com sucesso!"));
+    	            new FacesMessage("INFORMAÇÃO", "Configurações salvas com sucesso"));
+
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, 
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Falha ao persistir dados no banco: " + e.getMessage()));
+        	FacesContext.getCurrentInstance().addMessage(null, 
+    	            new FacesMessage("ATENÇÃO", "Não foi possivel salvar as configuraçoes"));
+        	
+        	e.printStackTrace();
         }
     }
-    
+       
     /*
     public void finalizarVenda(Venda venda) {
         // Se o estoque for negativo e o sistema NÃO permitir (config padrão false)
@@ -217,93 +223,65 @@ public class ConfiguracaoBean implements Serializable {
         // Nível 1: Raiz Invisível do PrimeFaces (obrigatório) ou Nó "Usuários"
         raizPermissoes = new DefaultTreeNode(new PermissaoNo("Root", ""), null);
         TreeNode noUsuarios = new DefaultTreeNode(new PermissaoNo("Usuários", ""), raizPermissoes);
-        noUsuarios.setExpanded(false);
+        noUsuarios.setExpanded(true);
 
         // Nível 2: Perfil Comum
-        TreeNode noComum = new DefaultTreeNode(new PermissaoNo("Comum", ""), noUsuarios);
-        TreeNode noAdmin = new DefaultTreeNode(new PermissaoNo("Admin", ""), noUsuarios);
-        noComum.setExpanded(false);
-        noAdmin.setExpanded(false);
+        //TreeNode noPerfil = new DefaultTreeNode(new PermissaoNo("Perfil", ""), noUsuarios);
+        
 
-        // Nível 3: Telas (.xhtml)
+        /*/ Nível 3: Telas (.xhtml)
         TreeNode noClientes = new DefaultTreeNode("tela", new PermissaoNo("Clientes", ""), noComum);
         TreeNode noFornecedores = new DefaultTreeNode("tela", new PermissaoNo("Fornecedores", ""), noComum);
         TreeNode noFuncionarios = new DefaultTreeNode("tela", new PermissaoNo("Funcionários", ""), noComum);
-        TreeNode noPessoas = new DefaultTreeNode("tela", new PermissaoNo("Pessoas", ""), noComum);
-        TreeNode noTelaUsuarios = new DefaultTreeNode("tela", new PermissaoNo("Usuários", ""), noComum);
-        TreeNode noConfiguracoes = new DefaultTreeNode("tela", new PermissaoNo("Configurações", ""), noComum);
-        
-        TreeNode noClientesAdm = new DefaultTreeNode("tela", new PermissaoNo("Clientes", ""), noAdmin);
-        TreeNode noFornecedoresAdm = new DefaultTreeNode("tela", new PermissaoNo("Fornecedores", ""), noAdmin);
-        TreeNode noFuncionariosAdm = new DefaultTreeNode("tela", new PermissaoNo("Funcionários", ""), noAdmin);
-        TreeNode noPessoasAdm = new DefaultTreeNode("tela", new PermissaoNo("Pessoas", ""), noAdmin);
-        TreeNode noTelaUsuariosAdm = new DefaultTreeNode("tela", new PermissaoNo("Usuários", ""), noAdmin);
-        TreeNode noConfiguracoesAdm = new DefaultTreeNode("tela", new PermissaoNo("Configurações", ""), noAdmin);
 
         // Nível 4: Ações com suas respectivas Chaves do Banco de Dados
         java.util.List<TreeNode> nosFolha = new java.util.ArrayList<>();
         
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "COMUM_CLIENTES_VER"), noClientes));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "COMUM_CLIENTES_NOVO"), noClientes));
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "COMUM_CLIENTES_EDITAR"), noClientes));
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "COMUM_CLIENTES_EXCLUIR"), noClientes));
 
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "COMUM_FORN_VER"), noFornecedores));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "COMUM_FORN_NOVO"), noFornecedores));
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "COMUM_FORN_EDITAR"), noFornecedores));
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "COMUM_FORN_EXCLUIR"), noFornecedores));
 
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "COMUM_FUNC_VER"), noFuncionarios));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "COMUM_FUNC_NOVO"), noFuncionarios));
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "COMUM_FUNC_EDITAR"), noFuncionarios));
         nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "COMUM_FUNC_EXCLUIR"), noFuncionarios));
+        */
         
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "COMUM_PESSOAS_VER"), noPessoas));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "COMUM_PESSOAS_NOVO"), noPessoas));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "COMUM_PESSOAS_EDITAR"), noPessoas));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "COMUM_PESSOAS_EXCLUIR"), noPessoas));
+        // Definições de estruturas lado a lado (Nome de exibição vs Código da Chave)
+        String[] perfisNome = {"Admin", "Comum"};
+        String[] perfisChave = {"ADMIN", "COMUM"};
         
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "COMUM_USUARIOS_VER"), noTelaUsuarios));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "COMUM_USUARIOS_NOVO"), noTelaUsuarios));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "COMUM_USUARIOS_EDITAR"), noTelaUsuarios));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "COMUM_USUARIOS_EXCLUIR"), noTelaUsuarios));
+        String[] telasNome = {"Clientes", "Fornecedores", "Funcionários", "Pessoas", "Usuários", "Configurações"};
+        String[] telasChave = {"CLIENTES", "FORN", "FUNC", "PESSOAS", "USUARIOS", "CONFIG"};
         
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "COMUM_CONFIG_VER"), noConfiguracoes));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "COMUM_CONFIG_NOVO"), noConfiguracoes));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "COMUM_CONFIG_EDITAR"), noConfiguracoes));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "COMUM_CONFIG_EXCLUIR"), noConfiguracoes));
-        
-        // Admin
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "ADMIN_CLIENTES_VER"), noClientesAdm));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "ADMIN_CLIENTES_NOVO"), noClientesAdm));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "ADMIN_CLIENTES_EDITAR"), noClientesAdm));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "ADMIN_CLIENTES_EXCLUIR"), noClientesAdm));
+        String[] acoesNome = {"Ver", "Novo", "Editar", "Excluir"};
+        String[] acoesChave = {"VER", "NOVO", "EDITAR", "EXCLUIR"};
 
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "ADMIN_FORN_VER"), noFornecedoresAdm));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "ADMIN_FORN_NOVO"), noFornecedoresAdm));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "ADMIN_FORN_EDITAR"), noFornecedoresAdm));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "ADMIN_FORN_EXCLUIR"), noFornecedoresAdm));
+        java.util.List<TreeNode> nosFolha = new java.util.ArrayList<>();
 
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "ADMIN_FUNC_VER"), noFuncionariosAdm));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "ADMIN_FUNC_NOVO"), noFuncionariosAdm));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "ADMIN_FUNC_EDITAR"), noFuncionariosAdm));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "ADMIN_FUNC_EXCLUIR"), noFuncionariosAdm));
+        // 1. Loop de Perfis (Comum, Admin)
+        for (int u = 0; u < perfisChave.length; u++) {
+            TreeNode noPerfil = new DefaultTreeNode(new PermissaoNo(perfisNome[u], ""), noUsuarios);
+            noPerfil.setExpanded(true);
+            
+            // 2. Loop de Telas (Clientes, Forn...)
+            for (int t = 0; t < telasChave.length; t++) {
+                TreeNode noTela = new DefaultTreeNode("tela", new PermissaoNo(telasNome[t], ""), noPerfil);
+                
+                // 3. Loop de Ações (Ver, Novo...)
+                for (int a = 0; a < acoesChave.length; a++) {
+                    // Monta a chave dinâmica idêntica ao banco: EX: ADMIN_FORN_EDITAR
+                    String chaveBanco = perfisChave[u] + "_" + telasChave[t] + "_" + acoesChave[a];
+                    
+                    // Cria o nó folha (o checkbox final)
+                    nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo(acoesNome[a], chaveBanco), noTela));
+                }
+            }
+        }
         
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "ADMIN_PESSOAS_VER"), noPessoasAdm));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "ADMIN_PESSOAS_NOVO"), noPessoasAdm));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "ADMIN_PESSOAS_EDITAR"), noPessoasAdm));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "ADMIN_PESSOAS_EXCLUIR"), noPessoasAdm));
-        
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "ADMIN_USUARIOS_VER"), noTelaUsuariosAdm));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "ADMIN_USUARIOS_NOVO"), noTelaUsuariosAdm));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "ADMIN_USUARIOS_EDITAR"), noTelaUsuariosAdm));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "ADMIN_USUARIOS_EXCLUIR"), noTelaUsuariosAdm));
-        
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "ADMIN_CONFIG_VER"), noConfiguracoesAdm));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Novo", "ADMIN_CONFIG_NOVO"), noConfiguracoesAdm));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "ADMIN_CONFIG_EDITAR"), noConfiguracoesAdm));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "ADMIN_CONFIG_EXCLUIR"), noConfiguracoesAdm));
-
         // Pré-marcar os checkboxes baseado no que já está salvo no banco
         java.util.List<TreeNode> marcados = new java.util.ArrayList<>();
         for (TreeNode noFolha : nosFolha) {
@@ -321,42 +299,21 @@ public class ConfiguracaoBean implements Serializable {
         nosSelecionados = marcados.toArray(new TreeNode[0]);
     }
 
-    private void atualizarSelecaoAscendente(TreeNode no) {
-        TreeNode pai = no.getParent();
-        if (pai != null && !pai.getData().toString().equals("Root")) {
-            pai.setSelected(true);
-            atualizarSelecaoAscendente(pai);
-        }
-    }
+    public Configuracao getConfiguracao() {
+		return configuracao;
+	}
 
-    // Getters e Setters
-    public String getCaminhoUploadImagens() { return caminhoUploadImagens; }
-    public void setCaminhoUploadImagens(String caminhoUploadImagens) { this.caminhoUploadImagens = caminhoUploadImagens; }
-    public boolean isPermitirCadastroUsuarios() { return permitirCadastroUsuarios; }
-    public void setPermitirCadastroUsuarios(boolean permitirCadastroUsuarios) { this.permitirCadastroUsuarios = permitirCadastroUsuarios; }
-    public boolean isPermitirEstoqueNegativo() { return permitirEstoqueNegativo; }
-    public void setPermitirEstoqueNegativo(boolean permitirEstoqueNegativo) { this.permitirEstoqueNegativo = permitirEstoqueNegativo; }
-    public double getMargemLucroMinima() { return margemLucroMinima; }
-    public void setMargemLucroMinima(double margemLucroMinima) { this.margemLucroMinima = margemLucroMinima; }    
-    public String getSmtpHost() { return smtpHost; }
-    public void setSmtpHost(String smtpHost) { this.smtpHost = smtpHost; }    
-    public String getSmtpPort() { return smtpPort; }
-    public void setSmtpPort(String smtpPort) { this.smtpPort = smtpPort; }    
-    public String getSmtpUser() { return smtpUser; }
-    public void setSmtpUser(String smtpUser) { this.smtpUser = smtpUser; }
-    /*
-    public boolean isComumPodeVerClientes() { return comumPodeVerClientes; }
-    public void setComumPodeVerClientes(boolean comumPodeVerClientes) { this.comumPodeVerClientes = comumPodeVerClientes; }
-    public boolean isComumPodeVerFornecedores() { return comumPodeVerFornecedores; }
-    public void setComumPodeVerFornecedores(boolean comumPodeVerFornecedores) { this.comumPodeVerFornecedores = comumPodeVerFornecedores; }
-    public boolean isComumPodeVerFuncionarios() { return comumPodeVerFuncionarios; }
-    public void setComumPodeVerFuncionarios(boolean comumPodeVerFuncionarios) { this.comumPodeVerFuncionarios = comumPodeVerFuncionarios; }
-    */
-    public ConfiguracaoService getConfiguracaoService() { return configuracaoService; }
-	public void setConfiguracaoService(ConfiguracaoService configuracaoService) { this.configuracaoService = configuracaoService; }
-	public ConfiguracaoRepository getConfiguracaoRepository() { return configuracaoRepository; }
-	public void setConfiguracaoRepository(ConfiguracaoRepository configuracaoRepository) { this.configuracaoRepository = configuracaoRepository; }
-	public static long getSerialversionuid() { return serialVersionUID; }
+	public void setConfiguracao(Configuracao configuracao) {
+		this.configuracao = configuracao;
+	}
+
+	public LoginBean getLoginBean() {
+		return loginBean;
+	}
+
+	public void setLoginBean(LoginBean loginBean) {
+		this.loginBean = loginBean;
+	}
 
 	public TreeNode getRaizPermissoes() {
 		return raizPermissoes;
@@ -373,6 +330,121 @@ public class ConfiguracaoBean implements Serializable {
 	public void setNosSelecionados(TreeNode[] nosSelecionados) {
 		this.nosSelecionados = nosSelecionados;
 	}
-   
+
+	private void atualizarSelecaoAscendente(TreeNode no) {
+    	TreeNode pai = no.getParent();
+        if (pai != null && !pai.getData().toString().equals("Root")) {
+            pai.setSelected(true);
+            atualizarSelecaoAscendente(pai);
+        }
+    }
+    
+    // Getters e Setters
+    public String getCaminhoUploadImagens() { return caminhoUploadImagens; }
+    public void setCaminhoUploadImagens(String caminhoUploadImagens) { this.caminhoUploadImagens = caminhoUploadImagens; }
+    public boolean isPermitirCadastroUsuarios() { return permitirCadastroUsuarios; }
+    public void setPermitirCadastroUsuarios(boolean permitirCadastroUsuarios) { this.permitirCadastroUsuarios = permitirCadastroUsuarios; }
+    public boolean isPermitirEstoqueNegativo() { return permitirEstoqueNegativo; }
+    public void setPermitirEstoqueNegativo(boolean permitirEstoqueNegativo) { this.permitirEstoqueNegativo = permitirEstoqueNegativo; }
+    public double getMargemLucroMinima() { return margemLucroMinima; }
+    public void setMargemLucroMinima(double margemLucroMinima) { this.margemLucroMinima = margemLucroMinima; }    
+    public String getSmtpHost() { return smtpHost; }
+    public void setSmtpHost(String smtpHost) { this.smtpHost = smtpHost; }    
+    public String getSmtpPort() { return smtpPort; }
+    public void setSmtpPort(String smtpPort) { this.smtpPort = smtpPort; }    
+    public String getSmtpUser() { return smtpUser; }
+    public void setSmtpUser(String smtpUser) { this.smtpUser = smtpUser; }
+    public ConfiguracaoService getConfiguracaoService() { return configuracaoService; }
+	public void setConfiguracaoService(ConfiguracaoService configuracaoService) { this.configuracaoService = configuracaoService; }
+	public ConfiguracaoRepository getConfiguracaoRepository() { return configuracaoRepository; }
+	public void setConfiguracaoRepository(ConfiguracaoRepository configuracaoRepository) { this.configuracaoRepository = configuracaoRepository; }
+	public static long getSerialversionuid() { return serialVersionUID; }
+  
+	// Nova estrategia para prefil de usuarios
+	public static class LinhaPermissao implements java.io.Serializable {
+	    private static final long serialVersionUID = 1L;
+	    
+	    private String perfil;
+	    private String tela;
+	    private String acao;
+	    private String chaveConfig;
+	    private boolean selecionado;
+
+	    public LinhaPermissao() {}
+
+	    public LinhaPermissao(String perfil, String tela, String acao, String chaveConfig, boolean selecionado) {
+	        this.perfil = perfil;
+	        this.tela = tela;
+	        this.acao = acao;
+	        this.chaveConfig = chaveConfig;
+	        this.selecionado = selecionado;
+	    }
+
+	    // GETTERS E SETTERS (Essenciais para o JSF ler e gravar o checkbox)
+	    public String getPerfil() { return perfil; }
+	    public void setPerfil(String perfil) { this.perfil = perfil; }
+	    public String getTela() { return tela; }
+	    public void setTela(String tela) { this.tela = tela; }
+	    public String getAcao() { return acao; }
+	    public void setAcao(String acao) { this.acao = acao; }
+	    public String getChaveConfig() { return chaveConfig; }
+	    public void setChaveConfig(String chaveConfig) { this.chaveConfig = chaveConfig; }
+	    public boolean isSelecionado() { return selecionado; }
+	    public void setSelecionado(boolean selecionado) { this.selecionado = selecionado; }
+	}
+	
+	public static class GrupoPermissao implements java.io.Serializable {
+	    private static final long serialVersionUID = 1L;
+	    
+	    private String perfil;
+	    private List<LinhaPermissao> linhas = new ArrayList<>();
+
+	    public GrupoPermissao(String perfil) {
+	        this.perfil = perfil;
+	    }
+
+	    public String getPerfil() { return perfil; }
+	    public void setPerfil(String perfil) { this.perfil = perfil; }
+	    public List<LinhaPermissao> getLinhas() { return linhas; }
+	    public void setLinhas(List<LinhaPermissao> linhas) { this.linhas = linhas; }
+	}
+	
+	// 2. Chame este método no seu @PostConstruct (ou onde iniciava a árvore antiga)
+	public void inicializarMatriz() {
+		try {
+	        this.listaPermissoes = new java.util.ArrayList<>();
+	        
+	        java.util.Map<String, String> mapa = (configuracaoService != null) ? configuracaoService.getMapaConfiguracoes() : null;
+	        if (mapa == null) mapa = new java.util.HashMap<>();
+
+	        String[] perfis = {"ADMIN", "COMUM" };
+	        String[] telas = {"CLIENTES", "FORN", "FUNC", "PESSOAS", "USUARIOS", "CONFIG"};
+	        String[] acoes = {"VER", "NOVO", "EDITAR", "EXCLUIR"};
+
+	        for (String p : perfis) {
+	            for (String t : telas) {
+	                for (String a : acoes) {
+	                    String chave = p + "_" + t + "_" + a;
+	                    boolean ativo = Boolean.parseBoolean(mapa.getOrDefault(chave, "false"));
+	                    
+	                    // Alimenta diretamente a lista plana
+	                    this.listaPermissoes.add(new LinhaPermissao(p, t, a, chave, ativo));
+	                }
+	            }
+	        }
+	        System.out.println("LOG: Matriz inicializada com " + this.listaPermissoes.size() + " linhas.");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+
+	public List<LinhaPermissao> getListaPermissoes() {
+	    return listaPermissoes;
+	}
+
+	public void setListaPermissoes(List<LinhaPermissao> listaPermissoes) {
+	    this.listaPermissoes = listaPermissoes;
+	}
+	
 	
 }
