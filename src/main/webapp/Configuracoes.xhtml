@@ -26,9 +26,11 @@
 	                <div style="margin-top: 10px; text-align: right;">
 	                    <p:commandButton value="Salvar Configurações" 
 	                                     action="#{configuracaoBean.salvar}"
-	                                     update=":formConfig:msgs"
+	                                     process="@form"
+	                                     update="@form"
 	                                     icon="pi pi-save"
-	                                     styleClass="btn-salvar-fix" />
+	                                     styleClass="btn-salvar-fix"
+	                                     oncomplete="recolherMatrizPermissoes();" />
 	                </div>
                 </div>
                 
@@ -104,9 +106,11 @@
 							    <p:separator />
 							    <div class="ui-g">
 							        <div class="ui-g-12">
-							        	<p:tree value="#{configuracaoBean.raizPermissoes}" 
+							        	<p:tree id="treePermissoes" 
+							        			value="#{configuracaoBean.raizPermissoes}" 
 							        			var="no" 
-							        			selectionMode="checkbox" 
+							        			selectionMode="checkbox"
+							        			widgetVar="wmatrizPermissoes" 
 							        			selection="#{configuracaoBean.nosSelecionados}">
 					                        
 					                        <p:treeNode icon="pi pi-folder">
@@ -120,7 +124,7 @@
 					                        <p:treeNode type="acao" icon="pi pi-key">
 					                            <h:outputText value="#{no}" />
 					                        </p:treeNode>
-					                    </p:tree>    
+					                    </p:tree>
 							        </div>
 							    </div>
 						    </p:tab>						    

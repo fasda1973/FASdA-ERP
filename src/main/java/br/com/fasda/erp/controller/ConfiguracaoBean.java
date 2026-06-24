@@ -248,6 +248,23 @@ public class ConfiguracaoBean implements Serializable {
             }
         }
         nosSelecionados = marcados.toArray(new TreeNode[0]);
+        
+     // No final do método, depois de criar tudo com TRUE:
+        //recolherArvoreAbstrata(raizPermissoes);
+    }
+    
+    private void recolherArvoreAbstrata(TreeNode<?> no) {
+        if (no == null) return;
+        
+        // Não muda a raiz principal, apenas os nós filhos
+        if (no.getParent() != null) {
+            no.setExpanded(false);
+        }
+        
+        // CORREÇÃO AQUI: Especificamos TreeNode<?> para o compilador aceitar a conversão
+        for (TreeNode<?> filho : no.getChildren()) {
+            recolherArvoreAbstrata(filho);
+        }
     }
 
     public Configuracao getConfiguracao() {
