@@ -129,20 +129,7 @@ public class ConfiguracaoBean implements Serializable {
             configuracaoService.atualizarConfiguracao("SMTP_HOST", String.valueOf(this.smtpHost));
             configuracaoService.atualizarConfiguracao("SMTP_PORT", String.valueOf(this.smtpPort));
             configuracaoService.atualizarConfiguracao("SMTP_USER", String.valueOf(this.smtpUser));
-            
-            /*/ Cria uma lista de todas as chaves folha possíveis para saber quem foi desmarcado
-            java.util.Map<String, String> todasAsPermissoes = new java.util.HashMap<>();
-            todasAsPermissoes.put("COMUM_CLIENTES_VER", "false");
-            todasAsPermissoes.put("COMUM_CLIENTES_EDITAR", "false");
-            todasAsPermissoes.put("COMUM_CLIENTES_EXCLUIR", "false");
-            todasAsPermissoes.put("COMUM_FORN_VER", "false");
-            todasAsPermissoes.put("COMUM_FORN_EDITAR", "false");
-            todasAsPermissoes.put("COMUM_FORN_EXCLUIR", "false");
-            todasAsPermissoes.put("COMUM_FUNC_VER", "false");
-            todasAsPermissoes.put("COMUM_FUNC_EDITAR", "false");
-            todasAsPermissoes.put("COMUM_FUNC_EXCLUIR", "false");
-            */
-            
+                       
             // Arrays com as definições da sua matriz (Deixe em CAIXA ALTA para bater com o padrão de chaves do banco)
             String[] perfis = {"ADMIN", "COMUM"};
             String[] telas = {"CLIENTES", "FORN", "FUNC", "PESSOAS", "USUARIOS", "CONFIG"};
@@ -182,20 +169,7 @@ public class ConfiguracaoBean implements Serializable {
                 Configuracao cPerm = new Configuracao(permissao.getKey(), permissao.getValue(), "Controle de Acesso Matriz");
                 configuracaoService.salvar(cPerm, "Configuração", loginDoUsuario);
                 configuracaoService.atualizarConfiguracao(permissao.getKey(), permissao.getValue());
-            }
-            
-            /*
-            if (this.listaPermissoes != null) {
-                for (LinhaPermissao linha : this.listaPermissoes) {
-                    String valorFinal = linha.isSelecionado() ? "true" : "false";
-
-                    Configuracao cPerm = new Configuracao(linha.getChaveConfig(), valorFinal, "Controle de Acesso Matriz");
-                    configuracaoService.salvar(cPerm, "Configuração", loginDoUsuario);
-                    configuracaoService.atualizarConfiguracao(linha.getChaveConfig(), valorFinal);
-                }
-                inicializarMatriz();
-            }
-            */
+            }         
             
             FacesContext.getCurrentInstance().addMessage(null, 
     	            new FacesMessage("INFORMAÇÃO", "Configurações salvas com sucesso"));
@@ -225,30 +199,7 @@ public class ConfiguracaoBean implements Serializable {
         TreeNode noUsuarios = new DefaultTreeNode(new PermissaoNo("Usuários", ""), raizPermissoes);
         noUsuarios.setExpanded(true);
 
-        // Nível 2: Perfil Comum
-        //TreeNode noPerfil = new DefaultTreeNode(new PermissaoNo("Perfil", ""), noUsuarios);
         
-
-        /*/ Nível 3: Telas (.xhtml)
-        TreeNode noClientes = new DefaultTreeNode("tela", new PermissaoNo("Clientes", ""), noComum);
-        TreeNode noFornecedores = new DefaultTreeNode("tela", new PermissaoNo("Fornecedores", ""), noComum);
-        TreeNode noFuncionarios = new DefaultTreeNode("tela", new PermissaoNo("Funcionários", ""), noComum);
-
-        // Nível 4: Ações com suas respectivas Chaves do Banco de Dados
-        java.util.List<TreeNode> nosFolha = new java.util.ArrayList<>();
-        
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "COMUM_CLIENTES_VER"), noClientes));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "COMUM_CLIENTES_EDITAR"), noClientes));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "COMUM_CLIENTES_EXCLUIR"), noClientes));
-
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "COMUM_FORN_VER"), noFornecedores));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "COMUM_FORN_EDITAR"), noFornecedores));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "COMUM_FORN_EXCLUIR"), noFornecedores));
-
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Ver", "COMUM_FUNC_VER"), noFuncionarios));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Editar", "COMUM_FUNC_EDITAR"), noFuncionarios));
-        nosFolha.add(new DefaultTreeNode("acao", new PermissaoNo("Excluir", "COMUM_FUNC_EXCLUIR"), noFuncionarios));
-        */
         
         // Definições de estruturas lado a lado (Nome de exibição vs Código da Chave)
         String[] perfisNome = {"Admin", "Comum"};
