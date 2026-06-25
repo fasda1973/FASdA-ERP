@@ -27,6 +27,9 @@ public class AuditoriaUtil {
             manager.detach(entidade);
             
             String tipoOperacao = "ALTERAÇÃO";
+            System.out.println("###########################################################");
+            System.out.println("Entrou na alteração");
+            System.out.println("###########################################################");
             
             // 2. Busca o Snapshot real diretamente do banco utilizando a Classe original do objeto
             T objetoSnapshot = (T) manager.find(entidade.getClass(), entidade.getId());
@@ -37,16 +40,36 @@ public class AuditoriaUtil {
             // 4. Salva as alterações de fato no banco de dados
             entidadeSalva = manager.merge(entidade);
             
+            System.out.println("###########################################################");
+            System.out.println("Salvou no banco");
+            System.out.println("###########################################################");
+            
             // 5. Se houveram mudanças reais, grava o log de auditoria
-            if (camposAlterados != null && !camposAlterados.trim().isEmpty()) {
+            if (camposAlterados != null && !camposAlterados.trim().isEmpty())  {
                 String detalheLog = String.format("Campos: %s", camposAlterados);
                 
                 // Criamos uma variável convertendo o ID para String de forma segura
                 String idString = entidadeSalva.getId() != null ? entidadeSalva.getId().toString() : null;
                 
-                LogAuditoria log = new LogAuditoria(tipoOperacao, origemTela.toUpperCase(), 
-                		idString, detalheLog, usuarioLogado);
-                logRepository.salvar(log);
+                System.out.println("###########################################################");
+                System.out.println("Chegou no log");
+                System.out.println("###########################################################");
+                
+                try {
+                
+	                LogAuditoria log = new LogAuditoria(tipoOperacao, origemTela.toUpperCase(), 
+	                		idString, detalheLog, usuarioLogado);
+	                logRepository.salvar(log);
+	                
+	                System.out.println("###########################################################");
+	                System.out.println("Passou salvar log com: " + log);
+	                
+	                System.out.println("Detalhe não gravou no log: " + detalheLog);
+	                System.out.println("###########################################################");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                     e.getMessage();
+                }
             }
             
         } else { // --- FLUXO DE NOVO CADASTRO ---
