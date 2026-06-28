@@ -36,7 +36,8 @@ public class AutorizacaoFilter implements Filter {
         boolean paginaLogin = requestURI.endsWith("/Login.xhtml") || requestURI.endsWith("/login.xhtml");
 
         // 2. Verifica se é a página de cadastro de usuários (troque pelo nome real do seu arquivo se for diferente)
-        boolean paginaCadastro = requestURI.endsWith("/usuarios.xhtml") || requestURI.endsWith("/Usuarios.xhtml");
+        //boolean paginaCadastro = requestURI.endsWith("/usuarios.xhtml") || requestURI.endsWith("/Usuarios.xhtml");
+        boolean paginaCadastro = requestURI.endsWith("/perfil.xhtml") || requestURI.endsWith("/Perfil.xhtml");
 
         // 3. Verifica se o cadastro está liberado pelo administrador
         boolean cadastroLiberado = configuracaoService != null && configuracaoService.isPermitirCadastroUsuarios();

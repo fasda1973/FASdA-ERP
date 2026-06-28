@@ -71,7 +71,6 @@ public class PerfilBean implements Serializable {
             this.senhaAtual = null;
             this.novaSenha = null;
             this.confirmaNovaSenha = null;
-
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Perfil atualizado com sucesso!"));
             
         } catch (Exception e) {
