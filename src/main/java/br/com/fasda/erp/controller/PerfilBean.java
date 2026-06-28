@@ -33,45 +33,76 @@ public class PerfilBean implements Serializable {
     @PostConstruct
     public void init() {
         // Busca o usuário atualizado direto do banco para evitar dados obsoletos da sessão
-        if (loginBean.getUsuarioLogado() != null) {
+        //if (loginBean.getUsuarioLogado() != null) {
+            //this.usuario = manager.find(Usuario.class, loginBean.getUsuarioLogado().getId());
+        //}
+    	
+    	// Se houver usuário logado, busca do banco para edição
+        if (loginBean != null && loginBean.getUsuarioLogado() != null) {
             this.usuario = manager.find(Usuario.class, loginBean.getUsuarioLogado().getId());
+        } else {
+            // SE NÃO HOUVER LOGADO: Inicializa um objeto limpo para o fluxo de NOVO USUÁRIO
+            this.usuario = new Usuario();
         }
     }
 
     @Transacional
     public void salvarPerfil() {
-        FacesContext context = FacesContext.getCurrentInstance();
+    	FacesContext context = FacesContext.getCurrentInstance();
         try {
-            // Se o usuário tentou preencher alguma informação de nova senha
-            if (novaSenha != null && !novaSenha.trim().isEmpty()) {
-                
-                // 1. Valida se a senha atual digitada está correta
-                if (!SenhaUtil.verificar(senhaAtual, usuario.getSenha())) {
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Senha atual incorreta!"));
+            boolean ehNovoUsuario = (usuario.getId() == null);
+
+            if (ehNovoUsuario) {
+                // --- REGRA PARA NOVO USUÁRIO ---
+                if (novaSenha == null || novaSenha.trim().isEmpty()) {
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "A senha é obrigatória para um novo cadastro!"));
                     return;
                 }
-                
-                // 2. Valida se a nova senha coincide com a confirmação
                 if (!novaSenha.equals(confirmaNovaSenha)) {
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "A nova senha e a confirmação não coincidem!"));
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "A senha e a confirmação não coincidem!"));
                     return;
                 }
                 
-                // 3. Criptografa a nova senha antes de salvar
+                // Criptografa a senha do novo usuário
                 usuario.setSenha(SenhaUtil.criptografar(novaSenha));
+                
+                // Salva o novo registro
+                manager.persist(usuario);
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Usuário cadastrado com sucesso!"));
+                
+                // Opcional: Redirecionar para tela de login ou limpar o formulário
+                this.usuario = new Usuario(); 
+                
+            } else {
+                // --- REGRA PARA ALTERAÇÃO DE PERFIL EXISTENTE ---
+                if (novaSenha != null && !novaSenha.trim().isEmpty()) {
+                    
+                    if (!SenhaUtil.verificar(senhaAtual, usuario.getSenha())) {
+                        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Senha atual incorreta!"));
+                        return;
+                    }
+                    
+                    if (!novaSenha.equals(confirmaNovaSenha)) {
+                        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "A nova senha e a confirmação não coincidem!"));
+                        return;
+                    }
+                    
+                    usuario.setSenha(SenhaUtil.criptografar(novaSenha));
+                }
+
+                // Salva alterações do usuário existente
+                manager.merge(usuario);
+                
+                if (loginBean != null && loginBean.getUsuarioLogado() != null) {
+                    loginBean.getUsuarioLogado().setNome(usuario.getNome());
+                }
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Perfil atualizado com sucesso!"));
             }
 
-            // Salva as alterações do usuário (Nome, etc) no banco
-            manager.merge(usuario);
-            
-            // Atualiza o usuário na sessão do LoginBean para refletir o novo nome na topbar imediatamente
-            loginBean.getUsuarioLogado().setNome(usuario.getNome());
-
-            // Limpa os campos de senha da tela
+            // Limpa os campos de senha da tela pós-execução
             this.senhaAtual = null;
             this.novaSenha = null;
             this.confirmaNovaSenha = null;
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Perfil atualizado com sucesso!"));
             
         } catch (Exception e) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Não foi possível atualizar o perfil."));
