@@ -1,5 +1,6 @@
 package br.com.fasda.erp.controller;
 
+import java.io.IOException;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -100,6 +101,10 @@ public class PerfilBean implements Serializable {
                 // Inicializa um novo objeto limpo pós-sucesso
                 this.usuario = new Usuario(); 
                 
+             // Aguarda um instante ou redireciona direto. O mais comum e seguro para Ajax:
+                redirecionarParaLogin();
+                return; // Interrompe a execução já que vai mudar de página
+                
             } else {
                 // --- REGRA PARA ALTERAÇÃO DE PERFIL EXISTENTE ---
                 if (novaSenha != null && !novaSenha.trim().isEmpty()) {
@@ -124,12 +129,17 @@ public class PerfilBean implements Serializable {
                     loginBean.getUsuarioLogado().setNome(usuario.getNome());
                 }
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Perfil updated com sucesso!"));
+            
             }
 
             // Limpa os campos de senha da tela pós-execução (Sucesso)
             this.senhaAtual = null;
             this.novaSenha = null;
             this.confirmaNovaSenha = null;
+            
+            // Se você quiser que na alteração de perfil ele também deslogue e volte para o Login:
+            redirecionarParaLogin();
+            return;
             
         } catch (Exception e) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Não foi possível atualizar o perfil."));
@@ -144,4 +154,24 @@ public class PerfilBean implements Serializable {
     public void setNovaSenha(String novaSenha) { this.novaSenha = novaSenha; }
     public String getConfirmaNovaSenha() { return confirmaNovaSenha; }
     public void setConfirmaNovaSenha(String confirmaNovaSenha) { this.confirmaNovaSenha = confirmaNovaSenha; }
+
+
+	private void redirecionarParaLogin() {
+	    FacesContext context = FacesContext.getCurrentInstance();
+	    try {
+	        // Se for uma alteração de perfil e o usuário já estava logado, 
+	        // é uma boa prática invalidar a sessão atual para ele logar de novo
+	        if (loginBean != null && loginBean.getUsuarioLogado() != null) {
+	            context.getExternalContext().invalidateSession();
+	        }
+	
+	        // Faz o redirecionamento HTTP correto que o PrimeFaces/Ajax conseguem entender
+	        String urlLogin = context.getExternalContext().getRequestContextPath() + "/Login.xhtml?faces-redirect=true";
+	        context.getExternalContext().redirect(urlLogin);
+	        
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+
 }
