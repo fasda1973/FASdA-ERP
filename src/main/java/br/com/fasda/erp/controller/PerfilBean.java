@@ -10,6 +10,9 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 
 import br.com.fasda.erp.model.Usuario;
+import br.com.fasda.erp.repository.UsuarioRepository;
+import br.com.fasda.erp.service.UsuarioService;
+import br.com.fasda.erp.util.NegocioException;
 import br.com.fasda.erp.util.SenhaUtil;
 import br.com.fasda.erp.util.Transacional;
 
@@ -24,6 +27,12 @@ public class PerfilBean implements Serializable {
 
     @Inject
     private LoginBean loginBean; // Injeta o loginBean para sabermos quem está logado
+    
+    @Inject
+    private UsuarioService usuarioService;
+    
+    @Inject
+	private UsuarioRepository usuarioRepository;
 
     private Usuario usuario;
     private String senhaAtual;
@@ -48,8 +57,14 @@ public class PerfilBean implements Serializable {
 
     @Transacional
     public void salvarPerfil() {
-    	FacesContext context = FacesContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
         try {
+            // Prepara loginAuditoria
+            String loginDoUsuario = "SISTEMA"; 
+            if (loginBean != null && loginBean.getUsuarioLogado() != null) {                
+                loginDoUsuario = loginBean.getUsuarioLogado().getLogin();
+            }
+            
             boolean ehNovoUsuario = (usuario.getId() == null);
 
             if (ehNovoUsuario) {
@@ -63,14 +78,26 @@ public class PerfilBean implements Serializable {
                     return;
                 }
                 
-                // Criptografa a senha do novo usuário
-                usuario.setSenha(SenhaUtil.criptografar(novaSenha));
+                // CRUCIAL: Verifique se o login existe ANTES de mexer na senha ou enviar para o Service
+                boolean jaExiste = usuarioRepository.existeLogin(usuario.getLogin(), usuario.getId());
                 
-                // Salva o novo registro
-                manager.persist(usuario);
+                if (jaExiste) {
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Já existe um usuário com o login informado."));
+                    
+                    // SOLUÇÃO DO BUG: Reseta o login para null para manter a aba "Criar login" visível!
+                    this.usuario.setLogin(null); 
+                    return;
+                }
+                
+                // Atribui a senha limpa. Deixe a criptografia APENAS dentro do UsuarioService para não duplicar!
+                usuario.setSenha(novaSenha);
+                
+                // Tenta salvar através do Service
+                usuarioService.salvar(this.usuario, "Perfil", loginDoUsuario); 
+                
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Usuário cadastrado com sucesso!"));
                 
-                // Opcional: Redirecionar para tela de login ou limpar o formulário
+                // Inicializa um novo objeto limpo pós-sucesso
                 this.usuario = new Usuario(); 
                 
             } else {
@@ -87,19 +114,19 @@ public class PerfilBean implements Serializable {
                         return;
                     }
                     
-                    usuario.setSenha(SenhaUtil.criptografar(novaSenha));
+                    usuario.setSenha(novaSenha);
                 }
 
-                // Salva alterações do usuário existente
-                manager.merge(usuario);
+                // Salva através do Service
+                usuarioService.salvar(this.usuario, "Perfil", loginDoUsuario); 
                 
                 if (loginBean != null && loginBean.getUsuarioLogado() != null) {
                     loginBean.getUsuarioLogado().setNome(usuario.getNome());
                 }
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Perfil atualizado com sucesso!"));
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Perfil updated com sucesso!"));
             }
 
-            // Limpa os campos de senha da tela pós-execução
+            // Limpa os campos de senha da tela pós-execução (Sucesso)
             this.senhaAtual = null;
             this.novaSenha = null;
             this.confirmaNovaSenha = null;
