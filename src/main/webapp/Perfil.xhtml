@@ -16,66 +16,71 @@
 			    		<p:tabView style="margin-top: 20px;">
 				        	<p:tab title="Criar login" rendered="#{perfilBean.usuario.login == null}">
 				        		<p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
-				        				        			
-					        		<h:panelGroup styleClass="md-inputfield">
-					                    <p:inputText value="#{perfilBean.usuario.nome}" required="true" requiredMessage="O nome é obrigatório." style="width: auto;" />
-					                    <label>Nome Completo</label>
-				                	</h:panelGroup>
-				                
-				                	<h:panelGroup styleClass="md-inputfield">
-					                    <p:inputText value="#{perfilBean.usuario.login}" style="width: auto;" />
-					                    <label>Username / Login</label>
-					                </h:panelGroup>
+				        			<div class="flex align-items-center">	        			
+						        		<h:panelGroup styleClass="md-inputfield">
+						                    <p:inputText value="#{perfilBean.usuario.nome}" required="true" requiredMessage="O nome é obrigatório." style="width: auto;" />
+						                    <label>Nome Completo</label>
+					                	</h:panelGroup>
 					                
-					                <h:panelGroup styleClass="md-inputfield">
-					                    <p:password value="#{perfilBean.novaSenha}" style="width: auto;" feedback="true" 
-					                                promptLabel="Digite a nova senha" weakLabel="Fraca" goodLabel="Boa" strongLabel="Excelente"/>
-					                    <label>Senha</label>
-					                </h:panelGroup>
-					
-					                <h:panelGroup styleClass="md-inputfield">
-					                    <p:password value="#{perfilBean.confirmaNovaSenha}" style="width: auto;" feedback="false"/>
-					                    <label>Confirme a Senha</label>
-					                </h:panelGroup>				                
+					                	<h:panelGroup styleClass="md-inputfield">
+						                    <p:inputText value="#{perfilBean.usuario.login}" style="width: auto;" />
+						                    <label>Username / Login</label>
+						                </h:panelGroup>
+						                
+						                <h:panelGroup styleClass="md-inputfield">
+						                    <p:password value="#{perfilBean.novaSenha}" style="width: auto;" feedback="true" 
+						                                promptLabel="Digite a nova senha" weakLabel="Fraca" goodLabel="Boa" strongLabel="Excelente"/>
+						                    <label>Senha</label>
+						                </h:panelGroup>
+						
+						                <h:panelGroup styleClass="md-inputfield">
+						                    <p:password value="#{perfilBean.confirmaNovaSenha}" style="width: auto;" feedback="false"/>
+						                    <label>Confirme a Senha</label>
+						                </h:panelGroup>
+					                </div>				                
 				                </p:panelGrid>
 				        	</p:tab>
 				        
 				            <p:tab title="Geral" rendered="#{perfilBean.usuario.login != null}">
-					            <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">			            			                
-					                <h:panelGroup styleClass="md-inputfield">
-					                    <p:inputText value="#{perfilBean.usuario.login}" disabled="true" style="width: auto;" />
-					                    <label>Username / Login</label>
-					                </h:panelGroup>
-					
-					                <h:panelGroup styleClass="md-inputfield">
-					                    <p:inputText value="#{perfilBean.usuario.perfil.descricao}" disabled="true" style="width: auto;" />
-					                    <label>Nível de Acesso</label>
-					                </h:panelGroup>
-					
-					                <h:panelGroup styleClass="md-inputfield">
-					                    <p:inputText value="#{perfilBean.usuario.nome}" required="true" requiredMessage="O nome é obrigatório." style="width: auto;" />
-					                    <label>Nome Completo</label>
-					                </h:panelGroup>				                	                
+					            <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">	
+					            	<div class="flex align-items-center">		            			                
+						                <h:panelGroup styleClass="md-inputfield">
+						                    <p:inputText value="#{perfilBean.usuario.login}" disabled="true" style="width: auto;" />
+						                    <label>Username / Login</label>
+						                </h:panelGroup>
+						
+						                <h:panelGroup styleClass="md-inputfield">
+						                    <p:inputText value="#{perfilBean.usuario.perfil.descricao}" disabled="true" style="width: auto;" />
+						                    <label>Nível de Acesso</label>
+						                </h:panelGroup>
+						
+						                <h:panelGroup styleClass="md-inputfield">
+						                    <p:inputText value="#{perfilBean.usuario.nome}" required="true" requiredMessage="O nome é obrigatório." style="width: auto;" />
+						                    <label>Nome Completo</label>
+						                </h:panelGroup>
+					                </div>				                	                
 					            </p:panelGrid>
 				            </p:tab>
 				
 							<p:tab title="Alterar senha" rendered="#{perfilBean.usuario.login != null}">			
-					            <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">		                
-					                <h:panelGroup styleClass="md-inputfield">
-					                    <p:password value="#{perfilBean.senhaAtual}" style="width: auto;" feedback="false"/>
-					                    <label>Senha Atual</label>
-					                </h:panelGroup>
-					
-					                <h:panelGroup styleClass="md-inputfield">
-					                    <p:password value="#{perfilBean.novaSenha}" style="width: auto;" feedback="true" 
-					                                promptLabel="Digite a nova senha" weakLabel="Fraca" goodLabel="Boa" strongLabel="Excelente"/>
-					                    <label>Nova Senha</label>
-					                </h:panelGroup>
-					
-					                <h:panelGroup styleClass="md-inputfield">
-					                    <p:password value="#{perfilBean.confirmaNovaSenha}" style="width: auto;" feedback="false"/>
-					                    <label>Confirme a Nova Senha</label>
-					                </h:panelGroup>			
+					            <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group">
+					            	<div class="flex align-items-center">		                
+						                <h:panelGroup styleClass="md-inputfield">
+						                    <p:password value="#{perfilBean.senhaAtual}" style="width: auto;" feedback="false"/>
+						                    <label>Senha Atual</label>
+						                </h:panelGroup>
+						
+						                <h:panelGroup styleClass="md-inputfield">
+						                    <p:password value="#{perfilBean.novaSenha}" style="width: auto;" feedback="true" 
+						                                promptLabel="Digite a nova senha" weakLabel="Fraca" goodLabel="Boa" strongLabel="Excelente"/>
+						                    <label>Nova Senha</label>
+						                </h:panelGroup>
+						
+						                <h:panelGroup styleClass="md-inputfield">
+						                    <p:password value="#{perfilBean.confirmaNovaSenha}" style="width: auto;" feedback="false"/>
+						                    <label>Confirme a Nova Senha</label>
+						                </h:panelGroup>
+					                </div>			
 					            </p:panelGrid>
 							</p:tab>
 				            <br/>
